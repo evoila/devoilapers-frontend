@@ -1,1 +1,1 @@
-# Operator Automatisation (OPA)
+# Operator Automation Frontend (OPA-Frontend)
