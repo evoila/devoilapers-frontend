@@ -1,5 +1,9 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import { CdsButton } from '@clr/react/button';
+import { CdsAlert } from '@clr/react/alert';
+import { CdsInput } from '@clr/react/input';
+import { CdsFormGroup } from '@clr/react/forms';
 
 interface Props {
   testProp?: string;
@@ -28,6 +32,17 @@ class Login extends React.Component<Props, State> {
           <div>{counter}</div>
           <CdsButton onClick={() => this.setState({ counter: counter + 1 })}>Log In</CdsButton>
         </div>
+        <CdsAlert status="info">
+          Hello World
+        </CdsAlert>
+        <CdsFormGroup>
+          <CdsInput>
+            <label>
+              Username
+            </label>
+            <input placeholder="Username" />
+          </CdsInput>
+        </CdsFormGroup>
       </div>
     );
   }
