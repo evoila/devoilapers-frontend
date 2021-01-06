@@ -1,4 +1,7 @@
 import React from 'react';
+import '@cds/core/modal/register';
+import '@clr/ui/clr-ui.min.css';
+import '@clr/icons/clr-icons.min.css';
 import {
   BrowserRouter as Router,
   Redirect,
