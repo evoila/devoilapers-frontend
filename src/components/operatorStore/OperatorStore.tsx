@@ -1,10 +1,14 @@
 import React from 'react';
+import NavigationBar from '../navigationBar/NavigationBar';
 
 class OperatorStore extends React.PureComponent {
   render() {
     return (
       <div>
-        <h1>OperatorStore</h1>
+        <NavigationBar />
+        <div>
+          <h1>Operator Store</h1>
+        </div>
       </div>
     );
   }

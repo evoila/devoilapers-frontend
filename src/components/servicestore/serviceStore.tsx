@@ -1,10 +1,14 @@
 import React from 'react';
+import NavigationBar from '../navigationBar/NavigationBar';
 
 class ServiceStore extends React.PureComponent {
   render() {
     return (
       <div>
-        <h1> Service Store </h1>
+        <NavigationBar />
+        <div>
+          <h1> Service Store </h1>
+        </div>
       </div>
     );
   }

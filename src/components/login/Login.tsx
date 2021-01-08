@@ -1,20 +1,21 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
-/* import { CdsButton } from '@cds/react/button'; */
-/* import { CdsAlert } from '@cds/react/alert'; */
 import { CdsInput } from '@cds/react/input';
 import { CdsFormGroup } from '@cds/react/forms';
+import { CdsButton } from '@cds/react/button';
+import { CdsAlert, CdsAlertGroup } from '@cds/react/alert';
+import { login } from '../../auth/auth';
 
 interface AppProps {
   testProp?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  history: any
 }
 
 interface AppState {
   username: string;
   password: string;
-  counter: number;
+  visibleAllert: boolean;
+  disableLoginBtn: boolean;
 }
 
 class Login extends React.Component<AppProps, AppState> {
@@ -24,51 +25,86 @@ class Login extends React.Component<AppProps, AppState> {
     this.state = {
       username: '',
       password: '',
-      counter: 0,
+      visibleAllert: true,
+      disableLoginBtn: false,
     };
+
+    this.handleAuth = this.handleAuth.bind(this);
   }
 
   handleAuth() :void {
     this.setState({
-      username: '',
-      password: '',
+      disableLoginBtn: true,
     });
+    const { history } = this.props;
+
+    const { username, password } = this.state;
+
+    if (login(username, password)) {
+      history.push('/');
+    } else {
+      this.setState({
+        username: '',
+        password: '',
+        visibleAllert: false,
+        disableLoginBtn: false,
+      });
+    }
   }
 
   render() {
+    const {
+      username,
+      password,
+      visibleAllert,
+      disableLoginBtn,
+    } = this.state;
     return (
-      <div>
-        <div>{this.state.counter}</div>
-        <div className="login-wrapper">
-          <CdsFormGroup className="login">
-            <section className="title">
-              <h1 cds-text="welcome">Welcome to</h1>
-              the Service Manager
-              <h5 className="hint">Use your Username and Password to login</h5>
-            </section>
-            <CdsInput>
-              <label>
-                Username
-              </label>
-              <input
-                value={this.state.username}
-                onChange={(e) => this.setState({ username: e.target.value })}
-                placeholder="Username"
-              />
-            </CdsInput>
-            <CdsInput>
-              <label>
-                Password
-              </label>
-              <input
-                type="password"
-                value={this.state.password}
-                onChange={this.handleAuth}
-                placeholder="Password"
-              />
-            </CdsInput>
-          </CdsFormGroup>
-        </div>
+      <div className="login-wrapper">
+        <CdsFormGroup className="login">
+          <section className="title">
+            <h1 cds-text="welcome">Welcome to</h1>
+            the Service Manager
+            <h5 className="hint">Use your Username and Password to login</h5>
+          </section>
+          <CdsInput>
+            <label htmlFor="username">
+              Username
+            </label>
+            <input
+              id="username"
+              name="username"
+              value={username}
+              onChange={(e) => this.setState({ username: e.target.value })}
+              placeholder="Username"
+            />
+          </CdsInput>
+          <CdsInput>
+            <label htmlFor="password">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => this.setState({ password: e.target.value })}
+              placeholder="Password"
+            />
+          </CdsInput>
+          <CdsAlertGroup status="danger" hidden={visibleAllert}>
+            <CdsAlert>
+              Username or Password was wrong. Please try again.
+            </CdsAlert>
+          </CdsAlertGroup>
+          <CdsButton
+            type="submit"
+            onClick={this.handleAuth}
+            block
+            disabled={disableLoginBtn}
+          >
+            Log In
+          </CdsButton>
+        </CdsFormGroup>
       </div>
     );
   }
