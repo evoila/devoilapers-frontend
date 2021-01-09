@@ -8,7 +8,6 @@ The project structure will probably change during the project.
 
 - /src/api: Directory for swagger files (auto generated)
 - /scripts: Directory for necessary scripts (i.e. build scripts)
-- /test: Directory for tests
 - /.github: Directory for Github actions
 
 ## Script overview
