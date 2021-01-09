@@ -13,13 +13,10 @@ The project structure will probably change during the project.
 
 ## Script overview
 - InstallSwaggerGenerator 
-    - Software to generate a swagger document out of the webserver definition and specific comments
-    - Execute to install swaggo 
-    - Details: https://github.com/swaggo/swag
-- GenerateSwaggerDoc
-    - Used to generate a swagger document out of the webserver definition and specific comments
-    - Execute in `<ProjectRoot>` to generate the swagger documentation  
-    - Details: https://github.com/swaggo/swag
+    - Software to generate a swagger api client out of a swagger.yaml from devoilappers-backend
+    - Execute to generate api.ts 
+    - devoilappers-backend api definition https://github.com/evoila/devoilapers-backend/blob/main/api/swagger.yaml
+    - Details: https://github.com/swagger-api/swagger-codegen
     
 
 ## Getting started
