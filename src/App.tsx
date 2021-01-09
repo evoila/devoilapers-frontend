@@ -21,7 +21,7 @@ import UserRoutesEnum from './enums/UserRoutesEnum';
 import AdminRoutesEnum from './enums/AdminRoutesEnum';
 import AdminRoute from './routes/AdminRoute';
 import OperatorStore from './components/operatorStore/OperatorStore';
-import ServiceStore from './components/servicestore/serviceStore';
+import ServiceStore from './components/servicestore/ServiceStore';
 import PageNotFound from './components/pageNotFound/PageNotFound';
 import AuthRoute from './routes/AuthRoute';
 

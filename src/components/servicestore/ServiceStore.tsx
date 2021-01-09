@@ -1,5 +1,6 @@
 import React from 'react';
 import NavigationBar from '../navigationBar/NavigationBar';
+import ServiceStoreInfoList from './ServiceStoreInfoList';
 
 class ServiceStore extends React.PureComponent {
   render() {
@@ -7,7 +8,10 @@ class ServiceStore extends React.PureComponent {
       <div>
         <NavigationBar />
         <div>
-          <h1> Service Store </h1>
+          <div>
+            <h1>Service Store:</h1>
+          </div>
+          <ServiceStoreInfoList />
         </div>
       </div>
     );

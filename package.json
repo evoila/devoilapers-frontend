@@ -2,6 +2,7 @@
   "name": "devoilapers_frontend",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://127.0.0.1:8080/",
   "dependencies": {
     "@cds/city": "^1.1.0",
     "@cds/core": "^5.0.0-next.0",

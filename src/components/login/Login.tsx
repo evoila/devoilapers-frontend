@@ -32,7 +32,7 @@ class Login extends React.Component<AppProps, AppState> {
     this.handleAuth = this.handleAuth.bind(this);
   }
 
-  handleAuth() :void {
+  async handleAuth() :Promise<void> {
     this.setState({
       disableLoginBtn: true,
     });
@@ -40,15 +40,19 @@ class Login extends React.Component<AppProps, AppState> {
 
     const { username, password } = this.state;
 
-    if (login(username, password)) {
-      history.push('/');
-    } else {
-      this.setState({
-        username: '',
-        password: '',
-        visibleAllert: false,
-        disableLoginBtn: false,
-      });
+    try {
+      const valid = await login(username, password);
+
+      if (valid) {
+        history.push('/');
+      } else {
+        this.setState({
+          visibleAllert: false,
+          disableLoginBtn: false,
+        });
+      }
+    } catch (error) {
+      // TODO: console.log(error);
     }
   }
 
