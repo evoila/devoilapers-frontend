@@ -28,7 +28,7 @@ export function getPassword() :string {
 }
 const host = 'https://127.0.0.1:8080/api/v1';
 
-let accountApi: AccountApi;
+let accountApi: AccountApi = new AccountApi(host);
 let servicestoreApi: ServicestoreApi;
 
 function createApis() {

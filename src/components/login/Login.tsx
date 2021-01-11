@@ -40,19 +40,15 @@ class Login extends React.Component<AppProps, AppState> {
 
     const { username, password } = this.state;
 
-    try {
-      const valid = await login(username, password);
+    const valid = await login(username, password);
 
-      if (valid) {
-        history.push('/');
-      } else {
-        this.setState({
-          visibleAllert: false,
-          disableLoginBtn: false,
-        });
-      }
-    } catch (error) {
-      // TODO: console.log(error);
+    if (valid) {
+      history.push('/');
+    } else {
+      this.setState({
+        visibleAllert: false,
+        disableLoginBtn: false,
+      });
     }
   }
 
