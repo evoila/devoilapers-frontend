@@ -60,16 +60,20 @@ export async function login(username: string, password: string) :Promise<boolean
   dtosAccountCredentialsDto.username = username;
   dtosAccountCredentialsDto.password = password;
 
-  const res = await accountApi.accountsLoginPost(dtosAccountCredentialsDto);
+  try {
+    const res = await accountApi.accountsLoginPost(dtosAccountCredentialsDto);
+    if (res.response.statusCode === 200 && res.body.isValid) {
+      localStorage.setItem('isLogedin', 'true');
+      localStorage.setItem('userRole', `${res.body.role}`);
 
-  if (res.response.statusCode === 200 && res.body.isValid) {
-    localStorage.setItem('isLogedin', 'true');
-    localStorage.setItem('userRole', `${res.body.role}`);
+      createApis();
 
-    createApis();
-
-    return true;
+      return true;
+    }
+  } catch (error) {
+    return false;
   }
+
   return false;
 }
 

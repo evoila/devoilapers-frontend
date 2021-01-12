@@ -10,9 +10,9 @@
     "@clr/icons": "^4.0.8",
     "@clr/ui": "^4.0.8",
     "@testing-library/jest-dom": "^5.11.8",
-    "@testing-library/react": "^11.1.0",
+    "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.0",
-    "@types/jest": "^26.0.19",
+    "@types/jest": "^26.0.20",
     "@types/node": "^14.14.19",
     "@types/react": "^17.0.0",
     "config": "^3.3.3",
@@ -28,7 +28,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "HTTPS=true react-scripts start",
+    "start": "BROWSER='chromium' HTTPS=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!@codemirror)/'",
     "eject": "react-scripts eject"
@@ -64,12 +64,12 @@
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.7",
     "@types/request": "^2.48.5",
-    "@typescript-eslint/eslint-plugin": "^4.11.1",
-    "@typescript-eslint/parser": "^4.11.1",
+    "@typescript-eslint/eslint-plugin": "^4.13.0",
+    "@typescript-eslint/parser": "^4.13.0",
     "eslint": "^7.17.0",
     "eslint-config-airbnb-typescript": "^12.0.0",
     "eslint-plugin-react": "^7.22.0",
-    "husky": "^4.3.6",
+    "husky": "^4.3.7",
     "lint-staged": "^10.5.3"
   }
 }
