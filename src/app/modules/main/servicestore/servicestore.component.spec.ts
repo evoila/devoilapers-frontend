@@ -1,25 +1,21 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PreferenceComponent } from './preference.component';
+import { ServicestoreComponent } from './servicestore.component';
 
-describe('PreferenceComponent', () => {
-  let component: PreferenceComponent;
-  let fixture: ComponentFixture<PreferenceComponent>;
+describe('ServicestoreComponent', () => {
+  let component: ServicestoreComponent;
+  let fixture: ComponentFixture<ServicestoreComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PreferenceComponent ]
+      declarations: [ ServicestoreComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PreferenceComponent);
+    fixture = TestBed.createComponent(ServicestoreComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
   });
 });
