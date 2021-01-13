@@ -1,0 +1,39 @@
+<clr-main-container>
+  <clr-header class="header-6">
+    <div class="branding">
+      <a href="javascript://" class="nav-link" routerLink="/main/home">
+        <clr-icon shape="rack-server"></clr-icon>
+        <span class="title">Service Manager</span>
+      </a>
+    </div>
+    <div class="header-nav">
+      <a href="javascript://" class="nav-link nav-text" routerLink="/main/home" routerLinkActive="active">
+        Home
+      </a>
+      <a href="javascript://" class="nav-link nav-text" routerLink="/main/servicestore" routerLinkActive="active">
+        Service Store
+      </a>
+      <a href="javascript://" class="nav-link nav-text" routerLink="/main/services" routerLinkActive="active">
+        Services
+      </a>
+    </div>
+    <div class="header-actions">
+      <clr-dropdown>
+        <button class="nav-icon" clrDropdownTrigger>
+          <clr-icon shape="user"></clr-icon>
+          <clr-icon shape="caret down"></clr-icon>
+        </button>
+        <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+          <a href="javascript://" clrDropdownItem routerLink="/main/about">About</a>
+          <a href="javascript://" clrDropdownItem (click)="onLogout()">Log out</a>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+    </div>
+  </clr-header>
+
+  <div class="content-container">
+    <main class="content-area">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</clr-main-container>

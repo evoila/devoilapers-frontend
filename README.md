@@ -28,7 +28,7 @@ See the Wiki: https://github.com/evoila/devoilapers-frontend/wiki/Stack#visual-s
 1. Start the devoilapers-backend: https://github.com/evoila/devoilapers-backend/blob/main/ReadMe.md#build-and-run-without-ide
 2. Execute `npm install`
 3. Execute `npm start`
-4. Open a Browser on http://localhost:3000/
+4. Open a Browser on http://localhost:4200/
 
 ### Branch naming conventions
 Use underscores to replace spaces or special characters
