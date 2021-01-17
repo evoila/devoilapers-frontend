@@ -1,0 +1,81 @@
+<div class="clr-row">
+  <div class="clr-row-9">
+    <h1>Service Details of {{this.service.name}}</h1>
+    <p>ID: {{this.service.id}}</p>
+    <p>Type: {{this.service.type}}</p>
+    <p>Namespace : {{this.service.namespace}}</p>
+    <p>Status: {{this.service.status}}</p>
+  </div>
+
+  <div class="clr-row-2 clr-offset-2">
+    <h2></h2>
+    <button (click)="wizard.open();this.open()" class="btn btn-primary">
+      <clr-icon shape="note"></clr-icon>
+      Edit YAML
+    </button>
+  </div>
+
+  <div class="clr-row-1">
+    <h2></h2>
+    <button (click)="openDeleteModal = true" class="btn btn-danger">
+      <clr-icon shape="note"></clr-icon>
+      DELETE
+    </button>
+  </div>
+
+</div>
+
+<div class="clr-row">
+  <div *ngFor="let actionGroups of service.actionGroups">
+    <h2>{{actionGroups.name}}</h2>
+    <button *ngFor="let action of actionGroups.actions" class="btn btn-primary" (click)="selectAction(action.command)">
+      <clr-icon shape="note"></clr-icon>
+      {{ action.name }}
+    </button>
+  </div>
+
+  <clr-wizard #wizard>
+		<clr-wizard-title>{{ this.service.name }}</clr-wizard-title>
+	  
+		<clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
+		<clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+		<clr-wizard-button [type]="'next'">Next</clr-wizard-button>
+		<clr-wizard-button [type]="'finish'" (click)="updateYAML()">Done</clr-wizard-button>
+	  
+		<clr-wizard-page #pageTwo>
+		  <ng-template clrPageTitle>Edit YAML</ng-template>
+		  <ng-template clrPageNavTitle>YAML</ng-template>
+		  <form clrForm clrLayout="horizontal" #formPageOne="ngForm">
+			<div
+			#editor
+			class="app-ace-editor clr-form-control"
+			style="width: 720px;height: 700px;"
+			></div>
+			</form>
+		</clr-wizard-page>
+	</clr-wizard>
+
+  <clr-modal [(clrModalOpen)]="openModal">
+    <h3 class="modal-title">{{ service.name }}</h3>
+    <div class="modal-body">
+      <p>ID: {{ service.id }}</p>
+      <p>Action: {{service.name}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline" (click)="openModal = false">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="executeAction()">Execute</button>
+    </div>
+  </clr-modal>
+
+  <clr-modal [(clrModalOpen)]="openDeleteModal">
+    <h3 class="modal-title">Delete {{service.name}}</h3>
+    <div class="modal-body">
+      <p>Are you sure?</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline" (click)="openDeleteModal = false">Cancel</button>
+      <button type="button" class="btn btn-danger" (click)="deleteService()">DELETE</button>
+    </div>
+  </clr-modal>
+
+</div>

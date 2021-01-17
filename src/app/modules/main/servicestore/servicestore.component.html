@@ -1,3 +1,56 @@
 <div>
-	<h1>Service Store</h1>
+	<div>
+		<h1>Service Store</h1>
+	</div>
+
+	<div class="clr-row">
+		<div *ngFor="let service of services" class="clr-col-lg-3 clr-col-12">
+		  <div class="card">
+			<div class="card-header">
+				{{ service.name }}
+			</div>
+			<div class="card-block">
+			  <div class="card-media-block wrap">
+				<img [src]="service.imageBase64" class="card-media-image" />
+				<!--<div class="card-media-description">
+				<span class="card-media-title">
+					Project B
+				  </span> 
+				  <span class="card-media-text">
+					Owner: Jane Doe
+				  </span>
+				</div>-->
+			  </div>
+			  <div class="card-text">
+				{{ service.description }}
+			  </div>
+			</div>
+			<div class="card-footer">
+			  <button class="btn btn-sm btn-link" (click)="wizard.open();this.open(service.name);">Action</button>
+			</div>
+		  </div>
+		</div>
+	</div>
+
+	<clr-wizard #wizard>
+		<clr-wizard-title>{{ serviceName }}</clr-wizard-title>
+	  
+		<clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
+		<clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+		<clr-wizard-button [type]="'next'">Next</clr-wizard-button>
+		<clr-wizard-button [type]="'finish'" (click)="finish()">Done</clr-wizard-button>
+	  
+		<clr-wizard-page #pageTwo>
+		  <ng-template clrPageTitle>Edit YAML</ng-template>
+		  <ng-template clrPageNavTitle>YAML</ng-template>
+		  <form clrForm clrLayout="horizontal" #formPageOne="ngForm">
+			<div
+			#editor
+			class="app-ace-editor clr-form-control"
+			style="width: 720px;height: 700px;"
+			></div>
+			</form>
+		</clr-wizard-page>
+	</clr-wizard>
+	
 </div>

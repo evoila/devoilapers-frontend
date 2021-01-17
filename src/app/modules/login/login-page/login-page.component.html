@@ -1,5 +1,5 @@
 <div class="login-wrapper">
-  <form class="login">
+  <div class="login">
     <section class="title">
       <h3 class="welcome">Welcome to</h3>
       the Service Manager
@@ -16,7 +16,7 @@
       </clr-password-container>
 
       <clr-checkbox-wrapper>
-        <input clrCheckbox type="checkbox" id="rememberme">
+        <input clrCheckbox type="checkbox" id="rememberme" [checked]="rememberMe" [(ngModel)]="rememberMe">
         <label for="rememberme"> Remember me </label>
       </clr-checkbox-wrapper>
 
@@ -26,5 +26,5 @@
       <button [disabled]="!username || !password" type="submit" class="btn btn-primary"
         (click)="onLogin()">Login</button>
     </div>
-  </form>
+  </div>
 </div>

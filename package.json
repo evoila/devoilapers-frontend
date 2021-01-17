@@ -3,7 +3,7 @@
   "version": "11.0.5",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve -o",
+    "start": "ng serve -o --ssl true",
     "build": "ng build --base-href ./ --prod --aot --build-optimizer",
     "test": "ng test",
     "lint": "ng lint",
@@ -23,7 +23,9 @@
     "@clr/core": "^4.0.9",
     "@clr/icons": "^4.0.9",
     "@clr/ui": "^4.0.9",
-    "@webcomponents/webcomponentsjs": "^2.5.0"
+    "@webcomponents/webcomponentsjs": "^2.5.0",
+    "ace-builds": "^1.4.12",
+    "rxjs-compat": "^6.6.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.1100.6",

@@ -8,20 +8,38 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AboutComponent } from './about/about.component';
 import { LayoutComponent } from './layout/layout.component';
-import { ServicesComponent } from './services/services.component';
+
+import { ConfigurationParameters, Configuration } from '../../rest'
+import { ApiModule } from '../../rest'
 import { ServicestoreComponent } from './servicestore/servicestore.component';
+import { ServicesComponent } from './services/services.component';
+import { ServiceDetailsComponent } from './service-details/service-details.component';
+
+export function configurationFactory() {
+  const params: ConfigurationParameters = {
+    username: localStorage.getItem('username'),
+    password: localStorage.getItem('password'),
+  };
+  return new Configuration(params);
+}
 
 @NgModule({
   declarations: [
-    MainPageComponent, PageNotFoundComponent,
-    AboutComponent, LayoutComponent,
-    ServicesComponent, ServicestoreComponent
+    MainPageComponent, 
+    PageNotFoundComponent,
+    AboutComponent, 
+    LayoutComponent,
+
+    ServicestoreComponent,
+    ServicesComponent,
+    ServiceDetailsComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     ClarityModule,  
-    MainRoutingModule
+    MainRoutingModule,
+    ApiModule.forRoot(configurationFactory),
   ]
 })
 export class MainModule { }
