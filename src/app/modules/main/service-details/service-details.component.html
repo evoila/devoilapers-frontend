@@ -11,7 +11,7 @@
     <h2></h2>
     <button (click)="wizard.open();this.open()" class="btn btn-primary">
       <clr-icon shape="note"></clr-icon>
-      Edit YAML
+      View YAML
     </button>
   </div>
 
@@ -36,14 +36,14 @@
 
   <clr-wizard #wizard>
 		<clr-wizard-title>{{ this.service.name }}</clr-wizard-title>
-	  
+
 		<clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
 		<clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
 		<clr-wizard-button [type]="'next'">Next</clr-wizard-button>
 		<clr-wizard-button [type]="'finish'" (click)="updateYAML()">Done</clr-wizard-button>
-	  
+
 		<clr-wizard-page #pageTwo>
-		  <ng-template clrPageTitle>Edit YAML</ng-template>
+		  <ng-template clrPageTitle>View YAML</ng-template>
 		  <ng-template clrPageNavTitle>YAML</ng-template>
 		  <form clrForm clrLayout="horizontal" #formPageOne="ngForm">
 			<div
@@ -62,8 +62,7 @@
       <p>Action: {{service.name}}</p>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline" (click)="openModal = false">Cancel</button>
-      <button type="button" class="btn btn-primary" (click)="executeAction()">Execute</button>
+      <button type="button" class="btn btn-outline" (click)="openModal = false">CLOSE</button>
     </div>
   </clr-modal>
 

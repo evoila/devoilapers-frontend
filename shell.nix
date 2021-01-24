@@ -3,15 +3,10 @@
 with pkgs;
 
 mkShell {
-	name="dev-environment";
+	name="service-manager-frontend-dev-environment";
 	buildInputs = [
-		nodejs
-
-		# dev tools
-		vscodium
-		git
-		swagger-codegen
-		chromium
+    nodejs
+    swagger-codegen
 	];
 	shellHook = ''
 		shopt -s expand_aliases
@@ -21,6 +16,10 @@ mkShell {
 		alias run="npm start"
 		alias test="npm test"
 		alias updateAPI="sh scripts/SwaggerClientTsUpdate.sh"
-		codium .
+		alias build="npm run-script build"
+		alias buildClean="rm -r dist"
+		alias help="echo 'command: install, run, test, updateAPI, build, buildClean'"
+    echo ""
+		echo "type help to see all available commands"
 	'';
 }

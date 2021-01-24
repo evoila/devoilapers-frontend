@@ -56,27 +56,12 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
     ace.config.set('fontSize', '14px');
     this.aceEditor = ace.edit(this.editor.nativeElement);
     this.aceEditor.session.setMode('ace/mode/yaml');
+    this.aceEditor.setReadOnly(true)
   }
 
   selectAction(command) {
     this.selectedComand = command;
     this.openModal = true;
-  }
-
-  executeAction() {
-    this.serviceService
-      .servicesActionServiceidActioncommandPost(
-        this.service.id,
-        this.selectedComand
-      )
-      .subscribe({
-        next: () => {
-          this.openModal = false;
-        },
-        error: (msg) => {
-          console.log(msg);
-        },
-      });
   }
 
   updateYAML() {
