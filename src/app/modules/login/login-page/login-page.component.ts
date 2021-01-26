@@ -32,33 +32,33 @@ export class LoginPageComponent implements OnInit {
     if (localStorage.getItem('password')){
       this.password = localStorage.getItem('password');
     }
-    this.onLogin()
+    this.onLogin();
   }
 
   onLogin() {
     if (this.username
         && this.password){
-          let dtosAccountCredentialsDto = {
+          const dtosAccountCredentialsDto = {
             username: this.username,
             password: this.password,
           } as DtosAccountCredentialsDto;
           this.accountServce.accountsLoginPost(dtosAccountCredentialsDto).subscribe({
         next: auth => {
           if (auth.isValid) {
-            localStorage.setItem('rememberMe', ""+this.rememberMe);
+            localStorage.setItem('rememberMe', '' + this.rememberMe);
             localStorage.setItem('username', this.username);
             localStorage.setItem('password', this.password);
             localStorage.setItem('role', auth.role);
             this.router.navigate(['main']);
           } else {
             this.isError = true;
-          };
+          }
         },
         error: msg => {
           this.isError = true;
-          this.msgError = msg
+          this.msgError = msg;
         }
-      })
+      });
     }
   }
 }
