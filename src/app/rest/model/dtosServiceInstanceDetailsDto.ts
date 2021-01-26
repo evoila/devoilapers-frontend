@@ -14,9 +14,7 @@ import { DtosServiceInstanceActionGroupDto } from './dtosServiceInstanceActionGr
 
 export interface DtosServiceInstanceDetailsDto { 
     actionGroups?: Array<DtosServiceInstanceActionGroupDto>;
-    id?: string;
     name?: string;
-    namespace?: string;
     status?: string;
     type?: string;
 }

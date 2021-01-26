@@ -61,22 +61,32 @@ export class ServiceService {
     /**
      * Apply a service specific action to a service instance
      * Apply a service specific action to a service instance
-     * @param serviceid Id of service
+     * @param payload Payload
+     * @param servicetype Type of service
+     * @param servicename Id of service
      * @param actioncommand action command
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public servicesActionServiceidActioncommandPost(serviceid: string, actioncommand: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public servicesActionServiceidActioncommandPost(serviceid: string, actioncommand: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public servicesActionServiceidActioncommandPost(serviceid: string, actioncommand: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public servicesActionServiceidActioncommandPost(serviceid: string, actioncommand: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public servicesActionServicetypeServicenameActioncommandPost(payload: string, servicetype: string, servicename: string, actioncommand: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public servicesActionServicetypeServicenameActioncommandPost(payload: string, servicetype: string, servicename: string, actioncommand: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public servicesActionServicetypeServicenameActioncommandPost(payload: string, servicetype: string, servicename: string, actioncommand: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public servicesActionServicetypeServicenameActioncommandPost(payload: string, servicetype: string, servicename: string, actioncommand: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (serviceid === null || serviceid === undefined) {
-            throw new Error('Required parameter serviceid was null or undefined when calling servicesActionServiceidActioncommandPost.');
+        if (payload === null || payload === undefined) {
+            throw new Error('Required parameter payload was null or undefined when calling servicesActionServicetypeServicenameActioncommandPost.');
+        }
+
+        if (servicetype === null || servicetype === undefined) {
+            throw new Error('Required parameter servicetype was null or undefined when calling servicesActionServicetypeServicenameActioncommandPost.');
+        }
+
+        if (servicename === null || servicename === undefined) {
+            throw new Error('Required parameter servicename was null or undefined when calling servicesActionServicetypeServicenameActioncommandPost.');
         }
 
         if (actioncommand === null || actioncommand === undefined) {
-            throw new Error('Required parameter actioncommand was null or undefined when calling servicesActionServiceidActioncommandPost.');
+            throw new Error('Required parameter actioncommand was null or undefined when calling servicesActionServicetypeServicenameActioncommandPost.');
         }
 
         let headers = this.defaultHeaders;
@@ -99,9 +109,13 @@ export class ServiceService {
         const consumes: string[] = [
             'application/json'
         ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
 
-        return this.httpClient.post<any>(`${this.basePath}/services/action/${encodeURIComponent(String(serviceid))}/${encodeURIComponent(String(actioncommand))}`,
-            null,
+        return this.httpClient.post<any>(`${this.basePath}/services/action/${encodeURIComponent(String(servicetype))}/${encodeURIComponent(String(servicename))}/${encodeURIComponent(String(actioncommand))}`,
+            payload,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -213,17 +227,22 @@ export class ServiceService {
     /**
      * Get details over a single service instance
      * Get details over a single service instance
-     * @param serviceid Id of service
+     * @param servicetype Type of service
+     * @param servicename Id of service
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public servicesInfoServiceidGet(serviceid: string, observe?: 'body', reportProgress?: boolean): Observable<DtosServiceInstanceDetailsOverviewDto>;
-    public servicesInfoServiceidGet(serviceid: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DtosServiceInstanceDetailsOverviewDto>>;
-    public servicesInfoServiceidGet(serviceid: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DtosServiceInstanceDetailsOverviewDto>>;
-    public servicesInfoServiceidGet(serviceid: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public servicesInfoServicetypeServicenameGet(servicetype: string, servicename: string, observe?: 'body', reportProgress?: boolean): Observable<DtosServiceInstanceDetailsOverviewDto>;
+    public servicesInfoServicetypeServicenameGet(servicetype: string, servicename: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DtosServiceInstanceDetailsOverviewDto>>;
+    public servicesInfoServicetypeServicenameGet(servicetype: string, servicename: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DtosServiceInstanceDetailsOverviewDto>>;
+    public servicesInfoServicetypeServicenameGet(servicetype: string, servicename: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (serviceid === null || serviceid === undefined) {
-            throw new Error('Required parameter serviceid was null or undefined when calling servicesInfoServiceidGet.');
+        if (servicetype === null || servicetype === undefined) {
+            throw new Error('Required parameter servicetype was null or undefined when calling servicesInfoServicetypeServicenameGet.');
+        }
+
+        if (servicename === null || servicename === undefined) {
+            throw new Error('Required parameter servicename was null or undefined when calling servicesInfoServicetypeServicenameGet.');
         }
 
         let headers = this.defaultHeaders;
@@ -247,7 +266,7 @@ export class ServiceService {
             'application/json'
         ];
 
-        return this.httpClient.get<DtosServiceInstanceDetailsOverviewDto>(`${this.basePath}/services/info/${encodeURIComponent(String(serviceid))}`,
+        return this.httpClient.get<DtosServiceInstanceDetailsOverviewDto>(`${this.basePath}/services/info/${encodeURIComponent(String(servicetype))}/${encodeURIComponent(String(servicename))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -260,17 +279,22 @@ export class ServiceService {
     /**
      * Delete a service instance
      * Delete an instance of a service
-     * @param serviceid Id of service
+     * @param servicetype Type of service
+     * @param servicename Id of service
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public servicesServiceidDelete(serviceid: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public servicesServiceidDelete(serviceid: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public servicesServiceidDelete(serviceid: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public servicesServiceidDelete(serviceid: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public servicesServicetypeServicenameDelete(servicetype: string, servicename: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public servicesServicetypeServicenameDelete(servicetype: string, servicename: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public servicesServicetypeServicenameDelete(servicetype: string, servicename: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public servicesServicetypeServicenameDelete(servicetype: string, servicename: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (serviceid === null || serviceid === undefined) {
-            throw new Error('Required parameter serviceid was null or undefined when calling servicesServiceidDelete.');
+        if (servicetype === null || servicetype === undefined) {
+            throw new Error('Required parameter servicetype was null or undefined when calling servicesServicetypeServicenameDelete.');
+        }
+
+        if (servicename === null || servicename === undefined) {
+            throw new Error('Required parameter servicename was null or undefined when calling servicesServicetypeServicenameDelete.');
         }
 
         let headers = this.defaultHeaders;
@@ -294,64 +318,7 @@ export class ServiceService {
             'application/json'
         ];
 
-        return this.httpClient.delete<any>(`${this.basePath}/services/${encodeURIComponent(String(serviceid))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Update service instance from yaml
-     * Update an instance of a service from yaml
-     * @param serviceyaml Service-Yaml
-     * @param serviceid Id of service
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public servicesUpdateServiceidPost(serviceyaml: DtosServiceYamlDto, serviceid: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public servicesUpdateServiceidPost(serviceyaml: DtosServiceYamlDto, serviceid: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public servicesUpdateServiceidPost(serviceyaml: DtosServiceYamlDto, serviceid: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public servicesUpdateServiceidPost(serviceyaml: DtosServiceYamlDto, serviceid: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (serviceyaml === null || serviceyaml === undefined) {
-            throw new Error('Required parameter serviceyaml was null or undefined when calling servicesUpdateServiceidPost.');
-        }
-
-        if (serviceid === null || serviceid === undefined) {
-            throw new Error('Required parameter serviceid was null or undefined when calling servicesUpdateServiceidPost.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (BasicAuth) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-        }
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.post<any>(`${this.basePath}/services/update/${encodeURIComponent(String(serviceid))}`,
-            serviceyaml,
+        return this.httpClient.delete<any>(`${this.basePath}/services/${encodeURIComponent(String(servicetype))}/${encodeURIComponent(String(servicename))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -363,18 +330,23 @@ export class ServiceService {
 
     /**
      * Get the yaml file for an instance
-     * Get the yaml file for an specific service instance. Parameter serviceid has to be supplied.
-     * @param serviceid Id of service
+     * Get the yaml file for an specific service instance. Parameter servicename has to be supplied.
+     * @param servicetype Type of service
+     * @param servicename Id of service
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public servicesYamlServiceidGet(serviceid: string, observe?: 'body', reportProgress?: boolean): Observable<DtosServiceYamlDto>;
-    public servicesYamlServiceidGet(serviceid: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DtosServiceYamlDto>>;
-    public servicesYamlServiceidGet(serviceid: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DtosServiceYamlDto>>;
-    public servicesYamlServiceidGet(serviceid: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public servicesYamlServicetypeServicenameGet(servicetype: string, servicename: string, observe?: 'body', reportProgress?: boolean): Observable<DtosServiceYamlDto>;
+    public servicesYamlServicetypeServicenameGet(servicetype: string, servicename: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DtosServiceYamlDto>>;
+    public servicesYamlServicetypeServicenameGet(servicetype: string, servicename: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DtosServiceYamlDto>>;
+    public servicesYamlServicetypeServicenameGet(servicetype: string, servicename: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (serviceid === null || serviceid === undefined) {
-            throw new Error('Required parameter serviceid was null or undefined when calling servicesYamlServiceidGet.');
+        if (servicetype === null || servicetype === undefined) {
+            throw new Error('Required parameter servicetype was null or undefined when calling servicesYamlServicetypeServicenameGet.');
+        }
+
+        if (servicename === null || servicename === undefined) {
+            throw new Error('Required parameter servicename was null or undefined when calling servicesYamlServicetypeServicenameGet.');
         }
 
         let headers = this.defaultHeaders;
@@ -398,7 +370,7 @@ export class ServiceService {
             'application/json'
         ];
 
-        return this.httpClient.get<DtosServiceYamlDto>(`${this.basePath}/services/yaml/${encodeURIComponent(String(serviceid))}`,
+        return this.httpClient.get<DtosServiceYamlDto>(`${this.basePath}/services/yaml/${encodeURIComponent(String(servicetype))}/${encodeURIComponent(String(servicename))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

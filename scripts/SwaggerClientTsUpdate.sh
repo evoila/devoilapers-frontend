@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SAGGER_YAML_FILE="src/swagger.json"
+SAGGER_YAML_FILE="src/app/rest/swagger.json"
 
 SWAGGER_API_OUTPUT_FOLDER="src/app/rest/"
 SWAGGER_API_OUTPUT_FILE=$SWAGGER_API_OUTPUT_FOLDER"api.ts"
@@ -13,7 +13,7 @@ curl -k https://127.0.0.1:8080/swagger/doc.json -o $SAGGER_YAML_FILE
 echo "Generate swagger code"
 swagger-codegen generate -l typescript-angular -i $SAGGER_YAML_FILE --additional-properties supportsES6=true -o $SWAGGER_API_OUTPUT_FOLDER
 
-# replace imports 
+# replace imports
 echo "Applying Workaround https://github.com/swagger-api/swagger-codegen/issues/10417"
 # sed -i 's/import localVarRequest = require(\x27request\x27);/import localVarRequest from "request";/' $SWAGGER_API_OUTPUT_FILE
 # sed -i 's/import http = require(\x27http\x27);/import http from "http";/' $SWAGGER_API_OUTPUT_FILE

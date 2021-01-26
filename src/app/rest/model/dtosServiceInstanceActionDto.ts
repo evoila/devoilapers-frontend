@@ -14,4 +14,5 @@
 export interface DtosServiceInstanceActionDto { 
     command?: string;
     name?: string;
+    placeholder?: string;
 }
