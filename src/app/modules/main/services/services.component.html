@@ -6,14 +6,14 @@
 		<clr-dg-column>Type</clr-dg-column>
 		<clr-dg-column>Status</clr-dg-column>
 		<clr-dg-column>Interactions</clr-dg-column>
-	
-		<clr-dg-row *ngFor="let service of services" (dblclick)="this.gotoServiceDetails(service.id)">
+
+		<clr-dg-row *ngFor="let service of services" (dblclick)="this.gotoServiceDetails(service.type, service.name)">
 			<clr-dg-cell>{{service.name}}</clr-dg-cell>
 			<clr-dg-cell>{{service.type}}</clr-dg-cell>
 			<clr-dg-cell>{{service.status}}</clr-dg-cell>
 			<clr-dg-cell>
 				<clr-dg-action-overflow>
-					<button (click)="this.gotoServiceDetails(service.id)" class="action-item">
+					<button (click)="this.gotoServiceDetails(service.type, service.name)" class="action-item">
 						<clr-icon shape="note"></clr-icon>
 						View Service
 					  </button>
@@ -33,13 +33,13 @@
 	<clr-modal [(clrModalOpen)]="openModal">
 		<h3 class="modal-title">{{ selectedService.name }}</h3>
 		<div class="modal-body">
-		  <p>ID: 	{{ selectedService.id }}</p>
+		  <p>Name: 	{{ selectedService.name }}</p>
 		  <p>Action: {{selectedAction.name}}</p>
 		</div>
 		<div class="modal-footer">
 		  <button type="button" class="btn btn-outline" (click)="openModal = false">Cancel</button>
 		  <button type="button" class="btn btn-primary" (click)="executeAction()">Execute</button>
 		</div>
-	  </clr-modal>	  
-	  
+	  </clr-modal>
+
 </div>

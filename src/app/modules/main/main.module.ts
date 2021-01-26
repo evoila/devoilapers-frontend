@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {ComponentRef, Input, NgModule, OnDestroy} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ClarityModule } from '@clr/angular';
@@ -15,7 +15,7 @@ import { ServicestoreComponent } from './servicestore/servicestore.component';
 import { ServicesComponent } from './services/services.component';
 import { ServiceDetailsComponent } from './service-details/service-details.component';
 
-export function configurationFactory() {
+export function configurationFactory(): Configuration {
   const params: ConfigurationParameters = {
     username: localStorage.getItem('username'),
     password: localStorage.getItem('password'),
@@ -25,21 +25,20 @@ export function configurationFactory() {
 
 @NgModule({
   declarations: [
-    MainPageComponent, 
+    MainPageComponent,
     PageNotFoundComponent,
-    AboutComponent, 
+    AboutComponent,
     LayoutComponent,
-
     ServicestoreComponent,
     ServicesComponent,
-    ServiceDetailsComponent
+    ServiceDetailsComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
-    ClarityModule,  
+    ClarityModule,
     MainRoutingModule,
     ApiModule.forRoot(configurationFactory),
   ]
 })
-export class MainModule { }
+export class MainModule {}

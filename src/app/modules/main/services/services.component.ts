@@ -1,10 +1,10 @@
 import { Router } from '@angular/router';
-import { 
-  Component, 
+import {
+  Component,
   OnInit
 } from '@angular/core';
 
-import { 
+import {
   ServiceService,
   DtosServiceInstanceDetailsDto,
   DtosServiceInstanceActionDto
@@ -18,10 +18,13 @@ import {
 })
 export class ServicesComponent implements OnInit {
   services: Array<DtosServiceInstanceDetailsDto> = [];
+
   selectedService: DtosServiceInstanceDetailsDto = {};
   selectedAction: DtosServiceInstanceActionDto = {};
-  openModal: boolean = false;
-  
+  selectedPayload: string;
+
+  openModal = false;
+
   constructor(
     private serviceService: ServiceService,
     private router: Router,
@@ -29,24 +32,30 @@ export class ServicesComponent implements OnInit {
 
   ngOnInit() {
     this.serviceService.servicesInfoGet().subscribe({
-      next: services => {this.services = services.services},
-      error: msg => {console.log(msg)}
+      next: services => {this.services = services.services; },
+      error: msg => {console.log(msg); }
     });
   }
 
-  gotoServiceDetails(serviceId: string){
-    this.router.navigate(['main/service-details', serviceId]);
+  gotoServiceDetails(serviceType: string, serviceName: string): void {
+    this.router.navigate(['main/service-details', serviceType, serviceName]);
   }
 
-  displayAction(selectedService: DtosServiceInstanceDetailsDto, selectedAction: DtosServiceInstanceActionDto){
+  displayAction(
+    selectedService: DtosServiceInstanceDetailsDto,
+    selectedAction: DtosServiceInstanceActionDto): void {
     this.selectedService = selectedService;
     this.selectedAction = selectedAction;
   }
 
-  executeAction(){
-    this.serviceService.servicesActionServiceidActioncommandPost(this.selectedService.id, this.selectedAction.command).subscribe({
-      next: () => {this.openModal = false},
-      error: msg => {console.log(msg)}
+  executeAction(): void{
+    this.serviceService.servicesActionServicetypeServicenameActioncommandPost(
+      this.selectedPayload,
+      this.selectedService.type,
+      this.selectedService.name,
+      this.selectedAction.command).subscribe({
+      next: () => {this.openModal = false; },
+      error: msg => {console.log(msg); }
     });
   }
 }

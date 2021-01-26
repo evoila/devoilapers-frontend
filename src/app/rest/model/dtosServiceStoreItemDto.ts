@@ -14,5 +14,5 @@
 export interface DtosServiceStoreItemDto { 
     description?: string;
     imageBase64?: string;
-    name?: string;
+    type?: string;
 }

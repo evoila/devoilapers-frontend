@@ -6,13 +6,14 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { 
+import {
   ActivatedRoute
 } from '@angular/router';
-import { 
+import {
+  DtosServiceInstanceActionDto,
   DtosServiceInstanceDetailsDto,
   ServiceService
-} from 'src/app/rest';
+} from '../../../rest';
 import * as ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
 
@@ -26,21 +27,30 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
 
   aceEditor: any;
   service: DtosServiceInstanceDetailsDto = {};
-  openModal: boolean = false;
-  openEditorModal: boolean = false;
-  openDeleteModal: boolean = false;
-  selectedComand: string;
+  openModal = false;
+  openEditorModal = false;
+  openDeleteModal = false;
+
+  selectedAction: DtosServiceInstanceActionDto
+  serviceName: string
+  serviceType: string
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private serviceService: ServiceService
-  ) {}
+    private serviceService: ServiceService,
+  ) {
+    this.selectedAction = new class implements DtosServiceInstanceActionDto {
+      command: string;
 
-  ngOnInit() {
+    }
+  }
+
+
+  ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.serviceService
-        .servicesInfoServiceidGet(params['serviceId'])
+        .servicesInfoServicetypeServicenameGet(params.serviceType, params.serivceName)
         .subscribe({
           next: (services) => {
             this.service = services.services[0];
@@ -56,39 +66,32 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
     ace.config.set('fontSize', '14px');
     this.aceEditor = ace.edit(this.editor.nativeElement);
     this.aceEditor.session.setMode('ace/mode/yaml');
-    this.aceEditor.setReadOnly(true)
+    this.aceEditor.setReadOnly(true);
   }
 
-  selectAction(command) {
-    this.selectedComand = command;
+  selectAction(action): void {
+    this.selectedAction = action
     this.openModal = true;
   }
 
-  updateYAML() {
-    this.serviceService
-      .servicesUpdateServiceidPost(this.aceEditor.getValue(), this.service.name)
-      .subscribe({
-        next: (dtosServiceStoreItemYamlDto) => {
-          this.aceEditor.session.setValue(dtosServiceStoreItemYamlDto.yaml);
-        },
-      });
-  }
-
-  open() {
-    this.serviceService.servicesYamlServiceidGet(this.service.id).subscribe({
+  open(): void{
+    this.serviceService.servicesYamlServicetypeServicenameGet(
+      this.service.type, this.service.name).subscribe({
       next: (dtosServiceYamlDto) => {
         this.aceEditor.session.setValue(dtosServiceYamlDto.yaml);
       },
-      error: msg => {console.log(msg)}
+      error: msg => {console.log(msg); }
     });
   }
 
-  deleteService() {
-    this.serviceService.servicesServiceidDelete(this.service.id).subscribe({
-      next: () => { 
-        this.router.navigate(['main/services']); 
+  deleteService(): void {
+    this.serviceService.servicesServicetypeServicenameDelete(
+      this.service.type,
+      this.service.name).subscribe({
+      next: () => {
+        this.router.navigate(['main/services']);
       },
-      error: msg => {console.log(msg)}
-    })
+      error: msg => {console.log(msg); }
+    });
   }
 }

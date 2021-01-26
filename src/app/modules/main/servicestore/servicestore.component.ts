@@ -1,17 +1,17 @@
-import { 
+import {
   AfterViewInit,
-  Component, 
-  ElementRef, 
-  OnInit, 
-  ViewChild 
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild
 } from '@angular/core';
-import { 
-  ServicestoreService, 
+import {
+  ServicestoreService,
   DtosServiceStoreItemDto,
   ServiceService,
   DtosServiceYamlDto,
 } from 'src/app/rest';
-import * as ace from "ace-builds";
+import * as ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
 
 @Component({
@@ -21,38 +21,36 @@ import 'ace-builds/webpack-resolver';
   providers: [ServicestoreService, ServiceService]
 })
 export class ServicestoreComponent implements OnInit, AfterViewInit {
-  @ViewChild("editor") private editor: ElementRef<HTMLElement>;
-  
-  services:  Array<DtosServiceStoreItemDto>;
-  serviceName: string;
+  @ViewChild('editor') private editor: ElementRef<HTMLElement>;
+
+  services: Array<DtosServiceStoreItemDto>;
+  serviceType: string;
   wizardYAML: string;
   aceEditor: any;
 
   constructor(private servicestoreService: ServicestoreService,
               private serviceService: ServiceService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.servicestoreService.servicestoreInfoGet().subscribe({
-      next: services => {this.services = services.services},
-      error: msg => {console.log(msg)}
+      next: services => {this.services = services.services; },
+      error: msg => {console.log(msg); }
     });
   }
-  
-  finish(){
-    let dtosServiceYamlDto = {
+
+  finish(): void {
+    const dtosServiceYamlDto = {
       yaml: this.aceEditor.getValue()
     } as DtosServiceYamlDto;
     this.serviceService.servicesCreateServicetypePost(
-      dtosServiceYamlDto, this.serviceName).subscribe({
-        next: dtosServiceStoreItemYamlDto => {
-          this.aceEditor.session.setValue(dtosServiceStoreItemYamlDto.yaml);
-        }
+      dtosServiceYamlDto, this.serviceType).subscribe({
+        next: () => console.log('OK')
     });
     }
 
-  open(serviceName){
-    this.serviceName=serviceName;
-    this.servicestoreService.servicestoreYamlServicetypeGet(this.serviceName)
+  open(serviceName): void{
+    this.serviceType = serviceName;
+    this.servicestoreService.servicestoreYamlServicetypeGet(this.serviceType)
       .subscribe({
           next: dtosServiceStoreItemYamlDto => {
             this.aceEditor.session.setValue(dtosServiceStoreItemYamlDto.yaml);
@@ -61,8 +59,8 @@ export class ServicestoreComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    ace.config.set("fontSize", "14px");
+    ace.config.set('fontSize', '14px');
     this.aceEditor = ace.edit(this.editor.nativeElement);
-    this.aceEditor.session.setMode("ace/mode/yaml");
+    this.aceEditor.session.setMode('ace/mode/yaml');
   }
 }
