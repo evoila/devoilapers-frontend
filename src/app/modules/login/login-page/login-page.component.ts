@@ -20,7 +20,7 @@ export class LoginPageComponent implements OnInit {
   role = '';
 
   isError = false;
-  msgError = '';
+  msgError = 'Invalid user name or password';
 
   constructor(
     private router: Router,
@@ -52,7 +52,10 @@ export class LoginPageComponent implements OnInit {
         },
         error: msg => {
           this.isError = true;
-          this.msgError = msg;
+          this.msgError = msg.message;
+          if (msg.status === 401){
+            this.msgError = 'Invalid user name or password';
+          }
         }
       });
     }
