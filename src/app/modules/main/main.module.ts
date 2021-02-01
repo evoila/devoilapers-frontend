@@ -17,8 +17,6 @@ import { ServiceDetailsComponent } from './service-details/service-details.compo
 
 export function configurationFactory(): Configuration {
   const params: ConfigurationParameters = {
-    username: localStorage.getItem('username'),
-    password: localStorage.getItem('password'),
   };
   return new Configuration(params);
 }

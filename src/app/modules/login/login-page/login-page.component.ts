@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService, DtosAccountCredentialsDto } from 'src/app/rest';
+import {AuthService} from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-login-page',
@@ -8,31 +9,29 @@ import { AccountService, DtosAccountCredentialsDto } from 'src/app/rest';
   styleUrls: ['./login-page.component.scss'],
   providers: [ AccountService ]
 })
+
 export class LoginPageComponent implements OnInit {
   rememberMe = false;
 
   username = '';
   password = '';
 
+  isValid = false;
+  role = '';
+
   isError = false;
   msgError = '';
 
   constructor(
     private router: Router,
-    private accountServce: AccountService
-  ) { }
+    private accountServce: AccountService,
+    public auth: AuthService,
+) { }
 
   ngOnInit() {
-    if (localStorage.getItem('rememberMe')){
-      this.rememberMe = localStorage.getItem('rememberMe') === 'true';
+    if (this.auth.loadLoginData()){
+      this.onLogin();
     }
-    if (localStorage.getItem('username')){
-      this.username = localStorage.getItem('username');
-    }
-    if (localStorage.getItem('password')){
-      this.password = localStorage.getItem('password');
-    }
-    this.onLogin();
   }
 
   onLogin() {
@@ -45,10 +44,7 @@ export class LoginPageComponent implements OnInit {
           this.accountServce.accountsLoginPost(dtosAccountCredentialsDto).subscribe({
         next: auth => {
           if (auth.isValid) {
-            localStorage.setItem('rememberMe', '' + this.rememberMe);
-            localStorage.setItem('username', this.username);
-            localStorage.setItem('password', this.password);
-            localStorage.setItem('role', auth.role);
+            this.auth.login(this.rememberMe, this.username, this.password, auth.isValid, auth.role)
             this.router.navigate(['main']);
           } else {
             this.isError = true;
