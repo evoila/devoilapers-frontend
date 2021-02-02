@@ -21,7 +21,7 @@
       </clr-checkbox-wrapper>
 
       <div class="error active" *ngIf="isError">
-        Invalid user name or password
+        {{ msgError }}
       </div>
       <button [disabled]="!username || !password" type="submit" class="btn btn-primary"
         (click)="onLogin()">Login</button>

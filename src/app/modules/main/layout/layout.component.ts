@@ -1,5 +1,6 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import {AuthService} from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-layout',
@@ -10,6 +11,7 @@ export class LayoutComponent implements OnInit {
   collapsed = true;
 
   constructor(
+    public auth: AuthService,
     private router: Router
   ) { }
 
@@ -17,7 +19,7 @@ export class LayoutComponent implements OnInit {
   }
 
   onLogout() {
-    localStorage.clear();
+    this.auth.logout()
     this.router.navigate(['login']);
   }
 
