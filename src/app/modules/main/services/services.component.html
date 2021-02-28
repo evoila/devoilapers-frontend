@@ -19,7 +19,7 @@
 					  </button>
 					<div *ngFor="let actionGroups of service.actionGroups">
 						<p>{{actionGroups.name}}</p>
-						<button *ngFor="let action of actionGroups.actions" class="action-item" (click)="openModal = true;displayAction(service, action)">
+						<button *ngFor="let action of actionGroups.actions" class="action-item" (click)="displayAction(service, action)">
 							<clr-icon shape="note"></clr-icon>
 							{{ action.name }}
 						</button>
@@ -29,17 +29,5 @@
 		</clr-dg-row>
 		<clr-dg-footer>{{services.length}} Services</clr-dg-footer>
 	</clr-datagrid>
-
-	<clr-modal [(clrModalOpen)]="openModal">
-		<h3 class="modal-title">{{ selectedService.name }}</h3>
-		<div class="modal-body">
-		  <p>Name: 	{{ selectedService.name }}</p>
-		  <p>Action: {{selectedAction.name}}</p>
-		</div>
-		<div class="modal-footer">
-		  <button type="button" class="btn btn-outline" (click)="openModal = false">Cancel</button>
-		  <button type="button" class="btn btn-primary" (click)="executeAction()">Execute</button>
-		</div>
-	  </clr-modal>
-
+  <app-action-modal></app-action-modal>
 </div>

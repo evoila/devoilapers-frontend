@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import {
   Component,
-  OnInit
+  OnInit, ViewChild
 } from '@angular/core';
 
 import {
@@ -10,6 +10,10 @@ import {
   DtosServiceInstanceActionDto
 } from 'src/app/rest';
 
+import {
+  ActionModalComponent
+} from '../action-modal/action-modal.component';
+
 @Component({
   selector: 'app-services',
   templateUrl: './services.component.html',
@@ -17,13 +21,14 @@ import {
   providers: [ServiceService]
 })
 export class ServicesComponent implements OnInit {
+  @ViewChild(ActionModalComponent) actionModal: ActionModalComponent;
+
   services: Array<DtosServiceInstanceDetailsDto> = [];
 
   selectedService: DtosServiceInstanceDetailsDto = {};
   selectedAction: DtosServiceInstanceActionDto = {};
   selectedPayload: string;
 
-  openModal = false;
 
   constructor(
     private serviceService: ServiceService,
@@ -44,18 +49,9 @@ export class ServicesComponent implements OnInit {
   displayAction(
     selectedService: DtosServiceInstanceDetailsDto,
     selectedAction: DtosServiceInstanceActionDto): void {
-    this.selectedService = selectedService;
-    this.selectedAction = selectedAction;
-  }
 
-  executeAction(): void{
-    this.serviceService.servicesActionServicetypeServicenameActioncommandPost(
-      this.selectedPayload,
-      this.selectedService.type,
-      this.selectedService.name,
-      this.selectedAction.command).subscribe({
-      next: () => {this.openModal = false; },
-      error: msg => {console.log(msg); }
-    });
+    console.log("opening");
+    this.actionModal.displayAction(selectedService, selectedAction);
+    console.log("opening");
   }
 }

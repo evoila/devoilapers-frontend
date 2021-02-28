@@ -14,6 +14,7 @@ import { ApiModule } from '../../rest'
 import { ServicestoreComponent } from './servicestore/servicestore.component';
 import { ServicesComponent } from './services/services.component';
 import { ServiceDetailsComponent } from './service-details/service-details.component';
+import {ActionModalComponent} from './action-modal/action-modal.component';
 
 export function configurationFactory(): Configuration {
   const params: ConfigurationParameters = {
@@ -32,6 +33,7 @@ export function configurationFactory(): Configuration {
     ServicestoreComponent,
     ServicesComponent,
     ServiceDetailsComponent,
+    ActionModalComponent
   ],
   imports: [
     CommonModule,

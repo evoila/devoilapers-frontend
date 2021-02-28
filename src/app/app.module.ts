@@ -9,10 +9,11 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { MainModule } from './modules/main/main.module';
 import { LoginModule } from './modules/login/login.module';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -21,10 +22,11 @@ import { LoginModule } from './modules/login/login.module';
     HttpClientModule,
     BrowserAnimationsModule,
     MainModule,
-    LoginModule
+    LoginModule,
+    FormsModule,
   ],
   providers: [
-    { provide: LocationStrategy, useClass: HashLocationStrategy }
+    {provide: LocationStrategy, useClass: HashLocationStrategy}
   ],
   bootstrap: [AppComponent]
 })
