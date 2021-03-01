@@ -21,9 +21,6 @@ export class ActionModalComponent {
     private serviceService: ServiceService,
   ) { }
 
-  ngOnInit(): void {
-  }
-
   displayAction(
     selectedService: DtosServiceInstanceDetailsDto,
     selectedAction: DtosServiceInstanceActionDto): void {

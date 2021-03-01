@@ -16,6 +16,7 @@ import {
 } from '../../../rest';
 import * as ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
+import {ActionModalComponent} from '../action-modal/action-modal.component';
 
 @Component({
   selector: 'app-service-details',
@@ -24,6 +25,7 @@ import 'ace-builds/webpack-resolver';
 })
 export class ServiceDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('editor') private editor: ElementRef<HTMLElement>;
+  @ViewChild(ActionModalComponent) actionModal: ActionModalComponent;
 
   aceEditor: any;
   service: DtosServiceInstanceDetailsDto = {};
@@ -69,11 +71,6 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
     this.aceEditor.setReadOnly(true);
   }
 
-  selectAction(action): void {
-    this.selectedAction = action
-    this.openModal = true;
-  }
-
   open(): void{
     this.serviceService.servicesYamlServicetypeServicenameGet(
       this.service.type, this.service.name).subscribe({
@@ -93,5 +90,9 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
       },
       error: msg => {console.log(msg); }
     });
+  }
+
+  displayAction(selectedAction: DtosServiceInstanceActionDto): void {
+    this.actionModal.displayAction(this.service, selectedAction);
   }
 }
