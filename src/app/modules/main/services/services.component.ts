@@ -25,11 +25,6 @@ export class ServicesComponent implements OnInit {
 
   services: Array<DtosServiceInstanceDetailsDto> = [];
 
-  selectedService: DtosServiceInstanceDetailsDto = {};
-  selectedAction: DtosServiceInstanceActionDto = {};
-  selectedPayload: string;
-
-
   constructor(
     private serviceService: ServiceService,
     private router: Router,
@@ -50,8 +45,7 @@ export class ServicesComponent implements OnInit {
     selectedService: DtosServiceInstanceDetailsDto,
     selectedAction: DtosServiceInstanceActionDto): void {
 
-    console.log("opening");
     this.actionModal.displayAction(selectedService, selectedAction);
-    console.log("opening");
+
   }
 }

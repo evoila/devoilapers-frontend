@@ -25,7 +25,6 @@ export class ActionModalComponent {
     selectedService: DtosServiceInstanceDetailsDto,
     selectedAction: DtosServiceInstanceActionDto): void {
 
-    console.log("starting");
     this.selectedService = selectedService;
     this.selectedAction = selectedAction;
 
@@ -36,25 +35,20 @@ export class ActionModalComponent {
 
       var keyName = this.selectedPlaceholderKeys[keyCount];
       var valueType = (typeof this.selectedPlaceholder[keyName]);
-      console.log(keyName);
-      console.log(valueType);
       this.selectedPlaceholderTypes[keyName] = valueType;
-      console.log(this.selectedPlaceholderTypes);
+
     }
 
     this.openModal = true;
-
-    console.log("runngin")
   }
 
   executeAction(): void{
-    console.log(this.selectedPlaceholder);
     this.serviceService.servicesActionServicetypeServicenameActioncommandPost(
-      this.selectedPayload,
+      JSON.stringify(this.selectedPlaceholder),
       this.selectedService.type,
       this.selectedService.name,
       this.selectedAction.command).subscribe({
-      next: () => {this.closeAction() },
+      next: () => {this.closeAction()},
       error: msg => {console.log(msg); }
     });
   }
