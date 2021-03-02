@@ -27,7 +27,7 @@
 <div class="clr-row">
   <div *ngFor="let actionGroups of service.actionGroups">
     <h2>{{actionGroups.name}}</h2>
-    <button *ngFor="let action of actionGroups.actions" class="btn btn-primary" (click)="selectAction(action)">
+    <button *ngFor="let action of actionGroups.actions" class="btn btn-primary" (click)="displayAction(action)">
       <clr-icon shape="note"></clr-icon>
       {{ action.name }}
     </button>
@@ -76,4 +76,5 @@
     </div>
   </clr-modal>
 
+  <app-action-modal></app-action-modal>
 </div>

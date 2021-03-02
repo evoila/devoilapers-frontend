@@ -1,0 +1,37 @@
+<div>
+  <clr-modal [(clrModalOpen)]="openModal">
+    <h3 class="modal-title">Action: {{selectedAction.name}}</h3>
+    <div class="modal-body">
+      <p>Service Name: 	{{ selectedService.name }}</p>
+      <div *ngFor="let inputFieldKey of this.selectedPlaceholderKeys">
+        <clr-input-container *ngIf="isString(inputFieldKey)">
+          <label>{{ inputFieldKey }}</label>
+          <input clrInput
+                 name="{{ inputFieldKey }}"
+                 [(ngModel)]="this.selectedPlaceholder[inputFieldKey]"
+          />
+        </clr-input-container>
+        <clr-input-container *ngIf="isInteger(inputFieldKey)">
+          <label>{{ inputFieldKey }}</label>
+          <input clrInput
+                 name="{{ inputFieldKey }}"
+                 type="number"
+                 [(ngModel)]="this.selectedPlaceholder[inputFieldKey]"/>
+        </clr-input-container>
+        <clr-checkbox-container>
+          <clr-checkbox-wrapper *ngIf="isBool(inputFieldKey)">
+            <label><strong>{{ inputFieldKey }}</strong></label>
+            <input clrCheckbox
+                   type="checkbox"
+                   name="{{ inputFieldKey }}"
+                   [(ngModel)]="this.selectedPlaceholder[inputFieldKey]"/>
+          </clr-checkbox-wrapper>
+        </clr-checkbox-container>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline" (click)="openModal = false">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="executeAction()">Execute</button>
+    </div>
+  </clr-modal>
+</div>
