@@ -10,7 +10,6 @@ export class ActionModalComponent {
 
   selectedService: DtosServiceInstanceDetailsDto = {};
   selectedAction: DtosServiceInstanceActionDto = {};
-  selectedPayload: string;
 
   openModal = false;
   selectedPlaceholder: any;
@@ -30,6 +29,7 @@ export class ActionModalComponent {
 
     this.selectedPlaceholder = JSON.parse(this.selectedAction.placeholder);
     this.selectedPlaceholderKeys = Object.keys(this.selectedPlaceholder);
+
     var keyCount;
     for (keyCount = 0; keyCount < this.selectedPlaceholderKeys.length; keyCount++) {
 
