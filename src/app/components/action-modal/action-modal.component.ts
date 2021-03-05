@@ -33,6 +33,7 @@ export class ActionModalComponent implements OnInit {
         this.shouldDisplayNotification = true;
       }, 25);
     });
+    this.shouldDisplayNotification = false;
   }
 
   displayAction(
@@ -60,7 +61,9 @@ export class ActionModalComponent implements OnInit {
         this.selectedPlaceholderTypes[keyName] = valueType;
 
       }
+
   }
+    this.shouldDisplayNotification = false;
     this.openModal = true;
   }
 
@@ -85,7 +88,6 @@ export class ActionModalComponent implements OnInit {
         );
         this.closeAction();
       },
-      error: msg => {console.log(msg); }
     });
   }
 

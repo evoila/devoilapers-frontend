@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import {
-  Component,
+  Component, OnDestroy,
   OnInit, ViewChild
 } from '@angular/core';
 
@@ -22,7 +22,7 @@ import { Observable, Subscription, interval  } from 'rxjs';
   styleUrls: ['./services.component.scss'],
   providers: [ ServiceService ]
 })
-export class ServicesComponent implements OnInit {
+export class ServicesComponent implements OnInit, OnDestroy {
   @ViewChild(ActionModalComponent) actionModal: ActionModalComponent;
   private updateSubscription: Subscription;
 
@@ -56,5 +56,9 @@ export class ServicesComponent implements OnInit {
 
     this.actionModal.displayAction(selectedService, selectedAction);
 
+  }
+
+  ngOnDestroy(): void {
+    this.updateSubscription.unsubscribe();
   }
 }

@@ -2,7 +2,7 @@ import { Router } from '@angular/router';
 import {
   AfterViewInit,
   Component,
-  ElementRef,
+  ElementRef, OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -25,7 +25,7 @@ import {interval, Subscription} from 'rxjs';
   templateUrl: './service-details.component.html',
   styleUrls: ['./service-details.component.scss'],
 })
-export class ServiceDetailsComponent implements OnInit, AfterViewInit {
+export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('editor') private editor: ElementRef<HTMLElement>;
   @ViewChild(ActionModalComponent) actionModal: ActionModalComponent;
 
@@ -72,6 +72,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
           },
         });
     });
+
   }
 
   ngAfterViewInit(): void {
@@ -111,5 +112,9 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
 
   displayAction(selectedAction: DtosServiceInstanceActionDto): void {
     this.actionModal.displayAction(this.service, selectedAction);
+  }
+
+  ngOnDestroy(): void {
+    this.updateSubscription.unsubscribe();
   }
 }
