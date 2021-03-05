@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AccountService, DtosAccountCredentialsDto } from 'src/app/rest';
-import {AuthService} from '../../../auth/auth.service';
+import { AccountService, DtosAccountCredentialsDto } from 'src/app/share/swagger-auto-gen';
+import {AuthService} from '../../services/auth/auth.service';
+import {Notification, NotificationService} from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-login-page',
@@ -22,16 +23,30 @@ export class LoginPageComponent implements OnInit {
   isError = false;
   msgError = 'Invalid user name or password';
 
+  public notification: Notification | null = null;
+  public shouldDisplayNotification = false;
+
   constructor(
     private router: Router,
     private accountServce: AccountService,
     public auth: AuthService,
+    private notifications: NotificationService,
 ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+
     if (this.auth.loadLoginData()){
       this.onLogin();
     }
+
+    this.notifications.notifications.subscribe(x => {
+      this.shouldDisplayNotification = false;
+      setTimeout(() => {
+        this.notification = x;
+        this.shouldDisplayNotification = true;
+      }, 25);
+    });
+
   }
 
   onLogin() {
@@ -50,13 +65,6 @@ export class LoginPageComponent implements OnInit {
             this.isError = true;
           }
         },
-        error: msg => {
-          this.isError = true;
-          this.msgError = msg.message;
-          if (msg.status === 401){
-            this.msgError = 'Invalid user name or password';
-          }
-        }
       });
     }
   }

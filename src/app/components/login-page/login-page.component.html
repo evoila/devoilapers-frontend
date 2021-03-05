@@ -20,9 +20,9 @@
         <label for="rememberme"> Remember me </label>
       </clr-checkbox-wrapper>
 
-      <div class="error active" *ngIf="isError">
-        {{ msgError }}
-      </div>
+      <app-notification-banner *ngIf="shouldDisplayNotification" [notification]="notification">
+      </app-notification-banner>
+
       <button [disabled]="!username || !password" type="submit" class="btn btn-primary"
         (click)="onLogin()">Login</button>
     </div>

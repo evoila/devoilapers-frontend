@@ -8,7 +8,7 @@ import {
   ServiceService,
   DtosServiceInstanceDetailsDto,
   DtosServiceInstanceActionDto
-} from 'src/app/rest';
+} from 'src/app/share/swagger-auto-gen';
 
 import {
   ActionModalComponent
@@ -33,8 +33,8 @@ export class ServicesComponent implements OnInit {
   ngOnInit() {
     this.serviceService.servicesInfoGet().subscribe({
       next: services => {this.services = services.services; },
-      error: msg => {console.log(msg); }
     });
+    console.log(this.services.length)
   }
 
   gotoServiceDetails(serviceType: string, serviceName: string): void {

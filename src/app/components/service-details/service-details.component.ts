@@ -13,7 +13,7 @@ import {
   DtosServiceInstanceActionDto,
   DtosServiceInstanceDetailsDto,
   ServiceService
-} from '../../../rest';
+} from '../../share/swagger-auto-gen';
 import * as ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
 import {ActionModalComponent} from '../action-modal/action-modal.component';

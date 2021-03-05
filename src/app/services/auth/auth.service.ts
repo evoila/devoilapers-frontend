@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Configuration} from '../rest';
+import {Configuration} from '../../share/swagger-auto-gen';
 @Injectable({
   providedIn: 'root'
 })

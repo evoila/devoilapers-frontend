@@ -28,6 +28,9 @@
     </div>
   </clr-header>
 
+  <app-notification-banner *ngIf="shouldDisplayNotification" [notification]="notification">
+  </app-notification-banner>
+
   <div class="content-container">
     <main class="content-area">
       <router-outlet></router-outlet>

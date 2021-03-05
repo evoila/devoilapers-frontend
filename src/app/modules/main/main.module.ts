@@ -1,20 +1,19 @@
-import {ComponentRef, Input, NgModule, OnDestroy} from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ClarityModule } from '@clr/angular';
-
 import { MainRoutingModule } from './main-routing.module';
-import { MainPageComponent } from './main-page/main-page.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { AboutComponent } from './about/about.component';
-import { LayoutComponent } from './layout/layout.component';
-
-import { ConfigurationParameters, Configuration } from '../../rest'
-import { ApiModule } from '../../rest'
-import { ServicestoreComponent } from './servicestore/servicestore.component';
-import { ServicesComponent } from './services/services.component';
-import { ServiceDetailsComponent } from './service-details/service-details.component';
-import {ActionModalComponent} from './action-modal/action-modal.component';
+import { MainPageComponent } from '../../components/main-page/main-page.component';
+import { PageNotFoundComponent } from '../../components/page-not-found/page-not-found.component';
+import { AboutComponent } from '../../components/about/about.component';
+import { LayoutComponent } from '../../components/layout/layout.component';
+import { ConfigurationParameters, Configuration } from '../../share/swagger-auto-gen'
+import { ApiModule } from '../../share/swagger-auto-gen'
+import { ServicestoreComponent } from '../../components/servicestore/servicestore.component';
+import { ServicesComponent } from '../../components/services/services.component';
+import { ServiceDetailsComponent } from '../../components/service-details/service-details.component';
+import { ActionModalComponent } from '../../components/action-modal/action-modal.component';
+import {NotificationsModule} from '../notifications-banner/notifications-banner.module';
 
 export function configurationFactory(): Configuration {
   const params: ConfigurationParameters = {
@@ -33,7 +32,7 @@ export function configurationFactory(): Configuration {
     ServicestoreComponent,
     ServicesComponent,
     ServiceDetailsComponent,
-    ActionModalComponent
+    ActionModalComponent,
   ],
   imports: [
     CommonModule,
@@ -41,6 +40,7 @@ export function configurationFactory(): Configuration {
     ClarityModule,
     MainRoutingModule,
     ApiModule.forRoot(configurationFactory),
+    NotificationsModule,
   ]
 })
 export class MainModule {}

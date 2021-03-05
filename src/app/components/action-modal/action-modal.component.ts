@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {DtosServiceInstanceActionDto, DtosServiceInstanceDetailsDto, ServiceService} from '../../../rest';
+import {DtosServiceInstanceActionDto, DtosServiceInstanceDetailsDto, ServiceService} from '../../share/swagger-auto-gen';
 
 @Component({
   selector: 'app-action-modal',

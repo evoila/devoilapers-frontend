@@ -10,7 +10,7 @@ import {
   DtosServiceStoreItemDto,
   ServiceService,
   DtosServiceYamlDto,
-} from 'src/app/rest';
+} from 'src/app/share/swagger-auto-gen';
 import * as ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
 

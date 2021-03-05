@@ -1,6 +1,16 @@
 <div>
 	<h1>Services</h1>
-	<p class="center">Double click service to edit</p>
+  <div *ngIf="this.services.length===0">
+    <p>There is currently no service available.
+      User the Service Store to create a service. Go to
+      <a routerLink="/main/servicestore">
+        Service Store
+      </a>
+    </p>
+  </div>
+  <div *ngIf="this.services.length!==0">
+    <p>Double click a service to edit</p>
+    <br>
 	<clr-datagrid>
 		<clr-dg-column>Name</clr-dg-column>
 		<clr-dg-column>Type</clr-dg-column>
@@ -29,5 +39,6 @@
 		</clr-dg-row>
 		<clr-dg-footer>{{services.length}} Services</clr-dg-footer>
 	</clr-datagrid>
+  </div>
   <app-action-modal></app-action-modal>
 </div>
