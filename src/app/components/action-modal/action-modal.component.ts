@@ -27,24 +27,31 @@ export class ActionModalComponent {
     this.selectedService = selectedService;
     this.selectedAction = selectedAction;
 
-    this.selectedPlaceholder = JSON.parse(this.selectedAction.placeholder);
-    this.selectedPlaceholderKeys = Object.keys(this.selectedPlaceholder);
+    console.log(this.selectedAction.placeholder)
+    if (this.selectedAction.placeholder !== 'null'){
+      
+      this.selectedPlaceholder = JSON.parse(this.selectedAction.placeholder);
+      this.selectedPlaceholderKeys = Object.keys(this.selectedPlaceholder);
 
-    var keyCount;
-    for (keyCount = 0; keyCount < this.selectedPlaceholderKeys.length; keyCount++) {
+      var keyCount;
+      for (keyCount = 0; keyCount < this.selectedPlaceholderKeys.length; keyCount++) {
 
-      var keyName = this.selectedPlaceholderKeys[keyCount];
-      var valueType = (typeof this.selectedPlaceholder[keyName]);
-      this.selectedPlaceholderTypes[keyName] = valueType;
+        var keyName = this.selectedPlaceholderKeys[keyCount];
+        var valueType = (typeof this.selectedPlaceholder[keyName]);
+        this.selectedPlaceholderTypes[keyName] = valueType;
 
-    }
-
+      }
+  }
     this.openModal = true;
   }
 
   executeAction(): void{
+    let updatePlaceholder = null;
+    if (this.selectedPlaceholderKeys.length !== 0){
+      updatePlaceholder = JSON.stringify(this.selectedPlaceholder);
+    }
     this.serviceService.servicesActionServicetypeServicenameActioncommandPost(
-      JSON.stringify(this.selectedPlaceholder),
+      updatePlaceholder,
       this.selectedService.type,
       this.selectedService.name,
       this.selectedAction.command).subscribe({

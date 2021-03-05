@@ -18,7 +18,7 @@ import {
   selector: 'app-services',
   templateUrl: './services.component.html',
   styleUrls: ['./services.component.scss'],
-  providers: [ServiceService]
+  providers: [ ServiceService ]
 })
 export class ServicesComponent implements OnInit {
   @ViewChild(ActionModalComponent) actionModal: ActionModalComponent;
@@ -34,7 +34,6 @@ export class ServicesComponent implements OnInit {
     this.serviceService.servicesInfoGet().subscribe({
       next: services => {this.services = services.services; },
     });
-    console.log(this.services.length)
   }
 
   gotoServiceDetails(serviceType: string, serviceName: string): void {
