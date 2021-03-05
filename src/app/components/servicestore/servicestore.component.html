@@ -38,7 +38,7 @@
 		<clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
 		<clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
 		<clr-wizard-button [type]="'next'">Next</clr-wizard-button>
-		<clr-wizard-button [type]="'finish'" (click)="finish()">Done</clr-wizard-button>
+		<clr-wizard-button [type]="'finish'" [clrWizardButtonDisabled]="clicked" (click)="finish(); clicked = true;">Done</clr-wizard-button>
 
 		<clr-wizard-page #pageTwo>
 		  <ng-template clrPageTitle>Edit YAML</ng-template>

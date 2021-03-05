@@ -13,6 +13,7 @@ import {
 } from 'src/app/share/swagger-auto-gen';
 import * as ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
+import {Notification, NotificationService, NotificationType} from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-servicestore',
@@ -27,14 +28,15 @@ export class ServicestoreComponent implements OnInit, AfterViewInit {
   serviceType: string;
   wizardYAML: string;
   aceEditor: any;
+  clicked: boolean;
 
   constructor(private servicestoreService: ServicestoreService,
-              private serviceService: ServiceService) { }
+              private serviceService: ServiceService,
+              private notification: NotificationService) { }
 
   ngOnInit(): void {
     this.servicestoreService.servicestoreInfoGet().subscribe({
       next: services => {this.services = services.services; },
-      error: msg => {console.log(msg); }
     });
   }
 
@@ -44,7 +46,16 @@ export class ServicestoreComponent implements OnInit, AfterViewInit {
     } as DtosServiceYamlDto;
     this.serviceService.servicesCreateServicetypePost(
       dtosServiceYamlDto, this.serviceType).subscribe({
-        next: () => console.log('OK')
+        next: () => {
+          this.notification.add(
+            new Notification(
+              NotificationType.Info,
+              this.serviceType + ': Action successful executed.',
+              'YAML:' + dtosServiceYamlDto.yaml,
+            )
+          );
+          this.clicked = false;
+        }
     });
     }
 

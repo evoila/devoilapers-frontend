@@ -17,6 +17,7 @@ import {
 import * as ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
 import {ActionModalComponent} from '../action-modal/action-modal.component';
+import {Notification, NotificationService, NotificationType} from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-service-details',
@@ -41,6 +42,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private serviceService: ServiceService,
+    private notification: NotificationService,
   ) {
     // tslint:disable-next-line:new-parens
     this.selectedAction = new class implements DtosServiceInstanceActionDto {
@@ -57,9 +59,6 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
         .subscribe({
           next: (services) => {
             this.service = services.services[0];
-          },
-          error: (msg) => {
-            console.log(msg);
           },
         });
     });
@@ -78,7 +77,6 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
       next: (dtosServiceYamlDto) => {
         this.aceEditor.session.setValue(dtosServiceYamlDto.yaml);
       },
-      error: msg => {console.log(msg); }
     });
   }
 
@@ -87,6 +85,14 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
       this.service.type,
       this.service.name).subscribe({
       next: () => {
+        this.notification.add(
+          new Notification(
+            NotificationType.Info,
+            this.service.name + ': Service successful deleted.',
+            ' Type: ' + this.service.type +
+            ' Service Name: ' + this.service.name +
+            ': Service successful deleted.',
+          ));
         this.router.navigate(['main/services']);
       },
       error: msg => {console.log(msg); }

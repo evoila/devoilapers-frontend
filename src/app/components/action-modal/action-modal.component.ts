@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {DtosServiceInstanceActionDto, DtosServiceInstanceDetailsDto, ServiceService} from '../../share/swagger-auto-gen';
+import {Notification, NotificationService, NotificationType} from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-action-modal',
@@ -18,6 +19,7 @@ export class ActionModalComponent {
 
   constructor(
     private serviceService: ServiceService,
+    private notification: NotificationService,
   ) { }
 
   displayAction(
@@ -36,8 +38,8 @@ export class ActionModalComponent {
       let keyCount;
       for (keyCount = 0; keyCount < this.selectedPlaceholderKeys.length; keyCount++) {
 
-        let keyName = this.selectedPlaceholderKeys[keyCount];
-        let valueType = (typeof this.selectedPlaceholder[keyName]);
+        const keyName = this.selectedPlaceholderKeys[keyCount];
+        const valueType = (typeof this.selectedPlaceholder[keyName]);
         this.selectedPlaceholderTypes[keyName] = valueType;
 
       }
@@ -55,7 +57,17 @@ export class ActionModalComponent {
       this.selectedService.type,
       this.selectedService.name,
       this.selectedAction.command).subscribe({
-      next: () => {this.closeAction();},
+      next: () => {
+        this.notification.add(
+          new Notification(
+            NotificationType.Info,
+            this.selectedAction.name + ': Action successful executed.',
+            ' Type: ' + this.selectedService.type +
+            ' Service Name: ' + this.selectedService.name,
+          )
+        );
+        this.closeAction();
+      },
       error: msg => {console.log(msg); }
     });
   }
