@@ -14,6 +14,8 @@ import {
   ActionModalComponent
 } from '../action-modal/action-modal.component';
 
+import { Observable, Subscription, interval  } from 'rxjs';
+
 @Component({
   selector: 'app-services',
   templateUrl: './services.component.html',
@@ -22,6 +24,7 @@ import {
 })
 export class ServicesComponent implements OnInit {
   @ViewChild(ActionModalComponent) actionModal: ActionModalComponent;
+  private updateSubscription: Subscription;
 
   services: Array<DtosServiceInstanceDetailsDto> = [];
 
@@ -30,7 +33,14 @@ export class ServicesComponent implements OnInit {
     private router: Router,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.updateServiceList();
+    this.updateSubscription = interval(10000).subscribe(
+      () => this.updateServiceList()
+    );
+  }
+
+  updateServiceList(): void {
     this.serviceService.servicesInfoGet().subscribe({
       next: services => {this.services = services.services; },
     });
