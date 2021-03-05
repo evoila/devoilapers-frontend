@@ -18,6 +18,7 @@ import * as ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
 import {ActionModalComponent} from '../action-modal/action-modal.component';
 import {Notification, NotificationService, NotificationType} from '../../services/notification/notification.service';
+import {interval, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-service-details',
@@ -27,6 +28,8 @@ import {Notification, NotificationService, NotificationType} from '../../service
 export class ServiceDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('editor') private editor: ElementRef<HTMLElement>;
   @ViewChild(ActionModalComponent) actionModal: ActionModalComponent;
+
+  private updateSubscription: Subscription;
 
   aceEditor: any;
   service: DtosServiceInstanceDetailsDto = {};
@@ -53,6 +56,13 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
+    this.updateServiceList();
+    this.updateSubscription = interval(10000).subscribe(
+      () => this.updateServiceList()
+    );
+  }
+
+  updateServiceList(): void {
     this.route.params.subscribe((params) => {
       this.serviceService
         .servicesInfoServicetypeServicenameGet(params.serviceType, params.serivceName)
