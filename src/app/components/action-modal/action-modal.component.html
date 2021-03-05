@@ -28,6 +28,8 @@
           </clr-checkbox-wrapper>
         </clr-checkbox-container>
       </div>
+      <app-notification-banner *ngIf="shouldDisplayNotification" [notification]="notification">
+      </app-notification-banner>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline" (click)="openModal = false">Cancel</button>

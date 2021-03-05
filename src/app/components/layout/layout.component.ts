@@ -21,7 +21,6 @@ export class LayoutComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.notifications.notifications.subscribe(x => {
       this.shouldDisplayNotification = false;
       setTimeout(() => {
@@ -29,7 +28,6 @@ export class LayoutComponent implements OnInit {
         this.shouldDisplayNotification = true;
       }, 25);
     });
-
   }
 
   onLogout(): void {

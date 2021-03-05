@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {DtosServiceInstanceActionDto, DtosServiceInstanceDetailsDto, ServiceService} from '../../share/swagger-auto-gen';
 import {Notification, NotificationService, NotificationType} from '../../services/notification/notification.service';
 
@@ -7,29 +7,46 @@ import {Notification, NotificationService, NotificationType} from '../../service
   templateUrl: './action-modal.component.html',
   styleUrls: ['./action-modal.component.scss']
 })
-export class ActionModalComponent {
+export class ActionModalComponent implements OnInit {
 
   selectedService: DtosServiceInstanceDetailsDto = {};
   selectedAction: DtosServiceInstanceActionDto = {};
 
   openModal = false;
-  selectedPlaceholder: any;
-  selectedPlaceholderKeys: any;
+  selectedPlaceholder: {};
+  selectedPlaceholderKeys: string[];
   selectedPlaceholderTypes =  {} ;
+
+  public notification: Notification | null = null;
+  public shouldDisplayNotification = false;
 
   constructor(
     private serviceService: ServiceService,
-    private notification: NotificationService,
+    private notifications: NotificationService,
   ) { }
+
+  ngOnInit(): void {
+    this.notifications.notifications.subscribe(x => {
+      this.shouldDisplayNotification = false;
+      setTimeout(() => {
+        this.notification = x;
+        this.shouldDisplayNotification = true;
+      }, 25);
+    });
+  }
 
   displayAction(
     selectedService: DtosServiceInstanceDetailsDto,
-    selectedAction: DtosServiceInstanceActionDto): void {
+    selectedAction: DtosServiceInstanceActionDto
+  ): void {
 
     this.selectedService = selectedService;
     this.selectedAction = selectedAction;
 
-    console.log(this.selectedAction.placeholder);
+    this.selectedPlaceholder = {};
+    this.selectedPlaceholderKeys = [];
+    this.selectedPlaceholderTypes = {};
+
     if (this.selectedAction.placeholder !== 'null'){
 
       this.selectedPlaceholder = JSON.parse(this.selectedAction.placeholder);
@@ -48,7 +65,7 @@ export class ActionModalComponent {
   }
 
   executeAction(): void{
-    let updatePlaceholder = null;
+    let updatePlaceholder = '{}';
     if (this.selectedPlaceholderKeys.length !== 0){
       updatePlaceholder = JSON.stringify(this.selectedPlaceholder);
     }
@@ -58,7 +75,7 @@ export class ActionModalComponent {
       this.selectedService.name,
       this.selectedAction.command).subscribe({
       next: () => {
-        this.notification.add(
+        this.notifications.add(
           new Notification(
             NotificationType.Info,
             this.selectedAction.name + ': Action successful executed.',
