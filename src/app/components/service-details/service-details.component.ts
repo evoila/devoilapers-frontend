@@ -33,19 +33,20 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
   openEditorModal = false;
   openDeleteModal = false;
 
-  selectedAction: DtosServiceInstanceActionDto
-  serviceName: string
-  serviceType: string
+  selectedAction: DtosServiceInstanceActionDto;
+  serviceName: string;
+  serviceType: string;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private serviceService: ServiceService,
   ) {
+    // tslint:disable-next-line:new-parens
     this.selectedAction = new class implements DtosServiceInstanceActionDto {
       command: string;
 
-    }
+    };
   }
 
 

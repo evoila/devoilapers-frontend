@@ -7,7 +7,7 @@ export class AuthService {
   constructor(private apiConfiguration: Configuration) { }
 
   public isAuthenticated(): boolean {
-    return Boolean(sessionStorage.getItem('isValid'))
+    return Boolean(sessionStorage.getItem('isValid'));
   }
 
   public loadLoginData(): boolean {
@@ -18,21 +18,21 @@ export class AuthService {
       sessionStorage.setItem('isValid', localStorage.getItem('isValid'));
       sessionStorage.setItem('role', localStorage.getItem('role'));
     }
-    return this.isAuthenticated()
+    return this.isAuthenticated();
   }
 
   public login(rememberMe: boolean, username: string, password: string, isValid: boolean, role: string): void {
 
     sessionStorage.setItem('username', username);
     sessionStorage.setItem('password', password);
-    sessionStorage.setItem('isValid', '' + isValid)
+    sessionStorage.setItem('isValid', '' + isValid);
     sessionStorage.setItem('role', role);
     sessionStorage.setItem('rememberMe', '' + rememberMe);
 
     if (rememberMe) {
       localStorage.setItem('username', username);
       localStorage.setItem('password', password);
-      localStorage.setItem('isValid', '' + isValid)
+      localStorage.setItem('isValid', '' + isValid);
       localStorage.setItem('role', role);
       localStorage.setItem('rememberMe', '' + rememberMe);
     }
@@ -42,19 +42,19 @@ export class AuthService {
   }
 
   public getUsername(): string {
-    return sessionStorage.getItem('username')
+    return sessionStorage.getItem('username');
   }
 
   public getPassword(): string {
-    return sessionStorage.getItem('password')
+    return sessionStorage.getItem('password');
   }
 
   public getRole(): string {
-    return sessionStorage.getItem('role')
+    return sessionStorage.getItem('role');
   }
 
   public getRememberMe(): string {
-    return sessionStorage.getItem('rememberMe')
+    return sessionStorage.getItem('rememberMe');
   }
 
   public logout(): void {

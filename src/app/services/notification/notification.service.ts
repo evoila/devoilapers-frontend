@@ -24,6 +24,7 @@ export class Notification {
 
 @Injectable()
 export class NotificationService {
+  // tslint:disable-next-line:variable-name
   private readonly _notifications = new Subject<Notification | null>();
 
   public readonly notifications = this._notifications.asObservable();

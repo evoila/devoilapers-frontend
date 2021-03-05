@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
-import { Notification, NotificationService, NotificationType } from 'src/app/services/notification/notification.service';
+import { Notification, NotificationService } from 'src/app/services/notification/notification.service';
 
 @Component({
   selector: 'app-layout',
@@ -33,7 +33,7 @@ export class LayoutComponent implements OnInit {
   }
 
   onLogout(): void {
-    this.auth.logout()
+    this.auth.logout();
     this.router.navigate(['login']);
   }
 

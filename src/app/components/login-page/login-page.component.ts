@@ -49,7 +49,7 @@ export class LoginPageComponent implements OnInit {
 
   }
 
-  onLogin() {
+  onLogin(): void {
     if (this.username
         && this.password){
           const dtosAccountCredentialsDto = {
@@ -59,7 +59,7 @@ export class LoginPageComponent implements OnInit {
           this.accountServce.accountsLoginPost(dtosAccountCredentialsDto).subscribe({
         next: auth => {
           if (auth.isValid) {
-            this.auth.login(this.rememberMe, this.username, this.password, auth.isValid, auth.role)
+            this.auth.login(this.rememberMe, this.username, this.password, auth.isValid, auth.role);
             this.router.navigate(['main']);
           } else {
             this.isError = true;

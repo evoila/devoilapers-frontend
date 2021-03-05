@@ -27,17 +27,17 @@ export class ActionModalComponent {
     this.selectedService = selectedService;
     this.selectedAction = selectedAction;
 
-    console.log(this.selectedAction.placeholder)
+    console.log(this.selectedAction.placeholder);
     if (this.selectedAction.placeholder !== 'null'){
-      
+
       this.selectedPlaceholder = JSON.parse(this.selectedAction.placeholder);
       this.selectedPlaceholderKeys = Object.keys(this.selectedPlaceholder);
 
-      var keyCount;
+      let keyCount;
       for (keyCount = 0; keyCount < this.selectedPlaceholderKeys.length; keyCount++) {
 
-        var keyName = this.selectedPlaceholderKeys[keyCount];
-        var valueType = (typeof this.selectedPlaceholder[keyName]);
+        let keyName = this.selectedPlaceholderKeys[keyCount];
+        let valueType = (typeof this.selectedPlaceholder[keyName]);
         this.selectedPlaceholderTypes[keyName] = valueType;
 
       }
@@ -55,7 +55,7 @@ export class ActionModalComponent {
       this.selectedService.type,
       this.selectedService.name,
       this.selectedAction.command).subscribe({
-      next: () => {this.closeAction()},
+      next: () => {this.closeAction();},
       error: msg => {console.log(msg); }
     });
   }
@@ -64,15 +64,15 @@ export class ActionModalComponent {
     this.openModal = false;
   }
 
-  isString(key: string) {
+  isString(key: string): boolean {
     return (this.selectedPlaceholderTypes[key]) === 'string';
   }
 
-  isInteger(key: string) {
+  isInteger(key: string): boolean {
     return (this.selectedPlaceholderTypes[key]) === 'number';
   }
 
-  isBool(key: string) {
+  isBool(key: string): boolean {
     return (this.selectedPlaceholderTypes[key]) === 'boolean';
   }
 }

@@ -32,11 +32,11 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               shortErrorMessage,
               error.message,
             )
-          )
+          );
 
           return throwError(error);
         })
-      )
+      );
   }
 
 }
