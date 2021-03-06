@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { AboutComponent } from './about/about.component';
-import { LayoutComponent } from './layout/layout.component';
-import { ServicesComponent } from './services/services.component';
-import { ServicestoreComponent } from './servicestore/servicestore.component';
-import { ServiceDetailsComponent } from './service-details/service-details.component';
-import {AuthGuardService} from '../../auth/auth-guard.service';
+import { PageNotFoundComponent } from '../../components/page-not-found/page-not-found.component';
+import { AboutComponent } from '../../components/about/about.component';
+import { LayoutComponent } from '../../components/layout/layout.component';
+import { ServicesComponent } from '../../components/services/services.component';
+import { ServicestoreComponent } from '../../components/servicestore/servicestore.component';
+import { ServiceDetailsComponent } from '../../components/service-details/service-details.component';
+import { AuthGuardService } from '../../services/auth/auth-guard.service';
 
 const routes: Routes = [
   {
     path: 'main',
     component: LayoutComponent,
-    canActivate: [AuthGuardService],
+    canActivate: [ AuthGuardService ],
     children: [
       { path: '', redirectTo: 'services', pathMatch: 'full' },
       { path: 'servicestore', component: ServicestoreComponent },
@@ -25,7 +25,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  imports: [ RouterModule.forChild(routes) ],
+  exports: [ RouterModule ]
 })
 export class MainRoutingModule { }

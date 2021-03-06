@@ -1,0 +1,44 @@
+<div>
+	<h1>Services</h1>
+  <div *ngIf="this.services.length===0">
+    <p>There is currently no service available.
+      User the Service Store to create a service. Go to
+      <a routerLink="/main/servicestore">
+        Service Store
+      </a>
+    </p>
+  </div>
+  <div *ngIf="this.services.length!==0">
+    <p>Double click a service to edit</p>
+    <br>
+	<clr-datagrid>
+		<clr-dg-column>Name</clr-dg-column>
+		<clr-dg-column>Type</clr-dg-column>
+		<clr-dg-column>Status</clr-dg-column>
+		<clr-dg-column>Interactions</clr-dg-column>
+
+		<clr-dg-row *ngFor="let service of services" (dblclick)="this.gotoServiceDetails(service.type, service.name)">
+			<clr-dg-cell>{{service.name}}</clr-dg-cell>
+			<clr-dg-cell>{{service.type}}</clr-dg-cell>
+			<clr-dg-cell>{{service.status}}</clr-dg-cell>
+			<clr-dg-cell>
+				<clr-dg-action-overflow>
+					<button (click)="this.gotoServiceDetails(service.type, service.name)" class="action-item">
+						<clr-icon shape="note"></clr-icon>
+						Overview
+					  </button>
+					<div *ngFor="let actionGroups of service.actionGroups">
+						<p>{{actionGroups.name}}</p>
+						<button *ngFor="let action of actionGroups.actions" class="action-item" (click)="displayAction(service, action)">
+							<clr-icon shape="note"></clr-icon>
+							{{ action.name }}
+						</button>
+					</div>
+				  </clr-dg-action-overflow>
+			</clr-dg-cell>
+		</clr-dg-row>
+		<clr-dg-footer>{{services.length}} Services</clr-dg-footer>
+	</clr-datagrid>
+  </div>
+  <app-action-modal></app-action-modal>
+</div>

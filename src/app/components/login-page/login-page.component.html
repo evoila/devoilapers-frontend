@@ -1,0 +1,30 @@
+<div class="login-wrapper">
+  <div class="login">
+    <section class="title">
+      <h3 class="welcome">Welcome to</h3>
+      the Service Manager
+    </section>
+    <div class="login-group">
+      <clr-input-container>
+        <input clrInput class="username" name="username" type="text" id="login_username" [(ngModel)]="username"
+          placeholder="Username">
+      </clr-input-container>
+
+      <clr-password-container>
+        <input clrPassword class="password" name="password" type="password" id="login_password" [(ngModel)]="password"
+          placeholder="Password">
+      </clr-password-container>
+
+      <clr-checkbox-wrapper>
+        <input clrCheckbox type="checkbox" id="rememberme" [checked]="rememberMe" [(ngModel)]="rememberMe">
+        <label for="rememberme"> Remember me </label>
+      </clr-checkbox-wrapper>
+
+      <app-notification-banner *ngIf="shouldDisplayNotification" [notification]="notification">
+      </app-notification-banner>
+
+      <button [disabled]="!username || !password" type="submit" class="btn btn-primary"
+        (click)="onLogin()">Login</button>
+    </div>
+  </div>
+</div>
