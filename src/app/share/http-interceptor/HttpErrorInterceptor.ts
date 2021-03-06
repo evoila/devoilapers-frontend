@@ -13,6 +13,12 @@ import {Injectable} from '@angular/core';
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
 
+  shortErrorMessages: { [id: number] : string; } = {
+    401: 'Invalid username or password.',
+    0: 'Backend service not available.',
+  };
+
+
   constructor(private notification: NotificationService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -22,8 +28,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         catchError((error: HttpErrorResponse) => {
           let shortErrorMessage = error.statusText;
 
-          if (error.status === 401){
-            shortErrorMessage = 'Invalid user name or password';
+          if (error.status in this.shortErrorMessages){
+            shortErrorMessage = this.shortErrorMessages[error.status];
           }
 
           this.notification.add(
