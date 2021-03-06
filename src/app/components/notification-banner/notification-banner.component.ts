@@ -11,7 +11,7 @@ export class NotificationBannerComponent implements OnInit {
   public notification: Notification;
 
   @Output()
-  public readonly close: EventEmitter<any> = new EventEmitter();
+  public readonly closer: EventEmitter<any> = new EventEmitter();
 
   displayMsg = '';
   actionButtonLabel = 'Details';
@@ -23,12 +23,12 @@ export class NotificationBannerComponent implements OnInit {
   }
 
   public onClose(): void {
-    this.close.emit();
+    this.closer.emit();
   }
 
   toggleErrorNotificationDetail(): void{
     this.displayMsg = this.displayMsg === this.notification.message ? this.notification.detail : this.notification.message;
-    this.actionButtonLabel = this.actionButtonLabel == 'Details' ? 'Less' : 'Details';
+    this.actionButtonLabel = this.actionButtonLabel === 'Details' ? 'Less' : 'Details';
   }
 
 }
