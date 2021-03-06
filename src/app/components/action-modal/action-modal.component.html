@@ -1,5 +1,5 @@
 <div>
-  <clr-modal [(clrModalOpen)]="openModal">
+<clr-modal [(clrModalOpen)]="openModal">
     <h3 class="modal-title">Action: {{selectedAction.name}}</h3>
     <div class="modal-body">
       <p>Service Name: 	{{ selectedService.name }}</p>
@@ -35,5 +35,17 @@
       <button type="button" class="btn btn-outline" (click)="openModal = false">Cancel</button>
       <button type="button" class="btn btn-primary" (click)="executeAction()">Execute</button>
     </div>
-  </clr-modal>
+</clr-modal>
+
+<clr-modal [(clrModalOpen)]="openResponseModal">
+  <h3 class="modal-title">Action Response: {{selectedAction.name}}</h3>
+  <div class="modal-body">
+    <app-notification-banner *ngIf="shouldDisplayNotification" [notification]="notification">
+    </app-notification-banner>
+    <code><pre>{{responseMessage}}</pre></code>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="closeActionResponse()">Close</button>
+  </div>
+</clr-modal>
 </div>
