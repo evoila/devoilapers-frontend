@@ -13,12 +13,16 @@ export class ActionModalComponent implements OnInit {
   selectedAction: DtosServiceInstanceActionDto = {};
 
   openModal = false;
+  openResponseModal = false;
+  responseMessage: string;
+
   selectedPlaceholder: {};
   selectedPlaceholderKeys: string[];
   selectedPlaceholderTypes =  {} ;
 
   public notification: Notification | null = null;
   public shouldDisplayNotification = false;
+
 
   constructor(
     private serviceService: ServiceService,
@@ -77,7 +81,7 @@ export class ActionModalComponent implements OnInit {
       this.selectedService.type,
       this.selectedService.name,
       this.selectedAction.command).subscribe({
-      next: () => {
+      next: (resMsg) => {
         this.notifications.add(
           new Notification(
             NotificationType.Info,
@@ -87,12 +91,19 @@ export class ActionModalComponent implements OnInit {
           )
         );
         this.closeAction();
+        if (resMsg) {
+          this.openResponseModal = true;
+          this.responseMessage = JSON.stringify(resMsg, null, 2);
+        }
       },
     });
   }
 
   closeAction(): void  {
     this.openModal = false;
+  }
+  closeActionResponse(): void  {
+    this.openResponseModal = false;
   }
 
   isString(key: string): boolean {

@@ -12,14 +12,6 @@
 			<div class="card-block">
 			  <div class="card-media-block wrap">
 				<img [src]="service.imageBase64" class="card-media-image" />
-				<!--<div class="card-media-description">
-				<span class="card-media-title">
-					Project B
-				  </span>
-				  <span class="card-media-text">
-					Owner: Jane Doe
-				  </span>
-				</div>-->
 			  </div>
 			  <div class="card-text">
 				{{ service.description }}
@@ -44,11 +36,9 @@
 		  <ng-template clrPageTitle>Edit YAML</ng-template>
 		  <ng-template clrPageNavTitle>YAML</ng-template>
 		  <form clrForm clrLayout="horizontal" #formPageOne="ngForm">
-			<div
-			#editor
-			class="app-ace-editor clr-form-control"
-			style="width: 720px;height: 700px;"
-			></div>
+        <div #editor
+        class="app-ace-editor"
+        ></div>
 			</form>
 		</clr-wizard-page>
 	</clr-wizard>
