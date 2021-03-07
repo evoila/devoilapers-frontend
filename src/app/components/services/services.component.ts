@@ -14,6 +14,8 @@ import {
   ActionModalComponent
 } from '../action-modal/action-modal.component';
 
+import { BrandingComponent } from '../branding/branding/branding.component';
+
 import { Observable, Subscription, interval  } from 'rxjs';
 
 @Component({
@@ -24,6 +26,7 @@ import { Observable, Subscription, interval  } from 'rxjs';
 })
 export class ServicesComponent implements OnInit, OnDestroy {
   @ViewChild(ActionModalComponent) actionModal: ActionModalComponent;
+
   private updateSubscription: Subscription;
 
   services: Array<DtosServiceInstanceDetailsDto> = [];

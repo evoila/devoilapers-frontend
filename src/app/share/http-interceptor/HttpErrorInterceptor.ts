@@ -13,7 +13,7 @@ import {Injectable} from '@angular/core';
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
 
-  shortErrorMessages: { [id: number] : string; } = {
+  shortErrorMessages: { [id: number]: string; } = {
     401: 'Invalid username or password.',
     0: 'Backend service not available.',
   };
