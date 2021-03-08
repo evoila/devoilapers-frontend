@@ -1,9 +1,25 @@
+<clr-main-container>
 <div class="clr-row">
-  <div class="clr-row-9">
-    <h1>Service Details of {{this.service.name}}</h1>
-    <p>Name: {{this.service.name}}</p>
-    <p>Type: {{this.service.type}}</p>
-    <p>Status: {{this.service.status}}</p>
+  <h1>Service Details of {{this.service.name}}</h1>
+</div>
+<div class="clr-row">
+  <div class="clr-row-8">
+    <table class="table table-vertical">
+      <tbody>
+      <tr>
+        <th>Name:</th>
+        <td>{{this.service.name}}</td>
+      </tr>
+      <tr>
+        <th>Type:</th>
+        <td>{{this.service.type}}</td>
+      </tr>
+      <tr>
+        <th>Status:</th>
+        <td>{{this.service.status}}</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 
   <div class="clr-row-2 clr-offset-2">
@@ -21,7 +37,6 @@
       DELETE
     </button>
   </div>
-
 </div>
 
 <div class="clr-row">
@@ -32,6 +47,7 @@
       {{ action.name }}
     </button>
   </div>
+</div>
 
   <clr-wizard #wizard>
 		<clr-wizard-title>{{ this.service.name }}</clr-wizard-title>
@@ -77,4 +93,3 @@
   </clr-modal>
 
   <app-action-modal></app-action-modal>
-</div>
