@@ -16,8 +16,8 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'services', pathMatch: 'full' },
       { path: 'servicestore', component: ServicestoreComponent },
-      { path: 'services', component: ServicesComponent },
       { path: 'service-details/:serviceType/:serivceName', component: ServiceDetailsComponent},
+      { path: 'services', component: ServicesComponent },
       { path: 'about', component: AboutComponent },
       { path: '**', component: PageNotFoundComponent },
     ]

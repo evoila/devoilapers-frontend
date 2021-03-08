@@ -1,95 +1,127 @@
-<clr-main-container>
-<div class="clr-row">
-  <h1>Service Details of {{this.service.name}}</h1>
-</div>
-<div class="clr-row">
-  <div class="clr-row-8">
-    <table class="table table-vertical">
-      <tbody>
-      <tr>
-        <th>Name:</th>
-        <td>{{this.service.name}}</td>
-      </tr>
-      <tr>
-        <th>Type:</th>
-        <td>{{this.service.type}}</td>
-      </tr>
-      <tr>
-        <th>Status:</th>
-        <td>{{this.service.status}}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+<app-services></app-services>
+<clr-modal [(clrModalOpen)]="mainModelIsOpen" [clrModalSize]="'xl'" style="width: 900px;">
+  
+    <h2 class="modal-title">Service Details of {{this.service.name}}</h2>
+    <div class="modal-body" >
+      <div class="content-container" >
 
-  <div class="clr-row-2 clr-offset-2">
-    <h2></h2>
-    <button (click)="wizard.open();this.open()" class="btn btn-primary">
-      <clr-icon shape="note"></clr-icon>
-      View YAML
-    </button>
-  </div>
+        <div class="content-area">
+          
+          <div class="clr-row">
+              <table class="table table-vertical">
+                <tbody>
+                  <tr>
+                    <th>Name:</th>
+                    <td>{{this.service.name}}</td>
+                  </tr>
+                  <tr>
+                    <th>Type:</th>
+                    <td>{{this.service.type}}</td>
+                  </tr>
+                  <tr>
+                    <th>Status:</th>
+                    <td>{{this.service.status}}</td>
+                  </tr>
+                </tbody>
+              </table>
+         
 
-  <div class="clr-row-1">
-    <h2></h2>
-    <button (click)="openDeleteModal = true" class="btn btn-danger">
-      <clr-icon shape="note"></clr-icon>
-      DELETE
-    </button>
-  </div>
-</div>
 
-<div class="clr-row">
-  <div *ngFor="let actionGroups of service.actionGroups">
-    <h2>{{actionGroups.name}}</h2>
-    <button *ngFor="let action of actionGroups.actions" class="btn btn-primary" (click)="displayAction(action)">
-      <clr-icon shape="note"></clr-icon>
-      {{ action.name }}
-    </button>
-  </div>
-</div>
 
-  <clr-wizard #wizard>
-		<clr-wizard-title>{{ this.service.name }}</clr-wizard-title>
 
-		<clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
-		<clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
-		<clr-wizard-button [type]="'next'">Next</clr-wizard-button>
-<!--		<clr-wizard-button [type]="'finish'">Done</clr-wizard-button>-->
+          </div>
 
-		<clr-wizard-page #pageTwo>
-		  <ng-template clrPageTitle>View YAML</ng-template>
-		  <ng-template clrPageNavTitle>YAML</ng-template>
-		  <form clrForm clrLayout="horizontal" #formPageOne="ngForm">
-			<div
-			#editor
-			class="app-ace-editor clr-form-control"
-			style="width: 720px;height: 700px;"
-			></div>
-			</form>
-		</clr-wizard-page>
-	</clr-wizard>
+          <div class="clr-row">
 
-  <clr-modal [(clrModalOpen)]="openModal">
-    <h3 class="modal-title">{{ service.name }}</h3>
-    <div class="modal-body">
-      <p>Type: {{ service.type }}</p>
-      <p>Action: {{ selectedAction.name }}</p>
+            <clr-wizard #wizard>
+              <clr-wizard-title>{{ this.service.name }}</clr-wizard-title>
+
+              <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
+              <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+              <clr-wizard-button [type]="'next'">Next</clr-wizard-button>
+              <!--		<clr-wizard-button [type]="'finish'">Done</clr-wizard-button>-->
+
+              <clr-wizard-page #pageTwo>
+                <ng-template clrPageTitle>View YAML</ng-template>
+                <ng-template clrPageNavTitle>YAML</ng-template>
+                <form clrForm clrLayout="horizontal" #formPageOne="ngForm">
+                  <div #editor class="app-ace-editor clr-form-control" style="width: 720px;height: 700px;"></div>
+                </form>
+              </clr-wizard-page>
+            </clr-wizard>
+
+            <clr-modal [(clrModalOpen)]="openModal">
+              <h3 class="modal-title">{{ service.name }}</h3>
+              <div class="modal-body">
+                <p>Type: {{ service.type }}</p>
+                <p>Action: {{ selectedAction.name }}</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="openModal = false">Execute
+                  {{ selectedAction.name }}</button>
+              </div>
+            </clr-modal>
+
+            <clr-modal [(clrModalOpen)]="openDeleteModal">
+              <h3 class="modal-title">Delete {{service.name}}</h3>
+              <div class="modal-body">
+                <p>Are you sure?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline" (click)="openDeleteModal = false">Cancel</button>
+                <button type="button" class="btn btn-danger" (click)="deleteService()">DELETE</button>
+              </div>
+            </clr-modal>
+
+            <app-action-modal></app-action-modal>
+          </div>
+
+        </div>
+
+
+
+        <div class="content-area" style="padding: 0px;">
+          <nav class="sidenav" style="float: right; border: 0px;">
+            <h4 style="margin-bottom: -10px;">Service Actions</h4>
+            <section class="sidenav-content">
+              <section class="nav-group collapsible">
+                <label>Common</label>
+                <ul class="nav-list">
+                  <li (click)="wizard.open();this.open()">
+                    <a>View Yaml</a>
+                  </li>
+                </ul>
+              </section>
+
+              <section class="nav-group collapsible" *ngFor="let actionGroups of service.actionGroups">
+                <label>{{actionGroups.name}}</label>
+                <ul class="nav-list">
+                  <li *ngFor="let action of actionGroups.actions" (click)="displayAction(action)">
+                    <a>{{ action.name }}</a>
+                  </li>
+                </ul>
+              </section>
+
+              <section class="nav-group collapsible">
+                <label>Danger zone</label>
+                <ul class="nav-list">
+                  <li (click)="openDeleteModal = true">
+                    <a>Delete service</a>
+                  </li>
+                </ul>
+              </section>
+            </section>
+
+
+          </nav>
+        </div>
+
+      </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="openModal = false">Execute {{ selectedAction.name }}</button>
+      <button type="button" class="btn btn-outline" (click)="openModal = false">Cancel</button>
     </div>
-  </clr-modal>
 
-  <clr-modal [(clrModalOpen)]="openDeleteModal">
-    <h3 class="modal-title">Delete {{service.name}}</h3>
-    <div class="modal-body">
-      <p>Are you sure?</p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline" (click)="openDeleteModal = false">Cancel</button>
-      <button type="button" class="btn btn-danger" (click)="deleteService()">DELETE</button>
-    </div>
-  </clr-modal>
 
-  <app-action-modal></app-action-modal>
+
+</clr-modal>

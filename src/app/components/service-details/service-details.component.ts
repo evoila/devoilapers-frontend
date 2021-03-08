@@ -40,6 +40,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   selectedAction: DtosServiceInstanceActionDto;
   serviceName: string;
   serviceType: string;
+  mainModelIsOpen = true;
 
   constructor(
     private router: Router,
