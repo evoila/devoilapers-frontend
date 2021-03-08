@@ -50,7 +50,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
   }
 
   gotoServiceDetails(serviceType: string, serviceName: string): void {
-    this.router.navigate(['main/service-details', serviceType, serviceName]);
+    this.router.navigate(['main/services', serviceType, serviceName]);
   }
 
   displayAction(

@@ -31,9 +31,10 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
 
   private updateSubscription: Subscription;
 
+  services: Array<DtosServiceInstanceDetailsDto> = [];
   aceEditor: any;
   service: DtosServiceInstanceDetailsDto = {};
-  openModal = false;
+  openModalAction = false;
   openEditorModal = false;
   openDeleteModal = false;
 
@@ -51,7 +52,6 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
     // tslint:disable-next-line:new-parens
     this.selectedAction = new class implements DtosServiceInstanceActionDto {
       command: string;
-
     };
   }
 
@@ -72,6 +72,9 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
             this.service = services.services[0];
           },
         });
+      this.serviceService.servicesInfoGet().subscribe({
+        next: services => {this.services = services.services; },
+      });
     });
 
   }
@@ -90,6 +93,11 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
         this.aceEditor.session.setValue(dtosServiceYamlDto.yaml);
       },
     });
+  }
+
+  gotoServiceDetails(serviceType: string, serviceName: string): void {
+    this.router.navigate(['main/services', serviceType, serviceName]);
+    this.mainModelIsOpen = true;
   }
 
   deleteService(): void {
@@ -112,6 +120,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   displayAction(selectedAction: DtosServiceInstanceActionDto): void {
+    this.mainModelIsOpen = false;
     this.actionModal.displayAction(this.service, selectedAction);
   }
 

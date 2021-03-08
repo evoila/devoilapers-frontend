@@ -1,12 +1,69 @@
-<app-services></app-services>
+<div>
+  <div>
+<div>
+  <h1>Services</h1>
+  <div *ngIf="this.services.length===0">
+    <p>There is currently no service available.
+      User the Service Store to create a service. Go to
+      <a routerLink="/main/servicestore">
+        Service Store
+      </a>
+    </p>
+  </div>
+  <div *ngIf="this.services.length!==0">
+    <p>Double click a service to edit</p>
+    <br>
+    <clr-datagrid>
+      <clr-dg-column>Name</clr-dg-column>
+      <clr-dg-column>Type</clr-dg-column>
+      <clr-dg-column>Status</clr-dg-column>
+      <clr-dg-column>Interactions</clr-dg-column>
+
+      <clr-dg-row *ngFor="let service of services" (dblclick)="this.gotoServiceDetails(service.type, service.name)">
+        <clr-dg-cell>{{service.name}}</clr-dg-cell>
+        <clr-dg-cell>{{service.type}}</clr-dg-cell>
+        <clr-dg-cell>{{service.status}}</clr-dg-cell>
+        <clr-dg-cell>
+          <clr-dg-action-overflow>
+            <button (click)="this.gotoServiceDetails(service.type, service.name)" class="action-item">
+              <clr-icon shape="note"></clr-icon>
+              Overview
+            </button>
+            <div *ngFor="let actionGroups of service.actionGroups">
+              <p>{{actionGroups.name}}</p>
+              <button *ngFor="let action of actionGroups.actions" class="action-item" (click)="displayAction(service, action)">
+                <clr-icon shape="note"></clr-icon>
+                {{ action.name }}
+              </button>
+            </div>
+          </clr-dg-action-overflow>
+        </clr-dg-cell>
+      </clr-dg-row>
+      <clr-dg-footer>{{services.length}} Services</clr-dg-footer>
+    </clr-datagrid>
+  </div>
+  <clr-wizard #wizard>
+    <!--    <clr-wizard-title>{{ serviceType }}</clr-wizard-title>-->
+    <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
+    <clr-wizard-page #pageTwo>
+      <ng-template clrPageTitle>Edit YAML</ng-template>
+      <ng-template clrPageNavTitle>YAML</ng-template>
+      <form clrForm clrLayout="horizontal" #formPageOne="ngForm">
+        <div #editor
+
+             class="app-ace-editor"
+        ></div>
+      </form>
+    </clr-wizard-page>
+  </clr-wizard>
+  <app-action-modal></app-action-modal>
+</div>
+
 <clr-modal [(clrModalOpen)]="mainModelIsOpen" [clrModalSize]="'xl'" style="width: 900px;">
-  
     <h2 class="modal-title">Service Details of {{this.service.name}}</h2>
     <div class="modal-body" >
       <div class="content-container" >
-
         <div class="content-area">
-          
           <div class="clr-row">
               <table class="table table-vertical">
                 <tbody>
@@ -24,61 +81,11 @@
                   </tr>
                 </tbody>
               </table>
-         
-
-
-
-
           </div>
-
           <div class="clr-row">
-
-            <clr-wizard #wizard>
-              <clr-wizard-title>{{ this.service.name }}</clr-wizard-title>
-
-              <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
-              <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
-              <clr-wizard-button [type]="'next'">Next</clr-wizard-button>
-              <!--		<clr-wizard-button [type]="'finish'">Done</clr-wizard-button>-->
-
-              <clr-wizard-page #pageTwo>
-                <ng-template clrPageTitle>View YAML</ng-template>
-                <ng-template clrPageNavTitle>YAML</ng-template>
-                <form clrForm clrLayout="horizontal" #formPageOne="ngForm">
-                  <div #editor class="app-ace-editor clr-form-control" style="width: 720px;height: 700px;"></div>
-                </form>
-              </clr-wizard-page>
-            </clr-wizard>
-
-            <clr-modal [(clrModalOpen)]="openModal">
-              <h3 class="modal-title">{{ service.name }}</h3>
-              <div class="modal-body">
-                <p>Type: {{ service.type }}</p>
-                <p>Action: {{ selectedAction.name }}</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-primary" (click)="openModal = false">Execute
-                  {{ selectedAction.name }}</button>
-              </div>
-            </clr-modal>
-
-            <clr-modal [(clrModalOpen)]="openDeleteModal">
-              <h3 class="modal-title">Delete {{service.name}}</h3>
-              <div class="modal-body">
-                <p>Are you sure?</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-outline" (click)="openDeleteModal = false">Cancel</button>
-                <button type="button" class="btn btn-danger" (click)="deleteService()">DELETE</button>
-              </div>
-            </clr-modal>
-
             <app-action-modal></app-action-modal>
           </div>
-
         </div>
-
-
 
         <div class="content-area" style="padding: 0px;">
           <nav class="sidenav" style="float: right; border: 0px;">
@@ -111,17 +118,39 @@
                 </ul>
               </section>
             </section>
-
-
           </nav>
         </div>
-
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline" (click)="openModal = false">Cancel</button>
+      <button type="button" class="btn btn-outline" (click)="mainModelIsOpen = false">Cancel</button>
     </div>
-
-
-
 </clr-modal>
+
+<clr-modal [(clrModalOpen)]="openDeleteModal">
+  <h3 class="modal-title">Delete {{service.name}}</h3>
+  <div class="modal-body">
+    <p>Are you sure?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="openDeleteModal = false">Cancel</button>
+    <button type="button" class="btn btn-danger" (click)="deleteService()">DELETE</button>
+  </div>
+</clr-modal>
+
+<clr-modal [(clrModalOpen)]="openModalAction">
+  <h3 class="modal-title">{{ service.name }}</h3>
+  <div class="modal-body">
+    <p>
+      Type: {{ service.type }}<br>
+      Action: {{ selectedAction.name }}
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="openModalAction = false">Execute</button>
+  </div>
+</clr-modal>
+
+
+  </div>
+</div>
