@@ -20,6 +20,7 @@ import 'ace-builds/webpack-resolver';
 import { ActionModalComponent } from '../action-modal/action-modal.component';
 import { Notification, NotificationService, NotificationType } from '../../services/notification/notification.service';
 import { interval, Subscription } from 'rxjs';
+import * as arraySort from 'array-sort'
 
 @Component({
   selector: 'app-service-details',
@@ -115,7 +116,9 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
 
   updateServiceList(): void {
     this.serviceService.servicesInfoGet().subscribe({
-      next: services => { this.services = services.services; },
+      next: services => {         
+        this.services = arraySort(services.services, ["type", "name"]);
+      },
     });
   }
 

@@ -25,6 +25,7 @@
     "@clr/ui": "^4.0.9",
     "@webcomponents/webcomponentsjs": "^2.5.0",
     "ace-builds": "^1.4.12",
+    "array-sort": "^1.0.0",
     "rxjs-compat": "^6.6.3"
   },
   "devDependencies": {

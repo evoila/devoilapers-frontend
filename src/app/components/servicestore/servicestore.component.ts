@@ -14,6 +14,7 @@ import {
 import * as ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
 import {Notification, NotificationService, NotificationType} from '../../services/notification/notification.service';
+import * as arraySort from 'array-sort'
 
 @Component({
   selector: 'app-servicestore',
@@ -36,7 +37,10 @@ export class ServicestoreComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.servicestoreService.servicestoreInfoGet().subscribe({
-      next: services => {this.services = services.services; },
+      next: services => {        
+        this.services = arraySort(services.services, ["type"]);
+
+       },
     });
   }
 
