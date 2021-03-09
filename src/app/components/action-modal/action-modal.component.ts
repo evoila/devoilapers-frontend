@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {DtosServiceInstanceActionDto, DtosServiceInstanceDetailsDto, ServiceService} from '../../share/swagger-auto-gen';
-import {Notification, NotificationService, NotificationType} from '../../services/notification/notification.service';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { DtosServiceInstanceActionDto, DtosServiceInstanceDetailsDto, ServiceService } from '../../share/swagger-auto-gen';
+import { Notification, NotificationService, NotificationType } from '../../services/notification/notification.service';
+import { trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-action-modal',
@@ -12,13 +13,44 @@ export class ActionModalComponent implements OnInit {
   selectedService: DtosServiceInstanceDetailsDto = {};
   selectedAction: DtosServiceInstanceActionDto = {};
 
-  openModal = false;
-  openResponseModal = false;
+  @Output()
+  closeEvent = new EventEmitter();
+
+
+  private _openModal = false;
+  set openModal(value: boolean) {
+    const oldValue = this._openModal
+    this._openModal = value;
+
+    if (oldValue != value && !value && !this.openResponseModal && !this.responseModalIsOpening)
+      this.closeEvent.emit()
+  }
+
+  get openModal() {
+    return this._openModal;
+  }
+
+  private _openResponseModal = false;
+  set openResponseModal(value: boolean) {
+    const oldValue = this._openResponseModal;
+    this._openResponseModal = value;
+
+    if (oldValue != value && !value && !this.openModal)
+      this.closeEvent.emit()
+  }
+
+  get openResponseModal() {
+    return this._openResponseModal;
+  }
+
+  private responseModalIsOpening = false;
+ 
+
   responseMessage: string;
 
   selectedPlaceholder: {};
   selectedPlaceholderKeys: string[];
-  selectedPlaceholderTypes =  {} ;
+  selectedPlaceholderTypes = {};
 
   public notification: Notification | null = null;
   public shouldDisplayNotification = false;
@@ -52,7 +84,7 @@ export class ActionModalComponent implements OnInit {
     this.selectedPlaceholderKeys = [];
     this.selectedPlaceholderTypes = {};
 
-    if (this.selectedAction.placeholder !== 'null'){
+    if (this.selectedAction.placeholder !== 'null') {
 
       this.selectedPlaceholder = JSON.parse(this.selectedAction.placeholder);
       this.selectedPlaceholderKeys = Object.keys(this.selectedPlaceholder);
@@ -66,14 +98,14 @@ export class ActionModalComponent implements OnInit {
 
       }
 
-  }
+    }
     this.shouldDisplayNotification = false;
     this.openModal = true;
   }
 
-  executeAction(): void{
+  executeAction(): void {
     let updatePlaceholder = '{}';
-    if (this.selectedPlaceholderKeys.length !== 0){
+    if (this.selectedPlaceholderKeys.length !== 0) {
       updatePlaceholder = JSON.stringify(this.selectedPlaceholder);
     }
     this.serviceService.servicesActionServicetypeServicenameActioncommandPost(
@@ -81,28 +113,36 @@ export class ActionModalComponent implements OnInit {
       this.selectedService.type,
       this.selectedService.name,
       this.selectedAction.command).subscribe({
-      next: (resMsg) => {
-        this.notifications.add(
-          new Notification(
-            NotificationType.Info,
-            this.selectedAction.name + ': Action successful executed.',
-            ' Type: ' + this.selectedService.type +
-            ' Service Name: ' + this.selectedService.name,
-          )
-        );
-        this.closeAction();
-        if (resMsg) {
-          this.openResponseModal = true;
-          this.responseMessage = JSON.stringify(resMsg, null, 2);
-        }
-      },
-    });
+        next: (resMsg) => {
+          this.notifications.add(
+            new Notification(
+              NotificationType.Info,
+              this.selectedAction.name + ': Action successful executed.',
+              ' Type: ' + this.selectedService.type +
+              ' Service Name: ' + this.selectedService.name,
+            )
+          );
+
+          let hasMessage = !(resMsg === "" || resMsg === {} || resMsg === undefined)
+
+          if (hasMessage) {
+            this.responseModalIsOpening = true
+          }
+
+          this.closeAction();
+          if (hasMessage) {
+            this.openResponseModal = true;
+            this.responseMessage = JSON.stringify(resMsg, null, 2);
+          }
+        },
+      });
   }
 
-  closeAction(): void  {
+  closeAction(): void {
     this.openModal = false;
   }
-  closeActionResponse(): void  {
+
+  closeActionResponse(): void {
     this.openResponseModal = false;
   }
 

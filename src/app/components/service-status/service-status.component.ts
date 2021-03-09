@@ -21,32 +21,35 @@ export class ServiceStatusComponent implements OnInit {
 
   @Input()
   set status(val: string) {
-    this._status = val
+    this._status = val;
   }
 
   get status() {
-    return this._status
+    return this._status;
   }
 
   get statusColor() {
-    let lowerCaseStatus = this._status.toLowerCase()
+    if (this._status === undefined) 
+      return "#435560";
+
+    let lowerCaseStatus = this._status.toLowerCase();
 
     switch (lowerCaseStatus) {
       case "ok":
-        return "#9ecca4"
+        return "#9ecca4";
       case "warning":
-        return "#f48b29"
+        return "#f48b29";
       case "error":
-        return "#ac0d0d"
+        return "#ac0d0d";
       case "pending":
-        return "#78c4d4"
+        return "#78c4d4";
     }
 
-    return "#435560"
+    return "#435560";
   }
 
   ngOnInit(): void {
-    console.log(status)
+    
   }
 
   public onClose(): void {
