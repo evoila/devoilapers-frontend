@@ -31,7 +31,7 @@
             </button>
             <div *ngFor="let actionGroups of service.actionGroups">
               <p>{{actionGroups.name}}</p>
-              <button *ngFor="let action of actionGroups.actions" class="action-item" (click)="displayAction(service, action)">
+              <button *ngFor="let action of actionGroups.actions" class="action-item" (click)="displayAction(action)">
                 <clr-icon shape="note"></clr-icon>
                 {{ action.name }}
               </button>
@@ -50,7 +50,6 @@
       <ng-template clrPageNavTitle>YAML</ng-template>
       <form clrForm clrLayout="horizontal" #formPageOne="ngForm">
         <div #editor
-
              class="app-ace-editor"
         ></div>
       </form>
@@ -94,7 +93,7 @@
               <section class="nav-group collapsible">
                 <label>Common</label>
                 <ul class="nav-list">
-                  <li (click)="wizard.open();this.open()">
+                  <li (click)="this.closeAllModals();wizard.open();this.open()">
                     <a>View Yaml</a>
                   </li>
                 </ul>
@@ -112,7 +111,7 @@
               <section class="nav-group collapsible">
                 <label>Danger zone</label>
                 <ul class="nav-list">
-                  <li (click)="openDeleteModal = true">
+                  <li (click)="this.closeAllModals();openDeleteModal = true;">
                     <a>Delete service</a>
                   </li>
                 </ul>

@@ -29,7 +29,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   @ViewChild('editor') private editor: ElementRef<HTMLElement>;
   @ViewChild(ActionModalComponent) actionModal: ActionModalComponent;
 
-  private updateSubscription: Subscription;
+  // private updateSubscription: Subscription;
 
   services: Array<DtosServiceInstanceDetailsDto> = [];
   aceEditor: any;
@@ -41,7 +41,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   selectedAction: DtosServiceInstanceActionDto;
   serviceName: string;
   serviceType: string;
-  mainModelIsOpen = true;
+  mainModelIsOpen = false;
 
   constructor(
     private router: Router,
@@ -58,25 +58,29 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
 
   ngOnInit(): void {
     this.updateServiceList();
-    this.updateSubscription = interval(10000).subscribe(
-      () => this.updateServiceList()
-    );
+    // this.updateSubscription = interval(10000).subscribe(
+    //   () => this.updateServiceList()
+    // );
+    this.route.params.subscribe((params) => {
+      if (params !== {} && params.serviceType !== undefined
+        && params.serivceName !== undefined) {
+        this.serviceService
+          .servicesInfoServicetypeServicenameGet(params.serviceType, params.serivceName)
+          .subscribe({
+            next: (services) => {
+              this.service = services.services[0];
+            },
+          });
+        this.closeAllModals();
+        this.mainModelIsOpen = true;
+      }
+    });
   }
 
   updateServiceList(): void {
-    this.route.params.subscribe((params) => {
-      this.serviceService
-        .servicesInfoServicetypeServicenameGet(params.serviceType, params.serivceName)
-        .subscribe({
-          next: (services) => {
-            this.service = services.services[0];
-          },
-        });
-      this.serviceService.servicesInfoGet().subscribe({
-        next: services => {this.services = services.services; },
-      });
+    this.serviceService.servicesInfoGet().subscribe({
+      next: services => {this.services = services.services; },
     });
-
   }
 
   ngAfterViewInit(): void {
@@ -93,6 +97,13 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
         this.aceEditor.session.setValue(dtosServiceYamlDto.yaml);
       },
     });
+  }
+
+  closeAllModals(): void{
+    this.mainModelIsOpen = false;
+    this.openModalAction = false;
+    this.openDeleteModal = false;
+    this.openEditorModal = false;
   }
 
   gotoServiceDetails(serviceType: string, serviceName: string): void {
@@ -120,11 +131,12 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   displayAction(selectedAction: DtosServiceInstanceActionDto): void {
+    this.closeAllModals();
     this.mainModelIsOpen = false;
     this.actionModal.displayAction(this.service, selectedAction);
   }
 
   ngOnDestroy(): void {
-    this.updateSubscription.unsubscribe();
+    // this.updateSubscription.unsubscribe();
   }
 }
