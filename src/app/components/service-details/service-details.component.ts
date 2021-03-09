@@ -64,6 +64,10 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   set detailsModalIsOpen(value: boolean) {
+    if (!value && this._detailsModalIsOpen != value && !this.mainModalWasOpen) {
+      this.router.navigate(['main/services']);
+    }
+
     this._detailsModalIsOpen = value;
   }
 
