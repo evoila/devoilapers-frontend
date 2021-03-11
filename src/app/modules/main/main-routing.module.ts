@@ -7,6 +7,7 @@ import { ServicesComponent } from '../../components/services/services.component'
 import { ServicestoreComponent } from '../../components/servicestore/servicestore.component';
 import { ServiceDetailsComponent } from '../../components/service-details/service-details.component';
 import { AuthGuardService } from '../../services/auth/auth-guard.service';
+import {FormsComponent} from '../../components/forms/forms.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
       { path: 'services/:serviceType/:serivceName', component: ServiceDetailsComponent},
       { path: 'services', component: ServiceDetailsComponent },
       { path: 'about', component: AboutComponent },
+      { path: 'forms', component: FormsComponent},
       { path: '**', component: PageNotFoundComponent },
     ]
   }

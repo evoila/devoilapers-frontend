@@ -15,6 +15,15 @@ import { ServiceDetailsComponent } from '../../components/service-details/servic
 import { ActionModalComponent } from '../../components/action-modal/action-modal.component';
 import {NotificationsModule} from '../notifications-banner/notifications-banner.module';
 import {BrandingComponent} from '../../components/branding/branding/branding.component';
+import {FormsComponent} from '../../components/forms/forms.component';
+
+import { BrowserModule } from "@angular/platform-browser";
+import {
+  SchemaFormModule,
+  WidgetRegistry,
+  DefaultWidgetRegistry,
+} from "ngx-schema-form";
+
 
 export function configurationFactory(): Configuration {
   const params: ConfigurationParameters = {
@@ -35,14 +44,17 @@ export function configurationFactory(): Configuration {
     ServiceDetailsComponent,
     ActionModalComponent,
     BrandingComponent,
+    FormsComponent,
   ],
-    imports: [
-        CommonModule,
-        FormsModule,
-        ClarityModule,
-        MainRoutingModule,
-        ApiModule.forRoot(configurationFactory),
-        NotificationsModule,
-    ]
+  imports: [
+    CommonModule,
+    FormsModule,
+    ClarityModule,
+    MainRoutingModule,
+    SchemaFormModule.forRoot(),
+    ApiModule.forRoot(configurationFactory),
+    NotificationsModule,
+  ],
+  providers: [{ provide: WidgetRegistry, useClass: DefaultWidgetRegistry }],
 })
 export class MainModule {}

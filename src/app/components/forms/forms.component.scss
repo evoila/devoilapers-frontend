@@ -1,0 +1,10 @@
+@use "node_modules/@clr/ui/clr-ui.min.css";
+::ng-deep input[type="text"]{
+  //@extend .
+  @extend .clr-input;
+}
+
+::ng-deep input[type="checkbox"] {
+  //@extend .clr-checkbox-wrapper;
+  @extend .clr-checkbox-inline;
+}
