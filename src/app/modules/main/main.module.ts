@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ClarityModule } from '@clr/angular';
 import { MainRoutingModule } from './main-routing.module';
 import { MainPageComponent } from '../../components/main-page/main-page.component';
@@ -23,6 +23,8 @@ import {
   WidgetRegistry,
   DefaultWidgetRegistry,
 } from "ngx-schema-form";
+import {ButtonComponent} from '../../components/ButtonComponent/button.component';
+import {CdsButton} from '@clr/core/button';
 
 
 export function configurationFactory(): Configuration {
@@ -31,6 +33,14 @@ export function configurationFactory(): Configuration {
     password: sessionStorage.getItem('password'),
   };
   return new Configuration(params);
+}
+
+export class ClarityWidgetRegistry extends DefaultWidgetRegistry {
+  constructor() {
+    super();
+
+    this.register("button", ButtonComponent);
+  }
 }
 
 @NgModule({
@@ -45,6 +55,7 @@ export function configurationFactory(): Configuration {
     ActionModalComponent,
     BrandingComponent,
     FormsComponent,
+    ButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -54,7 +65,8 @@ export function configurationFactory(): Configuration {
     SchemaFormModule.forRoot(),
     ApiModule.forRoot(configurationFactory),
     NotificationsModule,
+    ReactiveFormsModule,
   ],
-  providers: [{ provide: WidgetRegistry, useClass: DefaultWidgetRegistry }],
+    providers: [{ provide: WidgetRegistry, useClass: ClarityWidgetRegistry }],
 })
 export class MainModule {}
