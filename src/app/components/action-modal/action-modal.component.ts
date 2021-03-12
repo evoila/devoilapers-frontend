@@ -44,7 +44,7 @@ export class ActionModalComponent implements OnInit {
   }
 
   private responseModalIsOpening = false;
- 
+
 
   responseMessage: string;
 
@@ -52,8 +52,9 @@ export class ActionModalComponent implements OnInit {
   selectedPlaceholderKeys: string[];
   selectedPlaceholderTypes = {};
 
-  public notification: Notification | null = null;
-  public shouldDisplayNotification = false;
+  notification: Notification | null = null;
+
+  notificationsIsOpen = false;
 
 
   constructor(
@@ -62,14 +63,17 @@ export class ActionModalComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.subscribeToNotifications();
+  }
+
+  subscribeToNotifications(): void {
     this.notifications.notifications.subscribe(x => {
-      this.shouldDisplayNotification = false;
+      this.notificationsIsOpen = false;
       setTimeout(() => {
         this.notification = x;
-        this.shouldDisplayNotification = true;
+        this.notificationsIsOpen = true;
       }, 25);
     });
-    this.shouldDisplayNotification = false;
   }
 
   displayAction(
@@ -99,7 +103,7 @@ export class ActionModalComponent implements OnInit {
       }
 
     }
-    this.shouldDisplayNotification = false;
+    this.notificationsIsOpen = false;
     this.openModal = true;
   }
 
@@ -123,13 +127,15 @@ export class ActionModalComponent implements OnInit {
             )
           );
 
-          let hasMessage = !(resMsg === "" || resMsg === {} || resMsg === undefined)
+          let hasMessage = !(resMsg === null || resMsg === "" || resMsg === {} || resMsg === undefined)
+
 
           if (hasMessage) {
             this.responseModalIsOpening = true
           }
 
           this.closeAction();
+
           if (hasMessage) {
             this.openResponseModal = true;
             this.responseMessage = JSON.stringify(resMsg, null, 2);

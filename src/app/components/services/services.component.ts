@@ -14,8 +14,6 @@ import {
   ActionModalComponent
 } from '../action-modal/action-modal.component';
 
-import { BrandingComponent } from '../branding/branding/branding.component';
-
 import { Observable, Subscription, interval  } from 'rxjs';
 
 @Component({

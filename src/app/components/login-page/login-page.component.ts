@@ -24,7 +24,7 @@ export class LoginPageComponent implements OnInit {
   msgError = 'Invalid user name or password';
 
   public notification: Notification | null = null;
-  public shouldDisplayNotification = false;
+  notificationsIsOpen = false;
 
   constructor(
     private router: Router,
@@ -40,10 +40,10 @@ export class LoginPageComponent implements OnInit {
     }
 
     this.notifications.notifications.subscribe(x => {
-      this.shouldDisplayNotification = false;
+      this.notificationsIsOpen = false;
       setTimeout(() => {
         this.notification = x;
-        this.shouldDisplayNotification = true;
+        this.notificationsIsOpen = true;
       }, 25);
     });
 

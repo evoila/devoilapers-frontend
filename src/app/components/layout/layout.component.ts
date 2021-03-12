@@ -11,8 +11,9 @@ import { Notification, NotificationService } from 'src/app/services/notification
 export class LayoutComponent implements OnInit {
   collapsed = true;
 
-  public notification: Notification | null = null;
-  public shouldDisplayNotification = false;
+  notification: Notification | null = null;
+  notificationIsOpen = false;
+  notificationsIsOpen: boolean = false;
 
   constructor(
     public auth: AuthService,
@@ -21,11 +22,15 @@ export class LayoutComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.subscribeToNotifications();
+  }
+
+  subscribeToNotifications(){
     this.notifications.notifications.subscribe(x => {
-      this.shouldDisplayNotification = false;
+      this.notificationIsOpen = false;
       setTimeout(() => {
         this.notification = x;
-        this.shouldDisplayNotification = true;
+        this.notificationIsOpen = true;
       }, 25);
     });
   }

@@ -21,6 +21,7 @@ import { ActionModalComponent } from '../action-modal/action-modal.component';
 import { Notification, NotificationService, NotificationType } from '../../services/notification/notification.service';
 import { interval, Subscription } from 'rxjs';
 import * as arraySort from 'array-sort'
+import {findAll} from '@angular/compiler-cli/ngcc/src/utils';
 
 @Component({
   selector: 'app-service-details',
@@ -41,6 +42,11 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   _detailsModalIsOpen = false;
   _editorModalIsOpen = false;
   _deleteModalIsOpen = false;
+
+  notificationsIsOpen = false;
+
+  notificationIsOpen = false;
+  notification: Notification | null = null;
 
   set editorModalIsOpen(value: boolean) {
     if (!value && value != this._editorModalIsOpen)
@@ -88,9 +94,8 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
     private router: Router,
     private route: ActivatedRoute,
     private serviceService: ServiceService,
-    private notification: NotificationService,
-  ) {
-  }
+    public notifications: NotificationService,
+  ) {}
 
 
   ngOnInit(): void {
@@ -98,6 +103,8 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
     // this.updateSubscription = interval(10000).subscribe(
     //   () => this.updateServiceList()
     // );
+    this.subscribeToNotifications();
+
     this.route.params.subscribe((params) => {
       if (params !== {} && params.serviceType !== undefined
         && params.serivceName !== undefined) {
@@ -114,9 +121,19 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
     });
   }
 
+  subscribeToNotifications(){
+    this.notifications.notifications.subscribe(x => {
+      this.notificationIsOpen = false;
+      setTimeout(() => {
+        this.notification = x;
+        this.notificationIsOpen = true;
+      }, 25);
+    });
+  }
+
   updateServiceList(): void {
     this.serviceService.servicesInfoGet().subscribe({
-      next: services => {         
+      next: services => {
         this.services = arraySort(services.services, ["type", "name"]);
       },
     });
@@ -139,12 +156,10 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
     if (this.detailsModalIsOpen)
       this.mainModalWasOpen = true;
 
-
     this.detailsModalIsOpen = false;
     this.deleteModalIsOpen = false;
     this.editorModalIsOpen = false;
   }
-
 
   deleteService(): void {
     let closure = this.selectedService;
@@ -153,7 +168,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
       closure.type,
       closure.name).subscribe({
         next: () => {
-          this.notification.add(
+          this.notifications.add(
             new Notification(
               NotificationType.Info,
               closure.name + ': Service successful deleted.',
@@ -170,7 +185,6 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   setSelectedService(service: DtosServiceInstanceDetailsDto) {
     this.selectedService = service;
   }
-
 
   showDeleteModal(): void {
     this.closeAllModals();
@@ -189,6 +203,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   showYamlEditorModal(): void {
+    this.notificationIsOpen = false;
     this.closeAllModals()
     this.editorModalIsOpen = true;
 
