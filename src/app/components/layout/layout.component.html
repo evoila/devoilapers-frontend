@@ -28,8 +28,8 @@
     </div>
   </clr-header>
 
-  <app-notification-banner *ngIf="notificationsIsOpen"
-    [notification]="notification">
+  <app-notification-banner
+    *ngIf="notificationIsOpen('global')">
   </app-notification-banner>
 
   <div class="content-container">

@@ -1,10 +1,13 @@
-<div>
+<div *ngIf="notification !== null">
   <clr-alert
     clrAlertType="{{notification.type}}"
+    [(clrAlertClosed)]="alertClosed"
     [clrAlertSizeSmall]="false"
     [clrAlertAppLevel]="true">
       <clr-alert-item>
-          <div class="alert-text">{{displayMsg}}</div>
+          <div class="alert-text">
+            {{toggleMessageDescription ? notification.message : notification.detail }}
+          </div>
           <div class="alert-actions"
                *ngIf="notification.detail && notification.detail.length > 0">
             <a

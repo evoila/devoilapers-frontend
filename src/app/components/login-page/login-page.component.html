@@ -20,8 +20,8 @@
         <label for="rememberme"> Remember me </label>
       </clr-checkbox-wrapper>
 
-      <app-notification-banner *ngIf="notificationsIsOpen"
-        [notification]="notification">
+      <app-notification-banner
+        *ngIf="notificationIsOpen('global')">
       </app-notification-banner>
 
       <button [disabled]="!username || !password" type="submit" class="btn btn-primary"

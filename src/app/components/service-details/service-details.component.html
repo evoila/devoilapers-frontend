@@ -1,13 +1,11 @@
-<div>
-  <div>
+  <div >
     <div>
       <h1>Services</h1>
       <div *ngIf="this.services.length===0">
-        <p>There is currently no service available.
-          Use the Service Store to create a service. Go to
-          <a routerLink="/main/servicestore">
-            Service Store
-          </a>
+        <p>
+          There is currently no service available. Use the
+          <a routerLink="/main/servicestore">Service Store</a>
+          to create a new service.
         </p>
       </div>
       <div *ngIf="this.services.length!==0">
@@ -29,12 +27,16 @@
             <clr-dg-cell>
               <clr-dg-action-overflow>
                 <p style="margin-top: 0px">Interactions</p>
-                <button (click)="setSelectedService(service);showServiceDetailsModal();"
-                        class="action-item">
+                <button
+                  (click)="setSelectedService(service);
+                  showServiceDetailsModal();"
+                  class="action-item">
                   <clr-icon shape="info-standard"></clr-icon>
                   Overview
                 </button>
-                <button (click)="setSelectedService(service);showYamlEditorModal();"
+                <button
+                  (click)="setSelectedService(service);
+                  showYamlEditorModal();"
                         class="action-item">
                   <clr-icon shape="eye"></clr-icon>
                   View Yaml
@@ -49,7 +51,9 @@
                 </div>
                 <div>
                   <p>Delete</p>
-                  <button (click)="setSelectedService(service);showDeleteModal()" class="action-item alert-actions">
+                  <button (click)="setSelectedService(service);
+                  showDeleteModal();"
+                          class="action-item alert-actions">
                     <clr-icon shape="trash"></clr-icon>
                     Delete Service
                   </button>
@@ -63,7 +67,7 @@
 
       <clr-wizard #wizard [(clrWizardOpen)]="editorModalIsOpen">
         <!--    <clr-wizard-title>{{ serviceType }}</clr-wizard-title>-->
-        <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
+        <clr-wizard-button [type]="'cancel'">Close</clr-wizard-button>
         <clr-wizard-page #pageTwo>
           <ng-template clrPageTitle>Edit YAML</ng-template>
           <ng-template clrPageNavTitle>YAML</ng-template>
@@ -79,8 +83,8 @@
     <clr-modal [(clrModalOpen)]="detailsModalIsOpen" [clrModalSize]="'lg'">
       <h2 class="modal-title">Service Details of {{selectedService.name}}</h2>
       <div class="modal-body">
-        <app-notification-banner *ngIf="notificationsIsOpen"
-          [notification]="notification">
+        <app-notification-banner
+          *ngIf="notificationIsOpen('detailsModal')">
         </app-notification-banner>
         <div class="content-container">
           <div class="content-area" style="width: 100%;">
@@ -107,9 +111,7 @@
                     </tr>
                   </tbody>
                 </table>
-
               </div>
-
             </div>
             <div class="clr-row">
               <app-action-modal></app-action-modal>
@@ -129,10 +131,12 @@
                   </ul>
                 </section>
 
-                <section class="nav-group collapsible" *ngFor="let actionGroups of selectedService.actionGroups">
+                <section class="nav-group collapsible"
+                         *ngFor="let actionGroups of selectedService.actionGroups">
                   <label>{{actionGroups.name}}</label>
                   <ul class="nav-list">
-                    <li *ngFor="let action of actionGroups.actions" (click)="showActionModal(action)">
+                    <li *ngFor="let action of actionGroups.actions"
+                        (click)="showActionModal(action);">
                       <a>{{ action.name }}</a>
                     </li>
                   </ul>
@@ -152,23 +156,30 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline" (click)="detailsModalIsOpen = false">Cancel</button>
+        <button type="button" class="btn btn-outline" (click)="detailsModalIsOpen = false">Close</button>
       </div>
     </clr-modal>
 
     <clr-modal [(clrModalOpen)]="deleteModalIsOpen">
       <h3 class="modal-title">Delete {{selectedService.name}}</h3>
       <div class="modal-body">
-        <app-notification-banner *ngIf="notificationsIsOpen"
-          [notification]="notification">
+        <app-notification-banner
+          *ngIf="notificationIsOpen('deleteModal')">
         </app-notification-banner>
         <p>Are you sure?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline" (click)="deleteModalIsOpen = false">Cancel</button>
-        <button type="button" class="btn btn-danger" (click)="deleteService()">DELETE</button>
+        <button type="button"
+                class="btn btn-outline"
+                (click)="deleteModalIsOpen = false;">
+          Cancel
+        </button>
+        <button type="button"
+                class="btn btn-danger"
+                (click)="deleteService()">
+          DELETE
+        </button>
       </div>
     </clr-modal>
 
   </div>
-</div>

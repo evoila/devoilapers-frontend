@@ -20,11 +20,10 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   };
 
 
-  constructor(private notification: NotificationService) { }
+  constructor(private notificationService: NotificationService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(request)
-      .pipe(
+    return next.handle(request).pipe(
         catchError((error: HttpErrorResponse) => {
           let shortErrorMessage: string = error.statusText;
 
@@ -39,7 +38,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             shortErrorMessage = errorDto.message;
           }
 
-          this.notification.add(
+          // this.notificationService.use
+          this.notificationService.addError(
             new Notification(
               NotificationType.Danger,
               shortErrorMessage,
@@ -48,7 +48,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           );
 
           return throwError(error);
-        })
+        }),
+
       );
   }
 

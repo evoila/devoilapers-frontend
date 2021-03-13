@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-
+import {Injectable, OnInit} from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import {not} from '@angular/compiler/src/output/output_ast';
 
 export enum NotificationType {
   Warning = 'warning' as any,
@@ -23,18 +23,84 @@ export class Notification {
 }
 
 @Injectable()
-export class NotificationService {
+export class NotificationService implements OnInit {
 
-  private readonly _notifications = new Subject<Notification | null>();
+  private notificationOutlet:string;
 
-  public readonly notifications = this._notifications.asObservable();
+  private notificationOutletSuccess: string;
+  private notificationOutletError: string;
 
-  public add(notification: Notification): void {
-    this._notifications.next(notification);
+  private notification: Notification;
+
+  private notificationOutletBS = new BehaviorSubject<string>("global");
+  public currentNotificationOutlet = this.notificationOutletBS.asObservable();
+
+  private notificationBS = new BehaviorSubject<Notification>(null);
+  public currentNotification = this.notificationBS.asObservable();
+
+  ngOnInit() {
+    this.currentNotificationOutlet.subscribe(
+      notificationOutlet => this.notificationOutlet = notificationOutlet)
+    this.currentNotification.subscribe(
+      notification => this.notification = notification)
   }
 
-  public flushNotification(): void {
-    this._notifications.next(null);
+  public isOpen(outlet: string): boolean {
+    return outlet === this.notificationOutletSuccess;
   }
 
+  public close(): void {
+    this.notificationBS.next(null);
+  }
+
+  public addSuccess(notification: Notification) {
+    this.notificationOutletBS.next(this.notificationOutletSuccess);
+    this.notificationBS.next(notification);
+  }
+
+  public addError(notification: Notification) {
+    this.notificationOutletBS.next(this.notificationOutletError);
+    console.log(this.notificationOutlet);
+    this.notificationBS.next(notification);
+  }
+
+  useGlobalNotificationSuccess(): void {
+    this.notificationOutletSuccess = 'global';
+  }
+
+  useDetailsModalNotificationSuccess(): void {
+    this.notificationOutletSuccess = 'detailsModal';
+  }
+
+  useActionModalNotificationSuccess(): void {
+    this.notificationOutletSuccess = 'actionModal';
+  }
+
+  useEditorModalNotificationSuccess(): void {
+    this.notificationOutletSuccess = 'editorModal';
+  }
+
+  useDeleteModalNotificationSuccess(): void {
+    this.notificationOutletSuccess = 'deleteModal';
+  }
+
+  useGlobalNotificationError(): void {
+    this.notificationOutletError = 'global';
+  }
+
+  useDetailsModalNotificationError(): void {
+    this.notificationOutletError = 'detailsModal';
+  }
+
+  useActionModalNotificationError(): void {
+    this.notificationOutletError = 'actionModal';
+  }
+
+  useEditorModalNotificationError(): void {
+    this.notificationOutletError = 'editorModal';
+  }
+
+  useDeleteModalNotificationError(): void {
+    this.notificationOutletError = 'deleteModal';
+  }
 }

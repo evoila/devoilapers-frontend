@@ -5,7 +5,7 @@ import {
   ElementRef, OnDestroy,
   OnInit,
   ViewChild,
-  Input,
+  Input, ChangeDetectorRef,
 } from '@angular/core';
 import {
   ActivatedRoute
@@ -28,11 +28,9 @@ import {findAll} from '@angular/compiler-cli/ngcc/src/utils';
   templateUrl: './service-details.component.html',
   styleUrls: ['./service-details.component.scss'],
 })
-export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ServiceDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('editor') private editor: ElementRef<HTMLElement>;
-  @ViewChild(ActionModalComponent) actionModal: ActionModalComponent;
-
-  // private updateSubscription: Subscription;
+  @ViewChild( ActionModalComponent ) actionModal: ActionModalComponent;
 
   services: Array<DtosServiceInstanceDetailsDto> = [];
   aceEditor: any;
@@ -43,14 +41,16 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   _editorModalIsOpen = false;
   _deleteModalIsOpen = false;
 
-  notificationsIsOpen = false;
-
-  notificationIsOpen = false;
-  notification: Notification | null = null;
+  private notificationOutlet: string;
 
   set editorModalIsOpen(value: boolean) {
-    if (!value && value != this._editorModalIsOpen)
-      this.onModalClose()
+    if (value) {
+      this.notificationService.useEditorModalNotificationError();
+    }
+
+    if (!value && value != this._editorModalIsOpen){
+      this.onModalClose();
+    }
 
     this._editorModalIsOpen = value;
   }
@@ -60,6 +60,10 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   set deleteModalIsOpen(value: boolean) {
+    if (value) {
+      this.notificationService.useDeleteModalNotificationError();
+    }
+
     if (!value && value != this._deleteModalIsOpen)
       this.onModalClose()
 
@@ -71,6 +75,11 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   set detailsModalIsOpen(value: boolean) {
+    if (value) {
+      this.notificationService.useGlobalNotificationSuccess();
+      this.notificationService.useGlobalNotificationError()
+    }
+
     if (!value && this._detailsModalIsOpen != value && !this.mainModalWasOpen) {
       this.router.navigate(['main/services']);
     }
@@ -84,8 +93,12 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
 
   onModalClose(): void {
     if (this.mainModalWasOpen) {
+      this.notificationService.useGlobalNotificationSuccess();
+      this.notificationService.useGlobalNotificationError();
+
       this.mainModalWasOpen = false;
-      this.showServiceDetailsModal()
+      this.notificationService.useDetailsModalNotificationSuccess();
+      this.showServiceDetailsModal();
     }
   }
 
@@ -94,16 +107,22 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
     private router: Router,
     private route: ActivatedRoute,
     private serviceService: ServiceService,
-    public notifications: NotificationService,
-  ) {}
+    private notificationService: NotificationService,
+    private cdRef: ChangeDetectorRef,
+  ) {
+    this.useGlobalNotification();
+  }
 
 
   ngOnInit(): void {
+    this.notificationService.useGlobalNotificationSuccess();
+    this.notificationService.useGlobalNotificationError();
+    this.subscribeToNotificationOutlet();
+
     this.updateServiceList();
     // this.updateSubscription = interval(10000).subscribe(
     //   () => this.updateServiceList()
     // );
-    this.subscribeToNotifications();
 
     this.route.params.subscribe((params) => {
       if (params !== {} && params.serviceType !== undefined
@@ -113,22 +132,45 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
           .subscribe({
             next: (services) => {
               this.setSelectedService(services.services[0])
+              this.closeAllModals();
+              this.detailsModalIsOpen = true;
             },
           });
-        this.closeAllModals();
-        this.detailsModalIsOpen = true;
       }
     });
   }
 
-  subscribeToNotifications(){
-    this.notifications.notifications.subscribe(x => {
-      this.notificationIsOpen = false;
-      setTimeout(() => {
-        this.notification = x;
-        this.notificationIsOpen = true;
-      }, 25);
-    });
+  subscribeToNotificationOutlet(){
+    this.notificationService.currentNotificationOutlet.subscribe(
+      notificationOutlet => {
+        this.notificationOutlet = notificationOutlet
+        this.cdRef.detectChanges();
+      }
+    )
+  }
+
+  notificationIsOpen(outlet: string): boolean {
+    return this.notificationOutlet === outlet
+  }
+
+  useGlobalNotification(): void {
+    this.notificationService.useGlobalNotificationSuccess()
+  }
+
+  useDetailsModalNotification(): void {
+    this.notificationService.useDetailsModalNotificationSuccess();
+  }
+
+  useActionModalNotification(): void {
+    this.notificationService.useActionModalNotificationSuccess();
+  }
+
+  useEditorModalNotification(): void {
+    this.notificationService.useEditorModalNotificationSuccess();
+  }
+
+  useDeleteModalNotification(): void {
+    this.notificationService.useDeleteModalNotificationSuccess();
   }
 
   updateServiceList(): void {
@@ -146,8 +188,6 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
     this.aceEditor.setReadOnly(true);
   }
 
-
-
   redirectToService(service: DtosServiceInstanceDetailsDto): void {
     this.router.navigate(['main/services', service.type, service.name]);
   }
@@ -163,12 +203,11 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
 
   deleteService(): void {
     let closure = this.selectedService;
-
     this.serviceService.servicesServicetypeServicenameDelete(
       closure.type,
       closure.name).subscribe({
         next: () => {
-          this.notifications.add(
+          this.notificationService.addSuccess(
             new Notification(
               NotificationType.Info,
               closure.name + ': Service successful deleted.',
@@ -176,9 +215,10 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
               ' Service Name: ' + closure.name +
               ': Service successful deleted.',
             ));
-          this.router.navigate(['main/services']);
+          this.deleteModalIsOpen = false;
+          this.updateServiceList();
+          this.router.navigateByUrl('main/services');
         },
-        error: msg => { console.log(msg); }
       });
   }
 
@@ -187,12 +227,20 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   showDeleteModal(): void {
+    this.notificationService.close();
     this.closeAllModals();
     this.deleteModalIsOpen = true;
   }
 
   showActionModal(selectedAction): void {
     this.closeAllModals();
+
+    if (this.mainModalWasOpen){
+      this.notificationService.useDetailsModalNotificationSuccess();
+    } else {
+      this.notificationService.useGlobalNotificationSuccess();
+    }
+
     this.actionModal.displayAction(this.selectedService, selectedAction);
   }
 
@@ -203,7 +251,6 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   showYamlEditorModal(): void {
-    this.notificationIsOpen = false;
     this.closeAllModals()
     this.editorModalIsOpen = true;
 
@@ -213,10 +260,5 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
           this.aceEditor.session.setValue(dtosServiceYamlDto.yaml);
         },
       });
-  }
-
-
-  ngOnDestroy(): void {
-    // this.updateSubscription.unsubscribe();
   }
 }

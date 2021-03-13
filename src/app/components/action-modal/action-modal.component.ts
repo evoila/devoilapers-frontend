@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import {Component, OnInit, Input, EventEmitter, Output, ChangeDetectorRef} from '@angular/core';
 import { DtosServiceInstanceActionDto, DtosServiceInstanceDetailsDto, ServiceService } from '../../share/swagger-auto-gen';
 import { Notification, NotificationService, NotificationType } from '../../services/notification/notification.service';
 import { trigger } from '@angular/animations';
@@ -8,7 +8,8 @@ import { trigger } from '@angular/animations';
   templateUrl: './action-modal.component.html',
   styleUrls: ['./action-modal.component.scss']
 })
-export class ActionModalComponent implements OnInit {
+export class ActionModalComponent implements OnInit{
+
 
   selectedService: DtosServiceInstanceDetailsDto = {};
   selectedAction: DtosServiceInstanceActionDto = {};
@@ -18,6 +19,8 @@ export class ActionModalComponent implements OnInit {
 
 
   private _openModal = false;
+  private notificationOutlet: string;
+
   set openModal(value: boolean) {
     const oldValue = this._openModal
     this._openModal = value;
@@ -52,35 +55,37 @@ export class ActionModalComponent implements OnInit {
   selectedPlaceholderKeys: string[];
   selectedPlaceholderTypes = {};
 
-  notification: Notification | null = null;
-
-  notificationsIsOpen = false;
-
-
   constructor(
     private serviceService: ServiceService,
-    private notifications: NotificationService,
+    private notificationService: NotificationService,
+    private cdRef: ChangeDetectorRef,
   ) { }
 
   ngOnInit(): void {
-    this.subscribeToNotifications();
+    this.notificationService.useGlobalNotificationSuccess();
+    this.notificationService.useGlobalNotificationError();
+    this.subscribeToNotificationOutlet();
   }
 
-  subscribeToNotifications(): void {
-    this.notifications.notifications.subscribe(x => {
-      this.notificationsIsOpen = false;
-      setTimeout(() => {
-        this.notification = x;
-        this.notificationsIsOpen = true;
-      }, 25);
-    });
+  subscribeToNotificationOutlet(){
+    this.notificationService.currentNotificationOutlet.subscribe(
+      notificationOutlet => {
+        this.notificationOutlet = notificationOutlet
+        this.cdRef.detectChanges();
+      }
+    )
+  }
+
+  notificationIsOpen(): boolean {
+    return this.notificationOutlet === 'actionModal';
   }
 
   displayAction(
     selectedService: DtosServiceInstanceDetailsDto,
     selectedAction: DtosServiceInstanceActionDto
   ): void {
-
+    this.notificationService.useActionModalNotificationError();
+    this.notificationService.close();
     this.selectedService = selectedService;
     this.selectedAction = selectedAction;
 
@@ -103,7 +108,6 @@ export class ActionModalComponent implements OnInit {
       }
 
     }
-    this.notificationsIsOpen = false;
     this.openModal = true;
   }
 
@@ -112,13 +116,15 @@ export class ActionModalComponent implements OnInit {
     if (this.selectedPlaceholderKeys.length !== 0) {
       updatePlaceholder = JSON.stringify(this.selectedPlaceholder);
     }
+    this.notificationService.useActionModalNotificationError();
     this.serviceService.servicesActionServicetypeServicenameActioncommandPost(
       updatePlaceholder,
       this.selectedService.type,
       this.selectedService.name,
-      this.selectedAction.command).subscribe({
+      this.selectedAction.command
+    ).subscribe({
         next: (resMsg) => {
-          this.notifications.add(
+          this.notificationService.addSuccess(
             new Notification(
               NotificationType.Info,
               this.selectedAction.name + ': Action successful executed.',

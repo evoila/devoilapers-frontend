@@ -11,7 +11,7 @@ import { LoginModule } from './modules/login/login.module';
 import { FormsModule } from '@angular/forms';
 import {NotificationService} from './services/notification/notification.service';
 import {NotificationsModule} from './modules/notifications-banner/notifications-banner.module';
-import {HttpErrorInterceptor} from './share/http-interceptor/HttpErrorInterceptor';
+import {HttpErrorInterceptor} from './share/http-interceptor/http-message-interceptor.service';
 
 @NgModule({
   declarations: [

@@ -2,8 +2,8 @@
 <clr-modal [(clrModalOpen)]="openModal">
     <h3 class="modal-title">Action: {{selectedAction.name}}</h3>
     <div class="modal-body">
-      <app-notification-banner *ngIf="notificationsIsOpen"
-        [notification]="notification">
+      <app-notification-banner
+        *ngIf="notificationIsOpen()">
       </app-notification-banner>
       <p>Service Name: 	{{ selectedService.name }}</p>
       <div *ngFor="let inputFieldKey of this.selectedPlaceholderKeys">
@@ -41,9 +41,6 @@
 <clr-modal [(clrModalOpen)]="openResponseModal">
   <h3 class="modal-title">Action Response: {{selectedAction.name}}</h3>
   <div class="modal-body">
-    <app-notification-banner *ngIf="notificationsIsOpen"
-      [notification]="notification">
-    </app-notification-banner>
     <code><pre>{{responseMessage}}</pre></code>
   </div>
   <div class="modal-footer">

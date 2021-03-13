@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { Notification, NotificationService } from 'src/app/services/notification/notification.service';
 
@@ -9,35 +9,41 @@ import { Notification, NotificationService } from 'src/app/services/notification
   styleUrls: ['./layout.component.scss']
 })
 export class LayoutComponent implements OnInit {
-  collapsed = true;
-
-  notification: Notification | null = null;
-  notificationIsOpen = false;
-  notificationsIsOpen: boolean = false;
+  notificationOutlet: string;
 
   constructor(
-    public auth: AuthService,
+    private auth: AuthService,
     private router: Router,
-    private notifications: NotificationService,
+    private notificationService: NotificationService,
+    private cdRef: ChangeDetectorRef,
   ) { }
 
   ngOnInit(): void {
-    this.subscribeToNotifications();
+    this.notificationService.useGlobalNotificationSuccess();
+    this.subscribeToNotificationOutlet();
   }
 
-  subscribeToNotifications(){
-    this.notifications.notifications.subscribe(x => {
-      this.notificationIsOpen = false;
-      setTimeout(() => {
-        this.notification = x;
-        this.notificationIsOpen = true;
-      }, 25);
-    });
+  subscribeToNotificationOutlet(){
+    this.notificationService.currentNotificationOutlet.subscribe(
+      notificationOutlet => {
+        this.notificationOutlet = notificationOutlet;
+        this.notificationIsOpen('global');
+        this.cdRef.detectChanges();
+      }
+    )
+    this.useGlobalNotification();
+  }
+
+  notificationIsOpen(outlet: string): boolean {
+    return this.notificationOutlet === outlet
+  }
+
+  useGlobalNotification(): void {
+    this.notificationService.useGlobalNotificationSuccess();
   }
 
   onLogout(): void {
     this.auth.logout();
     this.router.navigate(['login']);
   }
-
 }
