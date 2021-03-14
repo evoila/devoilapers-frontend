@@ -8,7 +8,7 @@
           <label>{{ inputFieldKey }}</label>
           <input clrInput
                  name="{{ inputFieldKey }}"
-                 [(ngModel)]="this.selectedPlaceholder[inputFieldKey]"
+                 [(ngModel)]="this.selectedForm[inputFieldKey]"
           />
         </clr-input-container>
         <clr-input-container *ngIf="isInteger(inputFieldKey)">

@@ -9,11 +9,12 @@ import {
   ServicestoreService,
   DtosServiceStoreItemDto,
   ServiceService,
-  DtosServiceYamlDto,
+  DtosServiceYamlDto, DtosServiceStoreItemFormDto,
 } from 'src/app/share/swagger-auto-gen';
 import * as ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
 import {Notification, NotificationService, NotificationType} from '../../services/notification/notification.service';
+import {ClrWizard, ClrWizardPage} from '@clr/angular';
 
 @Component({
   selector: 'app-servicestore',
@@ -23,10 +24,15 @@ import {Notification, NotificationService, NotificationType} from '../../service
 })
 export class ServicestoreComponent implements OnInit, AfterViewInit {
   @ViewChild('editor') private editor: ElementRef<HTMLElement>;
+  @ViewChild('wizard') wizard: ClrWizard;
+  @ViewChild('pageOne') pageOne: ClrWizardPage;
 
   services: Array<DtosServiceStoreItemDto>;
+
+  jsonForm: Object;
+  formResult: Object;
+
   serviceType: string;
-  wizardYAML: string;
   aceEditor: any;
   clicked: boolean;
 
@@ -35,10 +41,12 @@ export class ServicestoreComponent implements OnInit, AfterViewInit {
               private notification: NotificationService) { }
 
   ngOnInit(): void {
+
     this.servicestoreService.servicestoreInfoGet().subscribe({
       next: services => {this.services = services.services; },
     });
   }
+
 
   finish(): void {
     const dtosServiceYamlDto = {
@@ -54,18 +62,37 @@ export class ServicestoreComponent implements OnInit, AfterViewInit {
               'YAML:' + dtosServiceYamlDto.yaml,
             )
           );
-          this.clicked = false;
         }
     });
     }
 
   open(serviceName): void{
     this.serviceType = serviceName;
-    this.servicestoreService.servicestoreYamlServicetypeGet(this.serviceType)
+    this.getFormJSON();
+    this.wizard.currentPage=this.pageOne;
+    this.wizard.open();
+  }
+
+  onResultJsonChange(formResult: Object){
+    this.formResult = formResult;
+  }
+
+  getFormJSON(): void {
+    this.servicestoreService.servicestoreFormServicetypeGet(this.serviceType)
       .subscribe({
-          next: dtosServiceStoreItemYamlDto => {
-            this.aceEditor.session.setValue(dtosServiceStoreItemYamlDto.yaml);
-          }
+        next: (dtosServiceStoreItemYamlDto: DtosServiceStoreItemFormDto) => {
+          this.jsonForm = JSON.parse(dtosServiceStoreItemYamlDto.formJson);
+        }
+      });
+  }
+
+  setEditorYAML(): void{
+    this.servicestoreService
+      .servicestoreYamlServicetypePost(JSON.stringify(this.formResult),this.serviceType)
+      .subscribe({
+        next: dtosServiceStoreItemYamlDto => {
+          this.aceEditor.session.setValue(dtosServiceStoreItemYamlDto.yaml);
+        }
       });
   }
 

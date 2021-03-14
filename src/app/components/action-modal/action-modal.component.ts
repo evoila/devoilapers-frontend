@@ -16,7 +16,7 @@ export class ActionModalComponent implements OnInit {
   openResponseModal = false;
   responseMessage: string;
 
-  selectedPlaceholder: {};
+  selectedForm: {};
   selectedPlaceholderKeys: string[];
   selectedPlaceholderTypes =  {} ;
 
@@ -48,20 +48,20 @@ export class ActionModalComponent implements OnInit {
     this.selectedService = selectedService;
     this.selectedAction = selectedAction;
 
-    this.selectedPlaceholder = {};
+    this.selectedForm = {};
     this.selectedPlaceholderKeys = [];
     this.selectedPlaceholderTypes = {};
 
-    if (this.selectedAction.placeholder !== 'null'){
+    if (this.selectedAction.form !== 'null'){
 
-      this.selectedPlaceholder = JSON.parse(this.selectedAction.placeholder);
-      this.selectedPlaceholderKeys = Object.keys(this.selectedPlaceholder);
+      this.selectedForm = JSON.parse(this.selectedAction.form);
+      this.selectedPlaceholderKeys = Object.keys(this.selectedForm);
 
       let keyCount;
       for (keyCount = 0; keyCount < this.selectedPlaceholderKeys.length; keyCount++) {
 
         const keyName = this.selectedPlaceholderKeys[keyCount];
-        const valueType = (typeof this.selectedPlaceholder[keyName]);
+        const valueType = (typeof this.selectedForm[keyName]);
         this.selectedPlaceholderTypes[keyName] = valueType;
 
       }
@@ -74,7 +74,7 @@ export class ActionModalComponent implements OnInit {
   executeAction(): void{
     let updatePlaceholder = '{}';
     if (this.selectedPlaceholderKeys.length !== 0){
-      updatePlaceholder = JSON.stringify(this.selectedPlaceholder);
+      updatePlaceholder = JSON.stringify(this.selectedForm);
     }
     this.serviceService.servicesActionServicetypeServicenameActioncommandPost(
       updatePlaceholder,

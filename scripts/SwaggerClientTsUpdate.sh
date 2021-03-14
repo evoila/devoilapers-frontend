@@ -1,8 +1,8 @@
 #!/bin/sh
 
-SAGGER_YAML_FILE="src/app/rest/swagger.json"
+SAGGER_YAML_FILE="src/app/share/swagger-auto-gen/swagger.json"
 
-SWAGGER_API_OUTPUT_FOLDER="src/app/rest/"
+SWAGGER_API_OUTPUT_FOLDER="src/app/share/swagger-auto-gen/"
 SWAGGER_API_OUTPUT_FILE=$SWAGGER_API_OUTPUT_FOLDER"api.ts"
 
 echo "Download start your backend service"

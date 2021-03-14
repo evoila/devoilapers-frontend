@@ -11,7 +11,7 @@ import {
 } from '@angular/router';
 import {
   DtosServiceInstanceActionDto,
-  DtosServiceInstanceDetailsDto,
+  DtosServiceInstanceDetailsDto, DtosServiceYamlDto,
   ServiceService
 } from '../../share/swagger-auto-gen';
 import * as ace from 'ace-builds';
@@ -93,7 +93,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   open(): void{
     this.serviceService.servicesYamlServicetypeServicenameGet(
       this.service.type, this.service.name).subscribe({
-      next: (dtosServiceYamlDto) => {
+      next: (dtosServiceYamlDto: DtosServiceYamlDto) => {
         this.aceEditor.session.setValue(dtosServiceYamlDto.yaml);
       },
     });

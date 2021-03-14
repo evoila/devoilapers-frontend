@@ -7,7 +7,7 @@ import { ServicesComponent } from '../../components/services/services.component'
 import { ServicestoreComponent } from '../../components/servicestore/servicestore.component';
 import { ServiceDetailsComponent } from '../../components/service-details/service-details.component';
 import { AuthGuardService } from '../../services/auth/auth-guard.service';
-import {FormsComponent} from '../../components/forms/forms.component';
+import {FormsComponent} from '../../components/wizard-forms/forms.component';
 
 const routes: Routes = [
   {

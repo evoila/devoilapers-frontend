@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {Injectable, NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ClarityModule } from '@clr/angular';
@@ -15,16 +15,16 @@ import { ServiceDetailsComponent } from '../../components/service-details/servic
 import { ActionModalComponent } from '../../components/action-modal/action-modal.component';
 import {NotificationsModule} from '../notifications-banner/notifications-banner.module';
 import {BrandingComponent} from '../../components/branding/branding/branding.component';
-import {FormsComponent} from '../../components/forms/forms.component';
+import {FormsComponent} from '../../components/wizard-forms/forms.component';
 
-import { BrowserModule } from "@angular/platform-browser";
 import {
   SchemaFormModule,
   WidgetRegistry,
   DefaultWidgetRegistry,
 } from "ngx-schema-form";
-import {ButtonComponent} from '../../components/ButtonComponent/button.component';
+import {ButtonComponent} from '../../components/clarity-form-components/button/button.component';
 import {CdsButton} from '@clr/core/button';
+import { ClarityWidgetRegistry } from 'src/app/components/clarity-form-components/claritywidgedregistry';
 
 
 export function configurationFactory(): Configuration {
@@ -33,14 +33,6 @@ export function configurationFactory(): Configuration {
     password: sessionStorage.getItem('password'),
   };
   return new Configuration(params);
-}
-
-export class ClarityWidgetRegistry extends DefaultWidgetRegistry {
-  constructor() {
-    super();
-
-    this.register("button", ButtonComponent);
-  }
 }
 
 @NgModule({

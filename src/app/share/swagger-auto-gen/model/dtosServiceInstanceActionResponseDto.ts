@@ -11,6 +11,6 @@
  */
 
 
-export interface DtosHTTPErrorDto { 
-    message?: string;
+export interface DtosServiceInstanceActionResponseDto { 
+    resultJson?: string;
 }

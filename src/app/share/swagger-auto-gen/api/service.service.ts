@@ -19,6 +19,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs/Observable';
 
 import { DtosHTTPErrorDto } from '../model/dtosHTTPErrorDto';
+import { DtosServiceInstanceActionResponseDto } from '../model/dtosServiceInstanceActionResponseDto';
 import { DtosServiceInstanceDetailsOverviewDto } from '../model/dtosServiceInstanceDetailsOverviewDto';
 import { DtosServiceYamlDto } from '../model/dtosServiceYamlDto';
 
@@ -68,9 +69,9 @@ export class ServiceService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public servicesActionServicetypeServicenameActioncommandPost(payload: string, servicetype: string, servicename: string, actioncommand: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public servicesActionServicetypeServicenameActioncommandPost(payload: string, servicetype: string, servicename: string, actioncommand: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public servicesActionServicetypeServicenameActioncommandPost(payload: string, servicetype: string, servicename: string, actioncommand: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public servicesActionServicetypeServicenameActioncommandPost(payload: string, servicetype: string, servicename: string, actioncommand: string, observe?: 'body', reportProgress?: boolean): Observable<DtosServiceInstanceActionResponseDto>;
+    public servicesActionServicetypeServicenameActioncommandPost(payload: string, servicetype: string, servicename: string, actioncommand: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DtosServiceInstanceActionResponseDto>>;
+    public servicesActionServicetypeServicenameActioncommandPost(payload: string, servicetype: string, servicename: string, actioncommand: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DtosServiceInstanceActionResponseDto>>;
     public servicesActionServicetypeServicenameActioncommandPost(payload: string, servicetype: string, servicename: string, actioncommand: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (payload === null || payload === undefined) {
@@ -114,7 +115,7 @@ export class ServiceService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post<any>(`${this.basePath}/services/action/${encodeURIComponent(String(servicetype))}/${encodeURIComponent(String(servicename))}/${encodeURIComponent(String(actioncommand))}`,
+        return this.httpClient.post<DtosServiceInstanceActionResponseDto>(`${this.basePath}/services/action/${encodeURIComponent(String(servicetype))}/${encodeURIComponent(String(servicename))}/${encodeURIComponent(String(actioncommand))}`,
             payload,
             {
                 withCredentials: this.configuration.withCredentials,
