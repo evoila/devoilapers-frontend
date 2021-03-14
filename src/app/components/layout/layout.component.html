@@ -1,6 +1,5 @@
-
-
 <clr-main-container>
+
   <clr-header class="header-6">
     <div class="branding">
       <a href="javascript://" class="nav-link" routerLink="/main/services">
@@ -29,7 +28,8 @@
     </div>
   </clr-header>
 
-  <app-notification-banner *ngIf="shouldDisplayNotification" [notification]="notification">
+  <app-notification-banner
+    *ngIf="notificationIsOpen()">
   </app-notification-banner>
 
   <div class="content-container">
@@ -37,4 +37,5 @@
       <router-outlet></router-outlet>
     </main>
   </div>
+
 </clr-main-container>

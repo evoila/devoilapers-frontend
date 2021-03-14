@@ -15,6 +15,7 @@ import { ServiceDetailsComponent } from '../../components/service-details/servic
 import { ActionModalComponent } from '../../components/action-modal/action-modal.component';
 import {NotificationsModule} from '../notifications-banner/notifications-banner.module';
 import {BrandingComponent} from '../../components/branding/branding/branding.component';
+import { ServiceStatusComponent } from 'src/app/components/service-status/service-status.component';
 import {FormsComponent} from '../../components/wizard-forms/forms.component';
 
 import {
@@ -48,6 +49,7 @@ export function configurationFactory(): Configuration {
     BrandingComponent,
     FormsComponent,
     ButtonComponent,
+    ServiceStatusComponent,
   ],
   imports: [
     CommonModule,

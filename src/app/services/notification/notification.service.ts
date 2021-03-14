@@ -1,40 +1,60 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-
-
-export enum NotificationType {
-  Warning = 'warning' as any,
-  Info = 'info' as any,
-  Danger = 'danger' as any
-}
-
-export interface NotificationActionLink {
-  title: string;
-  routerLink: string[];
-}
-
-export class Notification {
-  constructor(
-    public readonly type: NotificationType,
-    public readonly message: string,
-    public readonly detail: string,
-    public readonly link?: NotificationActionLink) {
-  }
-}
+import {Injectable, OnInit} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {Outlet} from './outlet';
+import {Notification} from './notification';
 
 @Injectable()
-export class NotificationService {
-  // tslint:disable-next-line:variable-name
-  private readonly _notifications = new Subject<Notification | null>();
+export class NotificationService implements OnInit {
 
-  public readonly notifications = this._notifications.asObservable();
+  private notificationOutlet:string;
 
-  public add(notification: Notification): void {
-    this._notifications.next(notification);
+  private notificationOutletSuccess: string;
+  private notificationOutletError: string;
+
+  private notification: Notification;
+
+  private notificationOutletBS = new BehaviorSubject<string>(Outlet.global);
+  public currentNotificationOutlet = this.notificationOutletBS.asObservable();
+
+  private notificationBS = new BehaviorSubject<Notification>(null);
+  public currentNotification = this.notificationBS.asObservable();
+
+  ngOnInit() {
+    this.currentNotificationOutlet.subscribe(
+      notificationOutlet => this.notificationOutlet = notificationOutlet)
+    this.currentNotification.subscribe(
+      notification => this.notification = notification)
   }
 
-  public flushNotification(): void {
-    this._notifications.next(null);
+  public isOpen(outlet: string): boolean {
+    return outlet === this.notificationOutletSuccess;
   }
 
+  public close(): void {
+    this.notificationBS.next(null);
+  }
+
+  public addSuccess(notification: Notification) {
+    this.notificationOutletBS.next(this.notificationOutletSuccess);
+    this.notificationBS.next(notification);
+  }
+
+  public addError(notification: Notification) {
+    this.notificationOutletBS.next(this.notificationOutletError);
+    console.log(this.notificationOutlet);
+    this.notificationBS.next(notification);
+  }
+
+  useOutlet(outlet: string): void {
+    this.notificationOutletSuccess = outlet;
+    this.notificationOutletError = outlet;
+  }
+
+  useOutletOnSuccess(outlet: string): void {
+    this.notificationOutletSuccess = outlet;
+  }
+
+  useOutletOnError(outlet: string): void {
+    this.notificationOutletError = outlet;
+  }
 }

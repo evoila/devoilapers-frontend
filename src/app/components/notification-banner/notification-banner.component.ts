@@ -1,33 +1,36 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { Notification } from 'src/app/services/notification/notification.service';
+import {Component, OnInit, Input, EventEmitter, Output, AfterContentChecked} from '@angular/core';
+import { NotificationService } from 'src/app/services/notification/notification.service';
+import {Notification} from '../../services/notification/notification';
+
 
 @Component({
   selector: 'app-notification-banner',
   templateUrl: './notification-banner.component.html',
   styleUrls: ['./notification-banner.component.scss']
 })
-export class NotificationBannerComponent implements OnInit {
-  @Input()
-  public notification: Notification;
+export class NotificationBannerComponent {
 
-  @Output()
-  public readonly closer: EventEmitter<any> = new EventEmitter();
-
-  displayMsg = '';
+  toggleMessageDescription = true;
   actionButtonLabel = 'Details';
 
-  constructor() { }
+  notification: Notification = null;
+  alertClosed: boolean = true;
 
-  ngOnInit(): void {
-    this.displayMsg = this.notification.message;
+  constructor(
+    private notificationService: NotificationService,
+  ) { }
+
+  ngOnInit() {
+    this.notificationService.currentNotification.subscribe(
+      notification => {
+        this.notification = notification;
+        this.alertClosed = false;
+      }
+    )
   }
 
-  public onClose(): void {
-    this.closer.emit();
-  }
-
-  toggleErrorNotificationDetail(): void{
-    this.displayMsg = this.displayMsg === this.notification.message ? this.notification.detail : this.notification.message;
+  toggleErrorNotificationDetail(): void {
+    this.toggleMessageDescription = !this.toggleMessageDescription;
     this.actionButtonLabel = this.actionButtonLabel === 'Details' ? 'Less' : 'Details';
   }
 

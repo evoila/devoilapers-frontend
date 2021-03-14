@@ -6,21 +6,35 @@
     </section>
     <div class="login-group">
       <clr-input-container>
-        <input clrInput class="username" name="username" type="text" id="login_username" [(ngModel)]="username"
+        <input clrInput class="username"
+               name="username" type="text"
+               id="login_username"
+               [(ngModel)]="username"
+               (keyup.enter)="onLogin()"
           placeholder="Username">
       </clr-input-container>
 
       <clr-password-container>
-        <input clrPassword class="password" name="password" type="password" id="login_password" [(ngModel)]="password"
+        <input clrPassword
+               class="password"
+               name="password"
+               type="password"
+               id="login_password"
+               [(ngModel)]="password"
+               (keyup.enter)="onLogin()"
           placeholder="Password">
       </clr-password-container>
 
       <clr-checkbox-wrapper>
-        <input clrCheckbox type="checkbox" id="rememberme" [checked]="rememberMe" [(ngModel)]="rememberMe">
+        <input clrCheckbox type="checkbox"
+               id="rememberme" [checked]="rememberMe"
+               [(ngModel)]="rememberMe"
+        >
         <label for="rememberme"> Remember me </label>
       </clr-checkbox-wrapper>
 
-      <app-notification-banner *ngIf="shouldDisplayNotification" [notification]="notification">
+      <app-notification-banner
+        *ngIf="notificationIsOpen()">
       </app-notification-banner>
 
       <button [disabled]="!username || !password" type="submit" class="btn btn-primary"

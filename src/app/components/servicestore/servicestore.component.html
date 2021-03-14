@@ -1,5 +1,5 @@
 <div>
-	<div>
+	<div class="clr-row">
 		<h1>Service Store</h1>
 	</div>
 
@@ -48,6 +48,11 @@
 		  <ng-template clrPageTitle>Edit YAML</ng-template>
 		  <ng-template clrPageNavTitle>YAML</ng-template>
 		  <form clrForm clrLayout="horizontal" #formPageOne="ngForm">
+        <div class="">
+          <app-notification-banner
+            *ngIf="notificationIsOpen('editorModal')">
+          </app-notification-banner>
+        </div>
         <div #editor
         class="app-ace-editor"
         ></div>

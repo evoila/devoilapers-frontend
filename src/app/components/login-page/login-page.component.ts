@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, Output} from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService, DtosAccountCredentialsDto } from 'src/app/share/swagger-auto-gen';
 import {AuthService} from '../../services/auth/auth.service';
-import {Notification, NotificationService} from '../../services/notification/notification.service';
+import {NotificationService} from '../../services/notification/notification.service';
+import {Outlet} from '../../services/notification/outlet';
 
 @Component({
   selector: 'app-login-page',
@@ -11,7 +12,7 @@ import {Notification, NotificationService} from '../../services/notification/not
   providers: [ AccountService ]
 })
 
-export class LoginPageComponent implements OnInit {
+export class LoginPageComponent implements OnInit, OnDestroy {
   rememberMe = false;
 
   username = '';
@@ -22,31 +23,39 @@ export class LoginPageComponent implements OnInit {
 
   isError = false;
   msgError = 'Invalid user name or password';
-
-  public notification: Notification | null = null;
-  public shouldDisplayNotification = false;
+  private notificationOutlet: string;
 
   constructor(
     private router: Router,
-    private accountServce: AccountService,
+    private accountService: AccountService,
     public auth: AuthService,
-    private notifications: NotificationService,
-) { }
+    private notificationService: NotificationService,
+    private cdRef: ChangeDetectorRef,
+    ) { }
 
   ngOnInit(): void {
-
+    this.notificationService.useOutletOnError(Outlet.global);
+    this.subscribeToNotificationOutlet();
     if (this.auth.loadLoginData()){
       this.onLogin();
     }
+  }
 
-    this.notifications.notifications.subscribe(x => {
-      this.shouldDisplayNotification = false;
-      setTimeout(() => {
-        this.notification = x;
-        this.shouldDisplayNotification = true;
-      }, 25);
-    });
+  subscribeToNotificationOutlet(){
+    this.notificationService.currentNotificationOutlet.subscribe(
+      notificationOutlet => {
+        this.notificationOutlet = notificationOutlet
+        this.cdRef.detectChanges();
+      }
+    )
+  }
 
+  notificationIsOpen(): boolean {
+    return this.notificationOutlet === Outlet.global;
+  }
+
+  useGlobalNotification(): void {
+    this.notificationService.useOutletOnError(Outlet.global);
   }
 
   onLogin(): void {
@@ -56,10 +65,13 @@ export class LoginPageComponent implements OnInit {
             username: this.username,
             password: this.password,
           } as DtosAccountCredentialsDto;
-          this.accountServce.accountsLoginPost(dtosAccountCredentialsDto).subscribe({
+          this.accountService.accountsLoginPost(dtosAccountCredentialsDto)
+            .subscribe({
         next: auth => {
           if (auth.isValid) {
-            this.auth.login(this.rememberMe, this.username, this.password, auth.isValid, auth.role);
+            this.auth.login(this.rememberMe,
+              this.username, this.password,
+              auth.isValid, auth.role);
             this.router.navigate(['main']);
           } else {
             this.isError = true;
@@ -67,5 +79,9 @@ export class LoginPageComponent implements OnInit {
         },
       });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.notificationService.close()
   }
 }
