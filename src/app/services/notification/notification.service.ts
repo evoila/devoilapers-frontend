@@ -1,26 +1,7 @@
 import {Injectable, OnInit} from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import {not} from '@angular/compiler/src/output/output_ast';
-
-export enum NotificationType {
-  Warning = 'warning' as any,
-  Info = 'info' as any,
-  Danger = 'danger' as any
-}
-
-export interface NotificationActionLink {
-  title: string;
-  routerLink: string[];
-}
-
-export class Notification {
-  constructor(
-    public readonly type: NotificationType,
-    public readonly message: string,
-    public readonly detail: string,
-    public readonly link?: NotificationActionLink) {
-  }
-}
+import {BehaviorSubject} from 'rxjs';
+import {Outlet} from './outlet';
+import {Notification} from './notification';
 
 @Injectable()
 export class NotificationService implements OnInit {
@@ -32,7 +13,7 @@ export class NotificationService implements OnInit {
 
   private notification: Notification;
 
-  private notificationOutletBS = new BehaviorSubject<string>("global");
+  private notificationOutletBS = new BehaviorSubject<string>(Outlet.global);
   public currentNotificationOutlet = this.notificationOutletBS.asObservable();
 
   private notificationBS = new BehaviorSubject<Notification>(null);
@@ -64,43 +45,16 @@ export class NotificationService implements OnInit {
     this.notificationBS.next(notification);
   }
 
-  useGlobalNotificationSuccess(): void {
-    this.notificationOutletSuccess = 'global';
+  useOutlet(outlet: string): void {
+    this.notificationOutletSuccess = outlet;
+    this.notificationOutletError = outlet;
   }
 
-  useDetailsModalNotificationSuccess(): void {
-    this.notificationOutletSuccess = 'detailsModal';
+  useOutletOnSuccess(outlet: string): void {
+    this.notificationOutletSuccess = outlet;
   }
 
-  useActionModalNotificationSuccess(): void {
-    this.notificationOutletSuccess = 'actionModal';
-  }
-
-  useEditorModalNotificationSuccess(): void {
-    this.notificationOutletSuccess = 'editorModal';
-  }
-
-  useDeleteModalNotificationSuccess(): void {
-    this.notificationOutletSuccess = 'deleteModal';
-  }
-
-  useGlobalNotificationError(): void {
-    this.notificationOutletError = 'global';
-  }
-
-  useDetailsModalNotificationError(): void {
-    this.notificationOutletError = 'detailsModal';
-  }
-
-  useActionModalNotificationError(): void {
-    this.notificationOutletError = 'actionModal';
-  }
-
-  useEditorModalNotificationError(): void {
-    this.notificationOutletError = 'editorModal';
-  }
-
-  useDeleteModalNotificationError(): void {
-    this.notificationOutletError = 'deleteModal';
+  useOutletOnError(outlet: string): void {
+    this.notificationOutletError = outlet;
   }
 }

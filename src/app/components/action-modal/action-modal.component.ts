@@ -1,7 +1,10 @@
 import {Component, OnInit, Input, EventEmitter, Output, ChangeDetectorRef} from '@angular/core';
 import { DtosServiceInstanceActionDto, DtosServiceInstanceDetailsDto, ServiceService } from '../../share/swagger-auto-gen';
-import { Notification, NotificationService, NotificationType } from '../../services/notification/notification.service';
+import { NotificationService} from '../../services/notification/notification.service';
 import { trigger } from '@angular/animations';
+import {Outlet} from '../../services/notification/outlet';
+import {NotificationType} from '../../services/notification/notificationtype';
+import {Notification} from '../../services/notification/notification';
 
 @Component({
   selector: 'app-action-modal',
@@ -62,8 +65,7 @@ export class ActionModalComponent implements OnInit{
   ) { }
 
   ngOnInit(): void {
-    this.notificationService.useGlobalNotificationSuccess();
-    this.notificationService.useGlobalNotificationError();
+    this.notificationService.useOutlet(Outlet.global);
     this.subscribeToNotificationOutlet();
   }
 
@@ -84,7 +86,7 @@ export class ActionModalComponent implements OnInit{
     selectedService: DtosServiceInstanceDetailsDto,
     selectedAction: DtosServiceInstanceActionDto
   ): void {
-    this.notificationService.useActionModalNotificationError();
+    this.notificationService.useOutletOnError(Outlet.actionModal);
     this.notificationService.close();
     this.selectedService = selectedService;
     this.selectedAction = selectedAction;
@@ -116,7 +118,7 @@ export class ActionModalComponent implements OnInit{
     if (this.selectedPlaceholderKeys.length !== 0) {
       updatePlaceholder = JSON.stringify(this.selectedPlaceholder);
     }
-    this.notificationService.useActionModalNotificationError();
+    this.notificationService.useOutletOnError(Outlet.actionModal);
     this.serviceService.servicesActionServicetypeServicenameActioncommandPost(
       updatePlaceholder,
       this.selectedService.type,

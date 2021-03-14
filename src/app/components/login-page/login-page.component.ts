@@ -1,8 +1,9 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, Output} from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService, DtosAccountCredentialsDto } from 'src/app/share/swagger-auto-gen';
 import {AuthService} from '../../services/auth/auth.service';
-import {Notification, NotificationService} from '../../services/notification/notification.service';
+import {NotificationService} from '../../services/notification/notification.service';
+import {Outlet} from '../../services/notification/outlet';
 
 @Component({
   selector: 'app-login-page',
@@ -33,7 +34,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     ) { }
 
   ngOnInit(): void {
-    this.notificationService.useGlobalNotificationError();
+    this.notificationService.useOutletOnError(Outlet.global);
     this.subscribeToNotificationOutlet();
     if (this.auth.loadLoginData()){
       this.onLogin();
@@ -49,12 +50,12 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     )
   }
 
-  notificationIsOpen(outlet: string): boolean {
-    return this.notificationOutlet === outlet
+  notificationIsOpen(): boolean {
+    return this.notificationOutlet === Outlet.global;
   }
 
   useGlobalNotification(): void {
-    this.notificationService.useGlobalNotificationError();
+    this.notificationService.useOutletOnError(Outlet.global);
   }
 
   onLogin(): void {
@@ -68,7 +69,9 @@ export class LoginPageComponent implements OnInit, OnDestroy {
             .subscribe({
         next: auth => {
           if (auth.isValid) {
-            this.auth.login(this.rememberMe, this.username, this.password, auth.isValid, auth.role);
+            this.auth.login(this.rememberMe,
+              this.username, this.password,
+              auth.isValid, auth.role);
             this.router.navigate(['main']);
           } else {
             this.isError = true;

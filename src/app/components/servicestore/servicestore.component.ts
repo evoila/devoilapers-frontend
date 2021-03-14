@@ -13,8 +13,11 @@ import {
 } from 'src/app/share/swagger-auto-gen';
 import * as ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
-import {Notification, NotificationService, NotificationType} from '../../services/notification/notification.service';
+import {NotificationService} from '../../services/notification/notification.service';
 import * as arraySort from 'array-sort'
+import {Outlet} from '../../services/notification/outlet';
+import {NotificationType} from '../../services/notification/notificationtype';
+import {Notification} from '../../services/notification/notification';
 
 @Component({
   selector: 'app-servicestore',
@@ -38,8 +41,7 @@ export class ServicestoreComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.notificationService.close();
-    this.notificationService.useGlobalNotificationSuccess();
-    this.notificationService.useGlobalNotificationError();
+    this.notificationService.useOutlet(Outlet.global);
     this.subscribeToNotificationOutlet();
 
     this.servicestoreService.servicestoreInfoGet().subscribe({
@@ -62,11 +64,11 @@ export class ServicestoreComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   useGlobalNotificationSuccess(): void {
-    this.notificationService.useGlobalNotificationSuccess();
+    this.notificationService.useOutletOnSuccess(Outlet.global);
   }
 
   useEditorModalNotificationSuccess(): void {
-    this.notificationService.useEditorModalNotificationSuccess();
+    this.notificationService.useOutletOnSuccess(Outlet.global);
   }
 
   finish(): void {
@@ -92,8 +94,8 @@ export class ServicestoreComponent implements OnInit, AfterViewInit, OnDestroy {
 
   open(serviceName): void{
     this.notificationService.close();
-    this.notificationService.useGlobalNotificationSuccess();
-    this.notificationService.useEditorModalNotificationError();
+    this.notificationService.useOutletOnSuccess(Outlet.global);
+    this.notificationService.useOutletOnError(Outlet.editorModal);
 
     this.serviceType = serviceName;
     this.servicestoreService.servicestoreYamlServicetypeGet(this.serviceType)
@@ -103,8 +105,7 @@ export class ServicestoreComponent implements OnInit, AfterViewInit, OnDestroy {
           }
       });
 
-    this.notificationService.useGlobalNotificationSuccess();
-    this.notificationService.useGlobalNotificationError();
+    this.notificationService.useOutlet(Outlet.global);
   }
 
   ngAfterViewInit(): void {

@@ -21,7 +21,7 @@
       </clr-checkbox-wrapper>
 
       <app-notification-banner
-        *ngIf="notificationIsOpen('global')">
+        *ngIf="notificationIsOpen()">
       </app-notification-banner>
 
       <button [disabled]="!username || !password" type="submit" class="btn btn-primary"

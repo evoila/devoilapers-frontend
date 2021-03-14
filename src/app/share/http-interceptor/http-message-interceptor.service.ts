@@ -6,10 +6,12 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { retry, catchError } from 'rxjs/operators';
-import {Notification, NotificationService, NotificationType} from '../../services/notification/notification.service';
-import {Injectable} from '@angular/core';
-import {DtosHTTPErrorDto} from '../swagger-auto-gen';
+import { catchError } from 'rxjs/operators';
+import { NotificationService} from '../../services/notification/notification.service';
+import { Injectable} from '@angular/core';
+import { DtosHTTPErrorDto} from '../swagger-auto-gen';
+import {NotificationType} from '../../services/notification/notificationtype';
+import {Notification} from '../../services/notification/notification';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {

@@ -1,5 +1,7 @@
 import {Component, OnInit, Input, EventEmitter, Output, AfterContentChecked} from '@angular/core';
-import { Notification, NotificationService } from 'src/app/services/notification/notification.service';
+import { NotificationService } from 'src/app/services/notification/notification.service';
+import {Notification} from '../../services/notification/notification';
+
 
 @Component({
   selector: 'app-notification-banner',

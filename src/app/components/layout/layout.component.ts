@@ -1,7 +1,9 @@
 import { Router } from '@angular/router';
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
-import { Notification, NotificationService } from 'src/app/services/notification/notification.service';
+import { NotificationService } from 'src/app/services/notification/notification.service';
+import {Outlet} from '../../services/notification/outlet';
+import {Notification} from '../../services/notification/notification';
 
 @Component({
   selector: 'app-layout',
@@ -19,7 +21,7 @@ export class LayoutComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.notificationService.useGlobalNotificationSuccess();
+    this.notificationService.useOutletOnSuccess(Outlet.global);
     this.subscribeToNotificationOutlet();
   }
 
@@ -27,19 +29,19 @@ export class LayoutComponent implements OnInit {
     this.notificationService.currentNotificationOutlet.subscribe(
       notificationOutlet => {
         this.notificationOutlet = notificationOutlet;
-        this.notificationIsOpen('global');
+        this.notificationIsOpen();
         this.cdRef.detectChanges();
       }
     )
     this.useGlobalNotification();
   }
 
-  notificationIsOpen(outlet: string): boolean {
-    return this.notificationOutlet === outlet
+  notificationIsOpen(): boolean {
+    return this.notificationOutlet === Outlet.global
   }
 
   useGlobalNotification(): void {
-    this.notificationService.useGlobalNotificationSuccess();
+    this.notificationService.useOutletOnSuccess(Outlet.global);
   }
 
   onLogout(): void {

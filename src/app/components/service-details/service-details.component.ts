@@ -18,10 +18,13 @@ import {
 import * as ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
 import { ActionModalComponent } from '../action-modal/action-modal.component';
-import { Notification, NotificationService, NotificationType } from '../../services/notification/notification.service';
+import { NotificationService} from '../../services/notification/notification.service';
 import { interval, Subscription } from 'rxjs';
 import * as arraySort from 'array-sort'
 import {findAll} from '@angular/compiler-cli/ngcc/src/utils';
+import {Outlet} from '../../services/notification/outlet';
+import {NotificationType} from '../../services/notification/notificationtype';
+import {Notification} from '../../services/notification/notification';
 
 @Component({
   selector: 'app-service-details',
@@ -45,7 +48,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
 
   set editorModalIsOpen(value: boolean) {
     if (value) {
-      this.notificationService.useEditorModalNotificationError();
+      this.notificationService.useOutletOnError(Outlet.editorModal);
     }
 
     if (!value && value != this._editorModalIsOpen){
@@ -61,7 +64,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
 
   set deleteModalIsOpen(value: boolean) {
     if (value) {
-      this.notificationService.useDeleteModalNotificationError();
+      this.notificationService.useOutletOnError(Outlet.deleteModal);
     }
 
     if (!value && value != this._deleteModalIsOpen)
@@ -76,8 +79,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
 
   set detailsModalIsOpen(value: boolean) {
     if (value) {
-      this.notificationService.useGlobalNotificationSuccess();
-      this.notificationService.useGlobalNotificationError()
+      this.notificationService.useOutlet(Outlet.global);
     }
 
     if (!value && this._detailsModalIsOpen != value && !this.mainModalWasOpen) {
@@ -93,11 +95,10 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
 
   onModalClose(): void {
     if (this.mainModalWasOpen) {
-      this.notificationService.useGlobalNotificationSuccess();
-      this.notificationService.useGlobalNotificationError();
+      this.notificationService.useOutlet(Outlet.global);
 
       this.mainModalWasOpen = false;
-      this.notificationService.useDetailsModalNotificationSuccess();
+      this.notificationService.useOutletOnSuccess(Outlet.detailsModal);
       this.showServiceDetailsModal();
     }
   }
@@ -115,8 +116,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    this.notificationService.useGlobalNotificationSuccess();
-    this.notificationService.useGlobalNotificationError();
+    this.notificationService.useOutlet(Outlet.global);
     this.subscribeToNotificationOutlet();
 
     this.updateServiceList();
@@ -154,23 +154,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
   }
 
   useGlobalNotification(): void {
-    this.notificationService.useGlobalNotificationSuccess()
-  }
-
-  useDetailsModalNotification(): void {
-    this.notificationService.useDetailsModalNotificationSuccess();
-  }
-
-  useActionModalNotification(): void {
-    this.notificationService.useActionModalNotificationSuccess();
-  }
-
-  useEditorModalNotification(): void {
-    this.notificationService.useEditorModalNotificationSuccess();
-  }
-
-  useDeleteModalNotification(): void {
-    this.notificationService.useDeleteModalNotificationSuccess();
+    this.notificationService.useOutletOnSuccess(Outlet.global)
   }
 
   updateServiceList(): void {
@@ -210,7 +194,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
           this.notificationService.addSuccess(
             new Notification(
               NotificationType.Info,
-              closure.name + ': Service successful deleted.',
+              closure.name + ': Service deleted.',
               ' Type: ' + closure.type +
               ' Service Name: ' + closure.name +
               ': Service successful deleted.',
@@ -236,9 +220,9 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
     this.closeAllModals();
 
     if (this.mainModalWasOpen){
-      this.notificationService.useDetailsModalNotificationSuccess();
+      this.notificationService.useOutletOnSuccess(Outlet.detailsModal);
     } else {
-      this.notificationService.useGlobalNotificationSuccess();
+      this.notificationService.useOutletOnSuccess(Outlet.global);
     }
 
     this.actionModal.displayAction(this.selectedService, selectedAction);
