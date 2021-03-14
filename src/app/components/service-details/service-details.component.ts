@@ -79,7 +79,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
 
   set detailsModalIsOpen(value: boolean) {
     if (value) {
-      this.notificationService.useOutlet(Outlet.global);
+      this.notificationService.useOutlet(Outlet.detailsModal);
     }
 
     if (!value && this._detailsModalIsOpen != value && !this.mainModalWasOpen) {
@@ -95,8 +95,6 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
 
   onModalClose(): void {
     if (this.mainModalWasOpen) {
-      this.notificationService.useOutlet(Outlet.global);
-
       this.mainModalWasOpen = false;
       this.notificationService.useOutletOnSuccess(Outlet.detailsModal);
       this.showServiceDetailsModal();
@@ -191,6 +189,8 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
       closure.type,
       closure.name).subscribe({
         next: () => {
+          this.mainModalWasOpen = false;
+          this.notificationService.useOutletOnSuccess(Outlet.global);
           this.notificationService.addSuccess(
             new Notification(
               NotificationType.Info,
@@ -201,7 +201,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
             ));
           this.deleteModalIsOpen = false;
           this.updateServiceList();
-          this.router.navigateByUrl('main/services');
+          this.router.navigate(['main/services']);
         },
       });
   }
@@ -212,11 +212,13 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
 
   showDeleteModal(): void {
     this.notificationService.close();
+    this.notificationService.close();
     this.closeAllModals();
     this.deleteModalIsOpen = true;
   }
 
   showActionModal(selectedAction): void {
+    this.notificationService.close();
     this.closeAllModals();
 
     if (this.mainModalWasOpen){
@@ -229,12 +231,14 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
   }
 
   showServiceDetailsModal(): void {
+    this.notificationService.close();
     this.closeAllModals();
     this.redirectToService(this.selectedService);
     this.detailsModalIsOpen = true;
   }
 
   showYamlEditorModal(): void {
+    this.notificationService.close();
     this.closeAllModals()
     this.editorModalIsOpen = true;
 

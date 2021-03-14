@@ -41,6 +41,9 @@
 <clr-modal [(clrModalOpen)]="openResponseModal">
   <h3 class="modal-title">Action Response: {{selectedAction.name}}</h3>
   <div class="modal-body">
+    <app-notification-banner
+      *ngIf="notificationResponseIsOpen()">
+    </app-notification-banner>
     <code><pre>{{responseMessage}}</pre></code>
   </div>
   <div class="modal-footer">

@@ -27,7 +27,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
         catchError((error: HttpErrorResponse) => {
-          let shortErrorMessage: string = error.statusText;
+          let shortErrorMessage: string = 'Error Code: ' + String(error.status);
+          let longErrorMessage: string = shortErrorMessage + ' ';
 
           if (error.status in this.shortErrorMessages){
             shortErrorMessage = this.shortErrorMessages[error.status];
@@ -38,6 +39,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           if (error.error !== null && error.error.message) {
             let errorDto: DtosHTTPErrorDto = error.error;
             shortErrorMessage = errorDto.message;
+            longErrorMessage = longErrorMessage + errorDto.message;
           }
 
           // this.notificationService.use
@@ -45,7 +47,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             new Notification(
               NotificationType.Danger,
               shortErrorMessage,
-              error.message,
+              longErrorMessage,
             )
           );
 

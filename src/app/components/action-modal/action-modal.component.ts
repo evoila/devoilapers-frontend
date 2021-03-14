@@ -13,7 +13,6 @@ import {Notification} from '../../services/notification/notification';
 })
 export class ActionModalComponent implements OnInit{
 
-
   selectedService: DtosServiceInstanceDetailsDto = {};
   selectedAction: DtosServiceInstanceActionDto = {};
 
@@ -28,8 +27,10 @@ export class ActionModalComponent implements OnInit{
     const oldValue = this._openModal
     this._openModal = value;
 
-    if (oldValue != value && !value && !this.openResponseModal && !this.responseModalIsOpening)
+    if (oldValue != value && !value && !this.openResponseModal && !this.responseModalIsOpening){
+      this.notificationService.useOutlet(Outlet.detailsModal);
       this.closeEvent.emit()
+    }
   }
 
   get openModal() {
@@ -41,8 +42,10 @@ export class ActionModalComponent implements OnInit{
     const oldValue = this._openResponseModal;
     this._openResponseModal = value;
 
-    if (oldValue != value && !value && !this.openModal)
-      this.closeEvent.emit()
+    if (oldValue != value && !value && !this.openModal) {
+      this.notificationService.useOutlet(Outlet.responseModal);
+      this.closeEvent.emit();
+    }
   }
 
   get openResponseModal() {
@@ -79,7 +82,11 @@ export class ActionModalComponent implements OnInit{
   }
 
   notificationIsOpen(): boolean {
-    return this.notificationOutlet === 'actionModal';
+    return this.notificationOutlet === Outlet.actionModal;
+  }
+
+  notificationResponseIsOpen(): boolean {
+    return this.notificationOutlet === Outlet.responseModal;
   }
 
   displayAction(
@@ -88,12 +95,15 @@ export class ActionModalComponent implements OnInit{
   ): void {
     this.notificationService.useOutletOnError(Outlet.actionModal);
     this.notificationService.close();
+
     this.selectedService = selectedService;
     this.selectedAction = selectedAction;
 
     this.selectedPlaceholder = {};
     this.selectedPlaceholderKeys = [];
     this.selectedPlaceholderTypes = {};
+    this.responseModalIsOpening = false;
+    this.openResponseModal = false;
 
     if (this.selectedAction.placeholder !== 'null') {
 
@@ -126,6 +136,22 @@ export class ActionModalComponent implements OnInit{
       this.selectedAction.command
     ).subscribe({
         next: (resMsg) => {
+          let hasMessage = !(resMsg === null || resMsg === "" || resMsg === {} || resMsg === undefined)
+
+          if (hasMessage) {
+            this.responseModalIsOpening = true
+          }
+
+          this.closeAction();
+
+          if (hasMessage) {
+            this.notificationService.useOutletOnSuccess(Outlet.responseModal);
+            this.openResponseModal = true;
+            this.responseMessage = JSON.stringify(resMsg, null, 2);
+          }
+
+          this.closeAction();
+
           this.notificationService.addSuccess(
             new Notification(
               NotificationType.Info,
@@ -135,19 +161,6 @@ export class ActionModalComponent implements OnInit{
             )
           );
 
-          let hasMessage = !(resMsg === null || resMsg === "" || resMsg === {} || resMsg === undefined)
-
-
-          if (hasMessage) {
-            this.responseModalIsOpening = true
-          }
-
-          this.closeAction();
-
-          if (hasMessage) {
-            this.openResponseModal = true;
-            this.responseMessage = JSON.stringify(resMsg, null, 2);
-          }
         },
       });
   }
@@ -157,6 +170,7 @@ export class ActionModalComponent implements OnInit{
   }
 
   closeActionResponse(): void {
+    this.responseModalIsOpening = false;
     this.openResponseModal = false;
   }
 
