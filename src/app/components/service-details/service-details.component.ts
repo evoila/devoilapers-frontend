@@ -5,6 +5,7 @@ import {
   ElementRef, OnDestroy,
   OnInit,
   ViewChild,
+  Input, ChangeDetectorRef,
 } from '@angular/core';
 import {
   ActivatedRoute
@@ -16,63 +17,150 @@ import {
 } from '../../share/swagger-auto-gen';
 import * as ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
-import {ActionModalComponent} from '../action-modal/action-modal.component';
-import {Notification, NotificationService, NotificationType} from '../../services/notification/notification.service';
-import {interval, Subscription} from 'rxjs';
+import { ActionModalComponent } from '../action-modal/action-modal.component';
+import { NotificationService} from '../../services/notification/notification.service';
+import { interval, Subscription } from 'rxjs';
+import * as arraySort from 'array-sort'
+import {findAll} from '@angular/compiler-cli/ngcc/src/utils';
+import {Outlet} from '../../services/notification/outlet';
+import {NotificationType} from '../../services/notification/notificationtype';
+import {Notification} from '../../services/notification/notification';
 
 @Component({
   selector: 'app-service-details',
   templateUrl: './service-details.component.html',
   styleUrls: ['./service-details.component.scss'],
 })
-export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ServiceDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('editor') private editor: ElementRef<HTMLElement>;
-  @ViewChild(ActionModalComponent) actionModal: ActionModalComponent;
+  @ViewChild( ActionModalComponent ) actionModal: ActionModalComponent;
 
-  private updateSubscription: Subscription;
-
+  services: Array<DtosServiceInstanceDetailsDto> = [];
   aceEditor: any;
-  service: DtosServiceInstanceDetailsDto = {};
-  openModal = false;
-  openEditorModal = false;
-  openDeleteModal = false;
+  selectedService: DtosServiceInstanceDetailsDto = {};
 
-  selectedAction: DtosServiceInstanceActionDto;
-  serviceName: string;
-  serviceType: string;
+  mainModalWasOpen = false;
+  _detailsModalIsOpen = false;
+  _editorModalIsOpen = false;
+  _deleteModalIsOpen = false;
+
+  private notificationOutlet: string;
+
+  set editorModalIsOpen(value: boolean) {
+    if (value) {
+      this.notificationService.useOutletOnError(Outlet.editorModal);
+    }
+
+    if (!value && value != this._editorModalIsOpen){
+      this.onModalClose();
+    }
+
+    this._editorModalIsOpen = value;
+  }
+
+  get editorModalIsOpen() {
+    return this._editorModalIsOpen;
+  }
+
+  set deleteModalIsOpen(value: boolean) {
+    if (value) {
+      this.notificationService.useOutletOnError(Outlet.deleteModal);
+    }
+
+    if (!value && value != this._deleteModalIsOpen)
+      this.onModalClose()
+
+    this._deleteModalIsOpen = value;
+  }
+
+  get deleteModalIsOpen() {
+    return this._deleteModalIsOpen;
+  }
+
+  set detailsModalIsOpen(value: boolean) {
+    if (value) {
+      this.notificationService.useOutlet(Outlet.detailsModal);
+    }
+
+    if (!value && this._detailsModalIsOpen != value && !this.mainModalWasOpen) {
+      this.router.navigate(['main/services']);
+    }
+
+    this._detailsModalIsOpen = value;
+  }
+
+  get detailsModalIsOpen() {
+    return this._detailsModalIsOpen;
+  }
+
+  onModalClose(): void {
+    if (this.mainModalWasOpen) {
+      this.mainModalWasOpen = false;
+      this.notificationService.useOutletOnSuccess(Outlet.detailsModal);
+      this.showServiceDetailsModal();
+    }
+  }
+
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private serviceService: ServiceService,
-    private notification: NotificationService,
+    private notificationService: NotificationService,
+    private cdRef: ChangeDetectorRef,
   ) {
-    // tslint:disable-next-line:new-parens
-    this.selectedAction = new class implements DtosServiceInstanceActionDto {
-      command: string;
-
-    };
+    this.useGlobalNotification();
   }
 
 
   ngOnInit(): void {
+    this.notificationService.useOutlet(Outlet.global);
+    this.subscribeToNotificationOutlet();
+
     this.updateServiceList();
-    this.updateSubscription = interval(10000).subscribe(
-      () => this.updateServiceList()
-    );
+    // this.updateSubscription = interval(10000).subscribe(
+    //   () => this.updateServiceList()
+    // );
+
+    this.route.params.subscribe((params) => {
+      if (params !== {} && params.serviceType !== undefined
+        && params.serivceName !== undefined) {
+        this.serviceService
+          .servicesInfoServicetypeServicenameGet(params.serviceType, params.serivceName)
+          .subscribe({
+            next: (services) => {
+              this.setSelectedService(services.services[0])
+              this.closeAllModals();
+              this.detailsModalIsOpen = true;
+            },
+          });
+      }
+    });
+  }
+
+  subscribeToNotificationOutlet(){
+    this.notificationService.currentNotificationOutlet.subscribe(
+      notificationOutlet => {
+        this.notificationOutlet = notificationOutlet
+        this.cdRef.detectChanges();
+      }
+    )
+  }
+
+  notificationIsOpen(outlet: string): boolean {
+    return this.notificationOutlet === outlet
+  }
+
+  useGlobalNotification(): void {
+    this.notificationService.useOutletOnSuccess(Outlet.global)
   }
 
   updateServiceList(): void {
-    this.route.params.subscribe((params) => {
-      this.serviceService
-        .servicesInfoServicetypeServicenameGet(params.serviceType, params.serivceName)
-        .subscribe({
-          next: (services) => {
-            this.service = services.services[0];
-          },
-        });
+    this.serviceService.servicesInfoGet().subscribe({
+      next: services => {
+        this.services = arraySort(services.services, ["type", "name"]);
+      },
     });
-
   }
 
   ngAfterViewInit(): void {
@@ -82,39 +170,83 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit, OnDestroy
     this.aceEditor.setReadOnly(true);
   }
 
-  open(): void{
-    this.serviceService.servicesYamlServicetypeServicenameGet(
-      this.service.type, this.service.name).subscribe({
-      next: (dtosServiceYamlDto) => {
-        this.aceEditor.session.setValue(dtosServiceYamlDto.yaml);
-      },
-    });
+  redirectToService(service: DtosServiceInstanceDetailsDto): void {
+    this.router.navigate(['main/services', service.type, service.name]);
+  }
+
+  closeAllModals(): void {
+    if (this.detailsModalIsOpen)
+      this.mainModalWasOpen = true;
+
+    this.detailsModalIsOpen = false;
+    this.deleteModalIsOpen = false;
+    this.editorModalIsOpen = false;
   }
 
   deleteService(): void {
+    let closure = this.selectedService;
     this.serviceService.servicesServicetypeServicenameDelete(
-      this.service.type,
-      this.service.name).subscribe({
-      next: () => {
-        this.notification.add(
-          new Notification(
-            NotificationType.Info,
-            this.service.name + ': Service successful deleted.',
-            ' Type: ' + this.service.type +
-            ' Service Name: ' + this.service.name +
-            ': Service successful deleted.',
-          ));
-        this.router.navigate(['main/services']);
-      },
-      error: msg => {console.log(msg); }
-    });
+      closure.type,
+      closure.name).subscribe({
+        next: () => {
+          this.mainModalWasOpen = false;
+          this.notificationService.useOutletOnSuccess(Outlet.global);
+          this.notificationService.addSuccess(
+            new Notification(
+              NotificationType.Info,
+              closure.name + ': Service deleted.',
+              ' Type: ' + closure.type +
+              ' Service Name: ' + closure.name +
+              ': Service successful deleted.',
+            ));
+          this.deleteModalIsOpen = false;
+          this.updateServiceList();
+          this.router.navigate(['main/services']);
+        },
+      });
   }
 
-  displayAction(selectedAction: DtosServiceInstanceActionDto): void {
-    this.actionModal.displayAction(this.service, selectedAction);
+  setSelectedService(service: DtosServiceInstanceDetailsDto) {
+    this.selectedService = service;
   }
 
-  ngOnDestroy(): void {
-    this.updateSubscription.unsubscribe();
+  showDeleteModal(): void {
+    this.notificationService.close();
+    this.notificationService.close();
+    this.closeAllModals();
+    this.deleteModalIsOpen = true;
+  }
+
+  showActionModal(selectedAction): void {
+    this.notificationService.close();
+    this.closeAllModals();
+
+    if (this.mainModalWasOpen){
+      this.notificationService.useOutletOnSuccess(Outlet.detailsModal);
+    } else {
+      this.notificationService.useOutletOnSuccess(Outlet.global);
+    }
+
+    this.actionModal.displayAction(this.selectedService, selectedAction);
+  }
+
+  showServiceDetailsModal(): void {
+    this.notificationService.close();
+    this.closeAllModals();
+    this.redirectToService(this.selectedService);
+    this.detailsModalIsOpen = true;
+  }
+
+  showYamlEditorModal(): void {
+    this.notificationService.close();
+    this.closeAllModals()
+    this.editorModalIsOpen = true;
+
+    this.serviceService.servicesYamlServicetypeServicenameGet(
+      this.selectedService.type, this.selectedService.name).subscribe({
+        next: (dtosServiceYamlDto) => {
+          this.aceEditor.session.setValue(dtosServiceYamlDto.yaml);
+        },
+      });
   }
 }

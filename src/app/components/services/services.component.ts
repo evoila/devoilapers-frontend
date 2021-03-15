@@ -14,8 +14,6 @@ import {
   ActionModalComponent
 } from '../action-modal/action-modal.component';
 
-import { BrandingComponent } from '../branding/branding/branding.component';
-
 import { Observable, Subscription, interval  } from 'rxjs';
 
 @Component({
@@ -50,7 +48,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
   }
 
   gotoServiceDetails(serviceType: string, serviceName: string): void {
-    this.router.navigate(['main/service-details', serviceType, serviceName]);
+    this.router.navigate(['main/services', serviceType, serviceName]);
   }
 
   displayAction(

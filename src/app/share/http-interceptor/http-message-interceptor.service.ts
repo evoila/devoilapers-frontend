@@ -6,10 +6,12 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { retry, catchError } from 'rxjs/operators';
-import {Notification, NotificationService, NotificationType} from '../../services/notification/notification.service';
-import {Injectable} from '@angular/core';
-import {DtosHTTPErrorDto} from '../swagger-auto-gen';
+import { catchError } from 'rxjs/operators';
+import { NotificationService} from '../../services/notification/notification.service';
+import { Injectable} from '@angular/core';
+import { DtosHTTPErrorDto} from '../swagger-auto-gen';
+import {NotificationType} from '../../services/notification/notificationtype';
+import {Notification} from '../../services/notification/notification';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
@@ -20,13 +22,13 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   };
 
 
-  constructor(private notification: NotificationService) { }
+  constructor(private notificationService: NotificationService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(request)
-      .pipe(
+    return next.handle(request).pipe(
         catchError((error: HttpErrorResponse) => {
-          let shortErrorMessage: string = error.statusText;
+          let shortErrorMessage: string = 'Error Code: ' + String(error.status);
+          let longErrorMessage: string = shortErrorMessage + ' ';
 
           if (error.status in this.shortErrorMessages){
             shortErrorMessage = this.shortErrorMessages[error.status];
@@ -37,18 +39,21 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           if (error.error !== null && error.error.message) {
             let errorDto: DtosHTTPErrorDto = error.error;
             shortErrorMessage = errorDto.message;
+            longErrorMessage = longErrorMessage + errorDto.message;
           }
 
-          this.notification.add(
+          // this.notificationService.use
+          this.notificationService.addError(
             new Notification(
               NotificationType.Danger,
               shortErrorMessage,
-              error.message,
+              longErrorMessage,
             )
           );
 
           return throwError(error);
-        })
+        }),
+
       );
   }
 

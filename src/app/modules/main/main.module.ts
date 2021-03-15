@@ -15,6 +15,7 @@ import { ServiceDetailsComponent } from '../../components/service-details/servic
 import { ActionModalComponent } from '../../components/action-modal/action-modal.component';
 import {NotificationsModule} from '../notifications-banner/notifications-banner.module';
 import {BrandingComponent} from '../../components/branding/branding/branding.component';
+import { ServiceStatusComponent } from 'src/app/components/service-status/service-status.component';
 
 export function configurationFactory(): Configuration {
   const params: ConfigurationParameters = {
@@ -35,6 +36,7 @@ export function configurationFactory(): Configuration {
     ServiceDetailsComponent,
     ActionModalComponent,
     BrandingComponent,
+    ServiceStatusComponent,
   ],
     imports: [
         CommonModule,
