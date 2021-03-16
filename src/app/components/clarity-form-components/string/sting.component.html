@@ -1,0 +1,27 @@
+<clr-input-container>
+  <input
+    clrInput
+    *ngIf="this.schema.widget.id ==='hidden'; else notHiddenFieldBlock"
+    [attr.name]="name" type="hidden" [formControl]="control">
+  <ng-template #notHiddenFieldBlock>
+    <div class="widget form-group">
+      <label [attr.for]="id">{{schema.title}}</label>
+      <span *ngIf="schema.description" class="formHelp">{{schema.description}}</span>
+      <input clrInput
+        [name]="name" [attr.readonly]="(schema.widget.id!=='color') && schema.readOnly?true:null"
+        class="text-widget.id textline-widget form-control"
+        [attr.type]="!this.schema.widget.id || this.schema.widget.id === 'string' ? 'text' : this.schema.widget.id"
+        [attr.id]="id"  [formControl]="control" [attr.placeholder]="schema.placeholder"
+        [attr.maxLength]="schema.maxLength || null"
+        [attr.minLength]="schema.minLength || null"
+        [attr.required]="schema.isRequired || null"
+        [attr.disabled]="(schema.widget.id=='color' && schema.readOnly)?true:null">
+      <input
+        clrInput
+        *ngIf="(schema.widget.id==='color' && schema.readOnly)"
+        [attr.name]="name"
+        type="hidden"
+        [formControl]="control">
+    </div>
+  </ng-template>
+</clr-input-container>

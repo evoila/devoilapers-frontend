@@ -32,19 +32,32 @@
 		<clr-wizard-button [type]="'next'">Next</clr-wizard-button>
 		<clr-wizard-button [type]="'finish'" (click)="finish()">Done</clr-wizard-button>
 
-    <clr-wizard-page #pageOne>
-      <ng-template clrPageTitle>Basic Information</ng-template>
-      <ng-template clrPageNavTitle>An</ng-template>
+<!--    <clr-wizard-page>-->
+<!--      <ng-template clrPageNavTitle>Information</ng-template>-->
+<!--      <ng-template clrPageTitle>{{ serviceType }}</ng-template>-->
 
-      <form *ngIf="wizard._open" clrForm clrLayout="horizontal" #formPageOne="ngForm">
-        <app-forms
-          [formJson]="this.jsonForm"
-          (resultJson)="onResultJsonChange($event)"
-        ></app-forms>
-      </form>
-    </clr-wizard-page>
+<!--      <form *ngIf="wizard._open" clrForm clrLayout="horizontal" #formPageOne="ngForm">-->
+<!--        <app-create-service-wizard-->
+<!--          [formJson]="this.jsonForm"-->
+<!--          (resultJson)="onResultJsonChange($event)"-->
+<!--        ></app-create-service-wizard>-->
+<!--      </form>-->
+<!--    </clr-wizard-page>-->
 
-		<clr-wizard-page #pageTwo (clrWizardPageOnLoad)="this.setEditorYAML()">
+    <ng-container *ngFor="let pageKey of jsonFormPageNavTitles">
+      <clr-wizard-page [id]="pageKey" *ngIf="wizard._open">
+        <ng-template clrPageNavTitle>{{getPagefromForm(pageKey).description}}</ng-template>
+        <ng-template clrPageTitle>{{getPagefromForm(pageKey).description}}</ng-template>
+        <form  *ngIf="wizard._open" clrForm clrLayout="horizontal" #formPageOne="ngForm">
+          <app-create-service-wizard
+            [formJson]="getPagefromForm(pageKey)"
+            (resultJson)="onResultJsonChange($event)"
+          ></app-create-service-wizard>
+        </form>
+      </clr-wizard-page>
+    </ng-container>
+
+		<clr-wizard-page (clrWizardPageOnLoad)="this.setEditorYAML()">
 		  <ng-template clrPageTitle>Edit YAML</ng-template>
 		  <ng-template clrPageNavTitle>YAML</ng-template>
 		  <form clrForm clrLayout="horizontal" #formPageOne="ngForm">

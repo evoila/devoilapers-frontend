@@ -16,7 +16,7 @@ import { ActionModalComponent } from '../../components/action-modal/action-modal
 import {NotificationsModule} from '../notifications-banner/notifications-banner.module';
 import {BrandingComponent} from '../../components/branding/branding/branding.component';
 import { ServiceStatusComponent } from 'src/app/components/service-status/service-status.component';
-import {FormsComponent} from '../../components/wizard-forms/forms.component';
+import {CreateServiceWizardComponent} from '../../components/create-service-wizard/create-service-wizard.component';
 
 import {
   SchemaFormModule,
@@ -47,7 +47,7 @@ export function configurationFactory(): Configuration {
     ServiceDetailsComponent,
     ActionModalComponent,
     BrandingComponent,
-    FormsComponent,
+    CreateServiceWizardComponent,
     ButtonComponent,
     ServiceStatusComponent,
   ],

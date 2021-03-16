@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ButtonWidget, CheckboxWidget} from 'ngx-schema-form';
 import { CdsButton } from '@clr/core/button';
 

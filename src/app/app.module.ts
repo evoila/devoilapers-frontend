@@ -8,14 +8,23 @@ import { LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { MainModule } from './modules/main/main.module';
 import { LoginModule } from './modules/login/login.module';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NotificationService} from './services/notification/notification.service';
 import {NotificationsModule} from './modules/notifications-banner/notifications-banner.module';
 import {HttpErrorInterceptor} from './share/http-interceptor/http-message-interceptor.service';
+import { StingComponent } from './components/clarity-form-components/string/sting.component';
+import { SelectComponent } from './components/clarity-form-components/select/select.component';
+import {SchemaFormModule} from 'ngx-schema-form';
+import { IntegerComponent } from './components/clarity-form-components/integer/integer.component';
+import { ObjectLayoutComponent } from './components/clarity-form-components/object-layout/object-layout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    StingComponent,
+    SelectComponent,
+    IntegerComponent,
+    ObjectLayoutComponent,
   ],
   imports: [
     BrowserModule,
@@ -27,6 +36,8 @@ import {HttpErrorInterceptor} from './share/http-interceptor/http-message-interc
     LoginModule,
     FormsModule,
     NotificationsModule,
+    ReactiveFormsModule,
+    SchemaFormModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
