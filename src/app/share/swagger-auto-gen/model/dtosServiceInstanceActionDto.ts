@@ -14,7 +14,6 @@
 export interface DtosServiceInstanceActionDto { 
     command?: string;
     form?: string;
+    isToggle?: boolean;
     name?: string;
-    toggleGroup?: string;
-    toggleValue?: number;
 }
