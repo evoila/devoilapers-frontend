@@ -36,7 +36,7 @@ export class LayoutComponent implements OnInit {
   }
 
   notificationIsOpen(): boolean {
-    return this.notificationOutlet === Outlet.global
+    return this.notificationOutlet === Outlet.global;
   }
 
   useGlobalNotification(): void {

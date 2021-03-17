@@ -16,7 +16,9 @@ import { ActionModalComponent } from '../../components/action-modal/action-modal
 import {NotificationsModule} from '../notifications-banner/notifications-banner.module';
 import {BrandingComponent} from '../../components/branding/branding/branding.component';
 import { ServiceStatusComponent } from 'src/app/components/service-status/service-status.component';
+import {CreateServiceWizardFormComponent} from '../../components/create-service-wizard-form/create-service-wizard-form.component';
 import {CreateServiceWizardComponent} from '../../components/create-service-wizard/create-service-wizard.component';
+import { AceEditorComponent } from '../../components/ace-editor/ace-editor.component';
 
 import {
   SchemaFormModule,
@@ -42,12 +44,14 @@ export function configurationFactory(): Configuration {
     PageNotFoundComponent,
     AboutComponent,
     LayoutComponent,
+    AceEditorComponent,
+    CreateServiceWizardFormComponent,
+    CreateServiceWizardComponent,
     ServicestoreComponent,
     ServicesComponent,
     ServiceDetailsComponent,
     ActionModalComponent,
     BrandingComponent,
-    CreateServiceWizardComponent,
     ButtonComponent,
     ServiceStatusComponent,
   ],

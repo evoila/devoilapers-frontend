@@ -1,5 +1,52 @@
-<sf-form
-  [schema]="this.formJson"
-  (onChange)="this.emitResultJson($event.value)">
-</sf-form>
+<clr-wizard #wizard (clrWizardOnReset)="this.getFormJSON()" *ngIf="serviceStoreItem != null" >
+  <clr-wizard-title>{{ serviceStoreItem.type }}</clr-wizard-title>
 
+  <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
+  <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+  <clr-wizard-button [type]="'next'">Next</clr-wizard-button>
+  <clr-wizard-button [type]="'finish'" (click)="finish()">Done</clr-wizard-button>
+
+  <clr-wizard-page #wizardFirstPage id="firstpage">
+    <ng-template clrPageNavTitle>Information</ng-template>
+    <ng-template clrPageTitle>{{  serviceStoreItem.type  }}</ng-template>
+
+    <form *ngIf="wizard._open" clrForm clrLayout="horizontal" #formPageOne="ngForm">
+    
+        <p>
+          Welcome to the service creation wizard for a {{ serviceStoreItem.type }} service. 
+          The following pages will guide you to the creation process.					
+        </p>
+  
+        <p>
+          <!-- {{ service.description }}			 -->
+        </p>
+
+        <p>
+          Continue with a click on next.
+        </p>
+    </form>
+  </clr-wizard-page>
+
+  <ng-container *ngFor="let pageKey of jsonFormPageNavTitles">
+    <clr-wizard-page [id]="pageKey" *ngIf="wizard._open">
+      <ng-template clrPageNavTitle>{{getPagefromForm(pageKey).description}}</ng-template>
+      <ng-template clrPageTitle>{{getPagefromForm(pageKey).description}}</ng-template>
+      <form *ngIf="wizard._open" clrForm clrLayout="horizontal" #formPageOne="ngForm">
+        <app-create-service-wizard-form [formJson]="getPagefromForm(pageKey)"
+          (resultJson)="onResultJsonChange($event, pageKey)"></app-create-service-wizard-form>
+      </form>
+    </clr-wizard-page>
+  </ng-container>
+
+  <clr-wizard-page (clrWizardPageOnLoad)="this.setEditorYAML()" #lastpage>
+    <ng-template clrPageTitle>Edit YAML</ng-template>
+    <ng-template clrPageNavTitle>YAML</ng-template>
+    <form clrForm clrLayout="horizontal" #formPageOne="ngForm">
+      <div class="">
+        <app-notification-banner *ngIf="notificationIsOpen('editorModal')">
+        </app-notification-banner>
+      </div>
+      <app-ace-editor [yaml]="yamlText"></app-ace-editor>
+    </form>
+  </clr-wizard-page>
+</clr-wizard>

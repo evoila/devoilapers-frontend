@@ -41,7 +41,6 @@ export class NotificationService implements OnInit {
 
   public addError(notification: Notification) {
     this.notificationOutletBS.next(this.notificationOutletError);
-    console.log(this.notificationOutlet);
     this.notificationBS.next(notification);
   }
 
