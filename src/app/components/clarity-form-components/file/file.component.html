@@ -1,0 +1,19 @@
+<div class="widget form-group">
+
+  <div class="clr-row">
+    <div class="clr-col-4">
+      <label [attr.for]="id" class="horizontal control-label">
+        {{ schema.title }}
+      </label>
+    </div>
+    <div class="clr-col-8">
+      <span *ngIf="schema.description" class="formHelp">{{schema.description}}</span>
+      <div class="clr-file-wrapper">
+        <label [for]="id" class="clr-control-label"><span class="btn btn-sm">browse</span></label>
+        <input type="file" placeholder="Enter value here" class="clr-file" [name]="name" [id]="id" [attr.id]="id"
+          [formControl]="control" [attr.disabled]="schema.readOnly?true:null" (change)="onFileChange($event)" />
+      </div>
+    </div>
+  </div>
+  <input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="control">
+</div>

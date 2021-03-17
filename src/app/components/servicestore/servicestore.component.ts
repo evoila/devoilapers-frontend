@@ -80,7 +80,7 @@ export class ServicestoreComponent implements OnInit, OnDestroy {
     this.notificationService.useOutletOnError(Outlet.editorModal);
 
     this.serviceType = service.type;
-    this.wizard.open(service)
+    this.wizard.open(service);
   }
 
   finish(yaml: string): void {
@@ -102,6 +102,10 @@ export class ServicestoreComponent implements OnInit, OnDestroy {
           );
         }
       });
+  }
+
+  onWizardCanceled(): void {
+
   }
 
   ngOnDestroy(): void {

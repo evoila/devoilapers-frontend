@@ -217,7 +217,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
     this.deleteModalIsOpen = true;
   }
 
-  showActionModal(selectedAction): void {
+  showActionModal(selectedAction: DtosServiceInstanceActionDto): void {
     this.notificationService.close();
     this.closeAllModals();
 

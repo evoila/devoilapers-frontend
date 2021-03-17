@@ -1,4 +1,4 @@
-<clr-wizard #wizard (clrWizardOnReset)="this.getFormJSON()" *ngIf="serviceStoreItem != null" >
+<clr-wizard #wizard (clrWizardOnReset)="this.getFormJSON()" *ngIf="serviceStoreItem != null" (clrWizardOnCancel)="this.onWizardCancel()" >
   <clr-wizard-title>{{ serviceStoreItem.type }}</clr-wizard-title>
 
   <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
@@ -18,7 +18,7 @@
         </p>
   
         <p>
-          <!-- {{ service.description }}			 -->
+           {{ serviceStoreItem.description }}	
         </p>
 
         <p>

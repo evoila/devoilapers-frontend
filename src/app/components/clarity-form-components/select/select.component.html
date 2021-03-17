@@ -1,49 +1,26 @@
-<clr-select-container>
-  <label [attr.for]="id">{{ schema.title }}</label>
-  <select
-    clrSelect
-    name="options"
-    *ngIf="schema.type!='array'"
-    [formControl]="control"
-    [attr.name]="name"
-    [attr.id]="id"
-    [disabled]="schema.readOnly"
-    [disableControl]="schema.readOnly">
+<clr-select-container style="width: 100%;">
+  <label [attr.for]="id" class="clr-col-md-4">{{ schema.title }}</label>
+  <select clrSelect name="options" *ngIf="schema.type!='array'" [formControl]="control" [attr.name]="name"  
+    [attr.id]="id" [disabled]="schema.readOnly" [disableControl]="schema.readOnly" class="clr-col-md-8" style="margin-left: 10px;">
     <ng-container *ngIf="schema.oneOf; else use_enum">
-      <option
-        *ngFor="let option of schema.oneOf"
-        [ngValue]="option.enum[0]">
+      <option *ngFor="let option of schema.oneOf" [ngValue]="option.enum[0]">
         {{option.description}}
       </option>
     </ng-container>
     <ng-template #use_enum>
-      <option *ngFor="let option of schema.enum"
-              [ngValue]="option" >
+      <option *ngFor="let option of schema.enum" [ngValue]="option">
         {{option}}</option>
     </ng-template>
   </select>
-  <select *ngIf="schema.type==='array'"
-          multiple
-          [formControl]="control"
-          [attr.name]="name"
-          [attr.id]="id"
-          [disabled]="schema.readOnly"
-          [disableControl]="schema.readOnly">
-    <option *ngFor="let option of schema.items.oneOf"
-            [ngValue]="option.enum[0]"
-            [disabled]="option.readOnly">
+  <select *ngIf="schema.type==='array'" multiple [formControl]="control" [attr.name]="name" [attr.id]="id"
+    [disabled]="schema.readOnly" [disableControl]="schema.readOnly" class="clr-col-md-8" >
+    <option *ngFor="let option of schema.items.oneOf" [ngValue]="option.enum[0]" [disabled]="option.readOnly">
       {{option.description}}
     </option>
   </select>
-  <clr-control-helper
-    *ngIf="schema.description">
+  <clr-control-helper *ngIf="schema.description">
     {{schema.description}}
   </clr-control-helper>
   <clr-control-error>This field is required!</clr-control-error>
-  <input
-    *ngIf="schema.readOnly"
-    [attr.name]="name"
-    type="hidden"
-    [formControl]="control">
+  <input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="control">
 </clr-select-container>
-

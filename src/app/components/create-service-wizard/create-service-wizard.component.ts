@@ -1,17 +1,13 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import {
   ServicestoreService,
   DtosServiceStoreItemDto,
-  ServiceService,
-  DtosServiceYamlDto, DtosServiceStoreItemFormDto,
+  DtosServiceStoreItemFormDto,
 } from 'src/app/share/swagger-auto-gen';
 import { ClrWizard, ClrWizardPage } from '@clr/angular';
-import * as ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
-import {NotificationService} from '../../services/notification/notification.service';
-import {Outlet} from '../../services/notification/outlet';
-import {NotificationType} from '../../services/notification/notificationtype';
-import {Notification} from '../../services/notification/notification';
+import { NotificationService } from '../../services/notification/notification.service';
+import { Outlet } from '../../services/notification/outlet';
 
 @Component({
   selector: 'app-create-service-wizard',
@@ -24,14 +20,16 @@ export class CreateServiceWizardComponent implements OnInit {
   @ViewChild('wizard') wizard: ClrWizard;
   @ViewChild('wizardFirstPage') wizardFirstPage: ClrWizardPage;
 
-  @Input() formJson: object;
+  /** Wizard finished */
   @Output() yamlCreated = new EventEmitter<string>();
+  /** Wizard canceled */
+  @Output() canceled = new EventEmitter<void>();
 
-  yamlText: string;
-  serviceStoreItem: DtosServiceStoreItemDto = new Object();
-  jsonForm: any;
-  jsonFormPageNavTitles: string[];
-  formResult: object = new Object();
+  public yamlText: string;
+  public serviceStoreItem: DtosServiceStoreItemDto = new Object();
+  public jsonForm: any;
+  public jsonFormPageNavTitles: string[];
+  public formResult: object = new Object();
   private notificationOutlet: string;
 
   constructor(private servicestoreService: ServicestoreService, private notificationService: NotificationService) { }
@@ -43,12 +41,13 @@ export class CreateServiceWizardComponent implements OnInit {
 
   ngOnInit(): void { }
 
+  /** Wizard finished */
   finish(): void {
     this.yamlCreated.emit(this.yamlText);
-    // this.wizard.goTo('clr-wizard-page-firstpage');
     this.wizard.currentPage = this.wizardFirstPage;
   }
 
+  /** Get json ngx form from backend */
   getFormJSON(): void {
     this.servicestoreService.servicestoreFormServicetypeGet(this.serviceStoreItem.type)
       .subscribe({
@@ -60,29 +59,18 @@ export class CreateServiceWizardComponent implements OnInit {
       });
   }
 
-  onWizardPagesChanged(): void {
-    if (this.wizard.pageCollection.pages.length === 0)
-      return;
-
-    const page = this.wizard.pageCollection.pages.first;
-    this.wizard.currentPage = page;
-
-    // this.wizard.currentPage = page
-    // this.wizard.goTo(page.id)
-  }
-
+  /** Return schema-form wizard page content from form by page name */
   getPagefromForm(pageName): any {
-    // console.log(this.jsonForm.properties[pageName])
     return this.jsonForm.properties[pageName];
   }
 
-  
+  /** Gets called if the ngx-schema-form value changes */
   onResultJsonChange(formResult: object, pageKey: string): void {
     if (formResult == null || pageKey == null) {
       return;
     }
 
-
+    // Concat form since we split it up for each wizard page
     this.formResult[pageKey] = formResult;
   }
 
@@ -91,6 +79,13 @@ export class CreateServiceWizardComponent implements OnInit {
   }
 
 
+  /** Gets called if the wizard closes */
+  onWizardCancel(): void {
+    this.canceled.emit();
+    this.wizard.currentPage = this.wizardFirstPage;
+  }
+
+  /** Query the backend to generate the yaml based on the form values and set it in the editor */
   setEditorYAML(): void {
     this.servicestoreService
       .servicestoreYamlServicetypePost(JSON.stringify(this.formResult), this.serviceStoreItem.type)
@@ -102,6 +97,4 @@ export class CreateServiceWizardComponent implements OnInit {
 
     this.notificationService.useOutlet(Outlet.global);
   }
-
-
 }

@@ -17,6 +17,9 @@ import { SelectComponent } from './components/clarity-form-components/select/sel
 import {SchemaFormModule} from 'ngx-schema-form';
 import { IntegerComponent } from './components/clarity-form-components/integer/integer.component';
 import { ObjectLayoutComponent } from './components/clarity-form-components/object-layout/object-layout.component';
+import {CheckboxComponent} from './components/clarity-form-components/checkbox/checkbox.component';
+import {RadioComponent} from './components/clarity-form-components/radio/radio.component';
+import {FileComponent} from './components/clarity-form-components/file/file.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +28,9 @@ import { ObjectLayoutComponent } from './components/clarity-form-components/obje
     SelectComponent,
     IntegerComponent,
     ObjectLayoutComponent,
+    CheckboxComponent,
+    RadioComponent,
+    FileComponent
   ],
   imports: [
     BrowserModule,

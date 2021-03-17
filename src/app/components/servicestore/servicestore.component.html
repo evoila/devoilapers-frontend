@@ -24,6 +24,6 @@
 		</div>
 	</div>
 
-	<app-create-service-wizard #creationWizard (yamlCreated)="finish($event)"></app-create-service-wizard>
+	<app-create-service-wizard #creationWizard (yamlCreated)="finish($event)" (canceled)="onWizardCanceled()"></app-create-service-wizard>
 
 </div>

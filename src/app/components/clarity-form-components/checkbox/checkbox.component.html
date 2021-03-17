@@ -1,0 +1,29 @@
+<div class="widget form-group">
+  <label [attr.for]="id" class="horizontal control-label">
+    {{ schema.title }}
+  </label>
+  <div *ngIf="schema.type!='array'" class="checkbox">
+    <clr-checkbox-wrapper>
+      <input [formControl]="control" [attr.name]="name" [attr.id]="id" clrCheckbox
+        [indeterminate]="control.value !== false && control.value !== true ? true :null" type="checkbox"
+        [disabled]="schema.readOnly">
+      <input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="control">
+      <label class="horizontal control-label">
+        {{schema.description}}
+      </label>
+    </clr-checkbox-wrapper>
+  </div>
+  <ng-container *ngIf="schema.type==='array'">
+    <div *ngFor="let option of schema.items.oneOf" class="checkbox">
+      <clr-checkbox-wrapper>
+        <input [attr.name]="name" clrCheckbox value="{{option.enum[0]}}" type="checkbox"
+          [attr.disabled]="schema.readOnly" (change)="onCheck($event.target)"
+          [attr.checked]="checked[option.enum[0]] ? true : null" [attr.id]="id + '.' + option.enum[0]">
+
+        <label class="horizontal control-label">
+          {{option.description}}
+        </label>
+      </clr-checkbox-wrapper>
+    </div>
+  </ng-container>
+</div>
