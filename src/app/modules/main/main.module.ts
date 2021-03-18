@@ -19,6 +19,7 @@ import { ServiceStatusComponent } from 'src/app/components/service-status/servic
 import {CreateServiceWizardFormComponent} from '../../components/create-service-wizard-form/create-service-wizard-form.component';
 import {CreateServiceWizardComponent} from '../../components/create-service-wizard/create-service-wizard.component';
 import { AceEditorComponent } from '../../components/ace-editor/ace-editor.component';
+import { ActionToggleComponent } from '../../components/action-toggle/action-toggle.component';
 
 import {
   SchemaFormModule,
@@ -54,6 +55,7 @@ export function configurationFactory(): Configuration {
     BrandingComponent,
     ButtonComponent,
     ServiceStatusComponent,
+    ActionToggleComponent,
   ],
   imports: [
     CommonModule,

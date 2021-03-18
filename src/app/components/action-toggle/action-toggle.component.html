@@ -1,0 +1,6 @@
+<clr-toggle-container *ngIf="action.isToggle" clrInline style="margin-top: 0px; margin-left: 40px;">
+  <clr-toggle-wrapper>
+    <input type="checkbox" clrToggle  [(ngModel)]="toggleValue" (change)="setActionToggleSwitchValue($event)" />
+    <label style="margin: 0px; padding: 0px; font-weight: normal; color: #666;">{{ action.name }}</label>
+  </clr-toggle-wrapper>
+</clr-toggle-container>

@@ -237,6 +237,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
     this.detailsModalIsOpen = true;
   }
 
+
   showYamlEditorModal(): void {
     this.notificationService.close();
     this.closeAllModals()
