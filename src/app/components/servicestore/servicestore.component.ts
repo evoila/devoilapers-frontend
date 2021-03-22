@@ -2,22 +2,23 @@ import {
   AfterViewInit,
   Component,
   ElementRef, OnDestroy,
-  OnInit,
+  OnInit, QueryList,
   ViewChild
 } from '@angular/core';
 import {
   ServicestoreService,
   DtosServiceStoreItemDto,
   ServiceService,
-  DtosServiceYamlDto,
+  DtosServiceYamlDto, DtosServiceStoreItemFormDto,
 } from 'src/app/share/swagger-auto-gen';
-import * as ace from 'ace-builds';
-import 'ace-builds/webpack-resolver';
+
 import {NotificationService} from '../../services/notification/notification.service';
 import * as arraySort from 'array-sort'
 import {Outlet} from '../../services/notification/outlet';
 import {NotificationType} from '../../services/notification/notificationtype';
 import {Notification} from '../../services/notification/notification';
+import { CreateServiceWizardComponent } from '../create-service-wizard/create-service-wizard.component';
+
 
 @Component({
   selector: 'app-servicestore',
@@ -25,12 +26,13 @@ import {Notification} from '../../services/notification/notification';
   styleUrls: ['./servicestore.component.scss'],
   providers: [ServicestoreService, ServiceService]
 })
-export class ServicestoreComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('editor') private editor: ElementRef<HTMLElement>;
+export class ServicestoreComponent implements OnInit, OnDestroy {  
+  @ViewChild('creationWizard') wizard: CreateServiceWizardComponent;
 
   services: Array<DtosServiceStoreItemDto>;
+  jsonFormPageNavTitles: string[];
+  jsonForm: any;
   serviceType: string;
-  aceEditor: any;
   clicked: boolean;
   private notificationOutlet: string;
 
@@ -39,6 +41,7 @@ export class ServicestoreComponent implements OnInit, AfterViewInit, OnDestroy {
               private notificationService: NotificationService,
   ) { }
 
+
   ngOnInit(): void {
     this.notificationService.close();
     this.notificationService.useOutlet(Outlet.global);
@@ -46,14 +49,14 @@ export class ServicestoreComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.servicestoreService.servicestoreInfoGet().subscribe({
       next: services => {
-        this.services = arraySort(services.services, ["type"]);
+        this.services = arraySort(services.services, ['type']);
 
        },
     });
 
   }
 
-  subscribeToNotificationOutlet(){
+  subscribeToNotificationOutlet(): void{
     this.notificationService.currentNotificationOutlet.subscribe(
       notificationOutlet => this.notificationOutlet = notificationOutlet
     )
@@ -71,13 +74,23 @@ export class ServicestoreComponent implements OnInit, AfterViewInit, OnDestroy {
     this.notificationService.useOutletOnSuccess(Outlet.global);
   }
 
-  finish(): void {
+  open(service: DtosServiceStoreItemDto): void{
+    this.notificationService.close();
+    this.notificationService.useOutletOnSuccess(Outlet.global);
+    this.notificationService.useOutletOnError(Outlet.editorModal);
+
+    this.serviceType = service.type;
+    this.wizard.open(service);
+  }
+
+  finish(yaml: string): void {
     this.clicked = true;
+
     const dtosServiceYamlDto = {
-      yaml: this.aceEditor.getValue()
+      yaml
     } as DtosServiceYamlDto;
-    this.serviceService.servicesCreateServicetypePost(
-      dtosServiceYamlDto, this.serviceType).subscribe({
+
+    this.serviceService.servicesCreateServicetypePost(dtosServiceYamlDto, this.serviceType).subscribe({
         next: () => {
           this.useGlobalNotificationSuccess();
           this.notificationService.addSuccess(
@@ -88,33 +101,14 @@ export class ServicestoreComponent implements OnInit, AfterViewInit, OnDestroy {
             )
           );
         }
-    });
-    this.clicked = false;
-  }
-
-  open(serviceName): void{
-    this.notificationService.close();
-    this.notificationService.useOutletOnSuccess(Outlet.global);
-    this.notificationService.useOutletOnError(Outlet.editorModal);
-
-    this.serviceType = serviceName;
-    this.servicestoreService.servicestoreYamlServicetypeGet(this.serviceType)
-      .subscribe({
-          next: dtosServiceStoreItemYamlDto => {
-            this.aceEditor.session.setValue(dtosServiceStoreItemYamlDto.yaml);
-          }
       });
-
-    this.notificationService.useOutlet(Outlet.global);
   }
 
-  ngAfterViewInit(): void {
-    ace.config.set('fontSize', '14px');
-    this.aceEditor = ace.edit(this.editor.nativeElement);
-    this.aceEditor.session.setMode('ace/mode/yaml');
+  onWizardCanceled(): void {
+
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.notificationService.close();
   }
 }

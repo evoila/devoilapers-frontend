@@ -3,7 +3,6 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { NotificationService } from 'src/app/services/notification/notification.service';
 import {Outlet} from '../../services/notification/outlet';
-import {Notification} from '../../services/notification/notification';
 
 @Component({
   selector: 'app-layout',
@@ -37,7 +36,7 @@ export class LayoutComponent implements OnInit {
   }
 
   notificationIsOpen(): boolean {
-    return this.notificationOutlet === Outlet.global
+    return this.notificationOutlet === Outlet.global;
   }
 
   useGlobalNotification(): void {

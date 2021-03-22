@@ -12,7 +12,7 @@ import {
 } from '@angular/router';
 import {
   DtosServiceInstanceActionDto,
-  DtosServiceInstanceDetailsDto,
+  DtosServiceInstanceDetailsDto, DtosServiceYamlDto,
   ServiceService
 } from '../../share/swagger-auto-gen';
 import * as ace from 'ace-builds';
@@ -217,7 +217,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
     this.deleteModalIsOpen = true;
   }
 
-  showActionModal(selectedAction): void {
+  showActionModal(selectedAction: DtosServiceInstanceActionDto): void {
     this.notificationService.close();
     this.closeAllModals();
 
@@ -236,6 +236,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
     this.redirectToService(this.selectedService);
     this.detailsModalIsOpen = true;
   }
+
 
   showYamlEditorModal(): void {
     this.notificationService.close();

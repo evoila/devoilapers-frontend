@@ -13,6 +13,7 @@
 
 export interface DtosServiceInstanceActionDto { 
     command?: string;
+    form?: string;
+    isToggle?: boolean;
     name?: string;
-    placeholder?: string;
 }

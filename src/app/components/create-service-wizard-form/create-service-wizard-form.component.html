@@ -1,0 +1,6 @@
+<form clrForm class="clr-form-horizontal">
+  <sf-form
+    [schema]="this.formJson"
+    (onChange)="this.emitResultJson($event.value)">
+  </sf-form>
+</form>

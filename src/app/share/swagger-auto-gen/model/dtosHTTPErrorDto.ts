@@ -12,6 +12,5 @@
 
 
 export interface DtosHTTPErrorDto { 
-    code?: number;
     message?: string;
 }
