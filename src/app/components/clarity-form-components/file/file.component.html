@@ -6,13 +6,16 @@
         {{ schema.title }}
       </label>
     </div>
-    <div class="clr-col-8">
+    <div class="clr-col-2">
       <span *ngIf="schema.description" class="formHelp">{{schema.description}}</span>
       <div class="clr-file-wrapper">
         <label [for]="id" class="clr-control-label"><span class="btn btn-sm">browse</span></label>
         <input type="file" placeholder="Enter value here" class="clr-file" [name]="name" [id]="id" [attr.id]="id"
           [formControl]="control" [attr.disabled]="schema.readOnly?true:null" (change)="onFileChange($event)" />
       </div>
+    </div>
+    <div class="clr-col-6" style="padding-top: 4px;">
+      <label style="margin-left: -30px; opacity: 80%;">{{filename}}</label>
     </div>
   </div>
   <input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="control">

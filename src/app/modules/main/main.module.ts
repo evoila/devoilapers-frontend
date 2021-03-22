@@ -20,6 +20,7 @@ import {CreateServiceWizardFormComponent} from '../../components/create-service-
 import {CreateServiceWizardComponent} from '../../components/create-service-wizard/create-service-wizard.component';
 import { AceEditorComponent } from '../../components/ace-editor/ace-editor.component';
 import { ActionToggleComponent } from '../../components/action-toggle/action-toggle.component';
+import { ActionResponseModalComponent } from '../../components/action-response-modal/action-response-modal.component';
 
 import {
   SchemaFormModule,
@@ -56,6 +57,7 @@ export function configurationFactory(): Configuration {
     ButtonComponent,
     ServiceStatusComponent,
     ActionToggleComponent,
+    ActionResponseModalComponent,
   ],
   imports: [
     CommonModule,

@@ -6,6 +6,9 @@ import { FileWidget } from 'ngx-schema-form';
   styleUrls: ['./file.component.scss']
 })
 export class FileComponent extends FileWidget implements AfterViewInit {
+  filename: string;
+
+
   ngAfterViewInit(): void {
     // OVERRIDE ControlWidget ngAfterViewInit() as ReactiveForms do not handle
     // file inputs
@@ -22,6 +25,7 @@ export class FileComponent extends FileWidget implements AfterViewInit {
 
   onFileChange($event): void {
     const file = $event.target.files[0];
+    this.filename = file.name;
     this.reader.readAsBinaryString(file);
   }
 }

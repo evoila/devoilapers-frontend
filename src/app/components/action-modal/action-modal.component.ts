@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { DtosServiceInstanceActionDto, DtosServiceInstanceDetailsDto, ServiceService } from '../../share/swagger-auto-gen';
 import { NotificationService } from '../../services/notification/notification.service';
 import { trigger } from '@angular/animations';
@@ -6,6 +6,7 @@ import { Outlet } from '../../services/notification/outlet';
 import { NotificationType } from '../../services/notification/notificationtype';
 import { Notification } from '../../services/notification/notification';
 import { JsonPipe } from '@angular/common';
+import { ActionResponseModalComponent } from '../action-response-modal/action-response-modal.component';
 
 @Component({
   selector: 'app-action-modal',
@@ -13,44 +14,17 @@ import { JsonPipe } from '@angular/common';
   styleUrls: ['./action-modal.component.scss']
 })
 export class ActionModalComponent implements OnInit {
+  @ViewChild('responseModal') responseModal: ActionResponseModalComponent;
+
   @Output()
   closeEvent = new EventEmitter();
 
-  set openModal(value: boolean) {
-    const oldValue = this._openModal;
-    this._openModal = value;
 
-    if (oldValue !== value && !value && !this.openResponseModal && !this.responseModalIsOpening) {
-      this.notificationService.useOutlet(Outlet.detailsModal);
-      this.closeEvent.emit();
-    }
-  }
-
-  get openModal(): boolean {
-    return this._openModal;
-  }
-
-  set openResponseModal(value: boolean) {
-    const oldValue = this._openResponseModal;
-    this._openResponseModal = value;
-
-    if (oldValue !== value && !value && !this.openModal) {
-      this.notificationService.useOutlet(Outlet.responseModal);
-      this.closeEvent.emit();
-    }
-  }
-
-  get openResponseModal(): boolean {
-    return this._openResponseModal;
-  }
-
-
-  private _openResponseModal = false;
+  private responseModalIsOpen: boolean;
   private formResult: object;
-  private _openModal = false;
   private notificationOutlet: string;
-  private responseModalIsOpening = false;
-  responseObject: any;
+
+  modalIsOpen = false;
   selectedService: DtosServiceInstanceDetailsDto = {};
   selectedAction: DtosServiceInstanceActionDto = {};
   selectedForm: {};
@@ -72,16 +46,14 @@ export class ActionModalComponent implements OnInit {
         this.notificationOutlet = notificationOutlet;
         this.cdRef.detectChanges();
       }
-    )
+    );
   }
 
   notificationIsOpen(): boolean {
     return this.notificationOutlet === Outlet.actionModal;
   }
 
-  notificationResponseIsOpen(): boolean {
-    return this.notificationOutlet === Outlet.responseModal;
-  }
+
 
   displayAction(
     selectedService: DtosServiceInstanceDetailsDto,
@@ -93,11 +65,8 @@ export class ActionModalComponent implements OnInit {
     this.selectedService = selectedService;
     this.selectedAction = selectedAction;
 
-    this.responseModalIsOpening = false;
-    this.openResponseModal = false;
-
     this.selectedForm = JSON.parse(this.selectedAction.form);
-    this.openModal = true;
+    this.modalIsOpen = true;
   }
 
   executeAction(): void {
@@ -118,14 +87,14 @@ export class ActionModalComponent implements OnInit {
         if (actionResultJson === null || actionResultJson === '') {
           this.notificationService.useOutletOnSuccess(Outlet.detailsModal);
         } else {
-          this.notificationService.useOutletOnSuccess(Outlet.responseModal);
-          this.responseModalIsOpening = true;
-          this.openResponseModal = true;
-          this.responseObject = JSON.parse(actionResultJson);
+          this.notificationService.useOutletOnSuccess(Outlet.responseModal);     
+               
+          this.responseModalIsOpen = true;
+          this.responseModal.open(JSON.parse(actionResultJson));
         }
 
         // Close modal
-        this.closeAction();
+        this.closeModal();
 
         // Notify that action could be successfully executed
         this.notificationService.addSuccess(
@@ -140,17 +109,22 @@ export class ActionModalComponent implements OnInit {
     });
   }
 
-  closeAction(): void {
-    this.openModal = false;
+  closeModal(): void {
+    this.modalIsOpen = false;
   }
 
   onResultJsonChange(formResult: object): void {
     this.formResult = formResult;
   }
 
-  closeActionResponse(): void {
-    this.responseModalIsOpening = false;
-    this.openResponseModal = false;
+  onResponseModalClose(): void {
+    this.responseModalIsOpen = false;
+    this.closeEvent.emit();
   }
 
+  OnOpenChange(isOpen: boolean): void {
+    if (!isOpen && !this.responseModalIsOpen) {
+      this.closeEvent.emit();
+    }
+  }
 }

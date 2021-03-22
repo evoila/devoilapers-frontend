@@ -1,39 +1,19 @@
 <div>
-<clr-modal [(clrModalOpen)]="openModal">
+  <clr-modal [(clrModalOpen)]="modalIsOpen" (clrModalOpenChange)="OnOpenChange($event)">
     <h3 class="modal-title">Action: {{selectedAction.name}}</h3>
     <div class="modal-body">
-      <app-notification-banner
-        *ngIf="notificationIsOpen()">
+      <app-notification-banner *ngIf="notificationIsOpen()">
       </app-notification-banner>
-      <p>Service Name: 	{{ selectedService.name }}</p>
-     
-      <app-create-service-wizard-form [formJson]="selectedForm" (resultJson)="onResultJsonChange($event)"></app-create-service-wizard-form>
+      <p>Service Name: {{ selectedService.name }}</p>
+
+      <app-create-service-wizard-form [formJson]="selectedForm" (resultJson)="onResultJsonChange($event)">
+      </app-create-service-wizard-form>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline" (click)="openModal = false">Cancel</button>
+      <button type="button" class="btn btn-outline" (click)="modalIsOpen = false">Cancel</button>
       <button type="button" class="btn btn-primary" (click)="executeAction()">Execute</button>
     </div>
-</clr-modal>
+  </clr-modal>
 
-<clr-modal [(clrModalOpen)]="openResponseModal">
-  <h3 class="modal-title">Action Response: {{selectedAction.name}}</h3>
-  <div class="modal-body">
-    <app-notification-banner
-      *ngIf="notificationResponseIsOpen()">
-    </app-notification-banner>
-
-    <table class="table table-vertical">
-      <tbody>
-        <tr *ngFor="let item of responseObject | keyvalue">
-          <th>{{item.key}}</th>
-          <td>{{item.value}}</td>
-        </tr>
-      </tbody>
-    </table>
-    
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline" (click)="closeActionResponse()">Close</button>
-  </div>
-</clr-modal>
+  <app-action-response-modal #responseModal [action]="selectedAction" (closing)="onResponseModalClose()"></app-action-response-modal>
 </div>
