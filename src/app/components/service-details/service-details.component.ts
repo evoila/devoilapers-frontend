@@ -47,9 +47,9 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
   private notificationOutlet: string;
 
   set editorModalIsOpen(value: boolean) {
-    if (value) {
-      this.notificationService.useOutletOnError(Outlet.editorModal);
-    }
+    // if (value) {
+    //   this.notificationService.useOutletOnError(Outlet.editorModal);
+    // }
 
     if (!value && value != this._editorModalIsOpen){
       this.onModalClose();
@@ -63,9 +63,9 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
   }
 
   set deleteModalIsOpen(value: boolean) {
-    if (value) {
-      this.notificationService.useOutletOnError(Outlet.deleteModal);
-    }
+    // if (value) {
+    //   this.notificationService.useOutletOnError(Outlet.deleteModal);
+    // }
 
     if (!value && value != this._deleteModalIsOpen)
       this.onModalClose()
@@ -78,9 +78,9 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
   }
 
   set detailsModalIsOpen(value: boolean) {
-    if (value) {
-      this.notificationService.useOutlet(Outlet.detailsModal);
-    }
+    // if (value) {
+    //   this.notificationService.useOutlet(Outlet.detailsModal);
+    // }
 
     if (!value && this._detailsModalIsOpen != value && !this.mainModalWasOpen) {
       this.router.navigate(['main/services']);
@@ -231,7 +231,7 @@ export class ServiceDetailsComponent implements OnInit, AfterViewInit {
   }
 
   showServiceDetailsModal(): void {
-    this.notificationService.close();
+    // this.notificationService.close();
     this.closeAllModals();
     this.redirectToService(this.selectedService);
     this.detailsModalIsOpen = true;

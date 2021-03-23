@@ -18,7 +18,7 @@
         <clr-dg-column>Interactions</clr-dg-column>
 
         <clr-dg-row *ngFor="let service of services" [clrDgItem]="service"
-          (dblclick)="this.setSelectedService(service);showServiceDetailsModal()">
+          (dblclick)="this.notificationService.close();this.setSelectedService(service);showServiceDetailsModal()">
           <clr-dg-cell>{{service.name}}</clr-dg-cell>
           <clr-dg-cell>{{service.type}}</clr-dg-cell>
           <clr-dg-cell>
@@ -32,8 +32,10 @@
                 <clr-icon shape="info-standard"></clr-icon>
                 Overview
               </button>
-              <button (click)="setSelectedService(service);
-                  showYamlEditorModal();" class="action-item">
+              <button (click)="this.notificationService.close();
+                      setSelectedService(service);
+                      showYamlEditorModal();"
+                      class="action-item">
                 <clr-icon shape="eye"></clr-icon>
                 View Yaml
               </button>

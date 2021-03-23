@@ -28,3 +28,4 @@ dist
 results
 
 .idea
+.direnv
