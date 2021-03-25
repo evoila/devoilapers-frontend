@@ -85,10 +85,10 @@ export class ActionModalComponent implements OnInit {
 
         // Set the correct notification scope
         if (actionResultJson === null || actionResultJson === '') {
-          this.notificationService.useOutletOnSuccess(Outlet.detailsModal);
+          // this.notificationService.useOutletOnSuccess(Outlet.global);
         } else {
-          this.notificationService.useOutletOnSuccess(Outlet.responseModal);     
-               
+          this.notificationService.useOutletOnSuccess(Outlet.responseModal);
+
           this.responseModalIsOpen = true;
           this.responseModal.open(JSON.parse(actionResultJson));
         }

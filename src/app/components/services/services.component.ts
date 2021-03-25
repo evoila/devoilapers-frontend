@@ -55,6 +55,8 @@ export class ServicesComponent implements OnInit, OnDestroy {
     selectedService: DtosServiceInstanceDetailsDto,
     selectedAction: DtosServiceInstanceActionDto): void {
 
+
+
     this.actionModal.displayAction(selectedService, selectedAction);
 
   }

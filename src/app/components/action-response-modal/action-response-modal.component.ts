@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ChangeDetectorRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DtosServiceInstanceActionDto, ServiceService, DtosServiceInstanceDetailsDto } from 'src/app/share/swagger-auto-gen';
 import { NotificationService } from '../../services/notification/notification.service';
 import { trigger } from '@angular/animations';
@@ -21,7 +21,9 @@ export class ActionResponseModalComponent implements OnInit {
   @Output() closing = new EventEmitter();
 
 
-  constructor(private notificationService: NotificationService) { }
+  constructor(private notificationService: NotificationService,
+    private cdRef: ChangeDetectorRef,
+  ) { }
 
   open(responseObject: any): void {
     this.modalIsOpen = true;
@@ -40,5 +42,16 @@ export class ActionResponseModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.notificationService.useOutlet(Outlet.responseModal);
+    this.subscribeToNotificationOutlet();
   }
+
+  subscribeToNotificationOutlet(): void {
+    this.notificationService.currentNotificationOutlet.subscribe(
+      notificationOutlet => {
+        this.notificationOutlet = notificationOutlet;
+        this.cdRef.detectChanges();
+      }
+    );
+  }
+
 }
