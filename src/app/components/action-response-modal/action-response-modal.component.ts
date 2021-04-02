@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { DtosServiceInstanceActionDto, ServiceService, DtosServiceInstanceDetailsDto } from 'src/app/share/swagger-auto-gen';
+import { DtosServiceInstanceActionDto } from 'src/app/share/swagger-auto-gen';
 import { NotificationService } from '../../services/notification/notification.service';
 import { trigger } from '@angular/animations';
 import { Outlet } from '../../services/notification/outlet';
@@ -22,7 +22,7 @@ export class ActionResponseModalComponent implements OnInit {
 
 
   constructor(private notificationService: NotificationService,
-    private cdRef: ChangeDetectorRef,
+              private cdRef: ChangeDetectorRef,
   ) { }
 
   open(responseObject: any): void {

@@ -1,19 +1,18 @@
 import {
-  AfterViewInit,
   Component,
-  ElementRef, OnDestroy,
-  OnInit, QueryList,
+  OnDestroy,
+  OnInit,
   ViewChild
 } from '@angular/core';
 import {
   ServicestoreService,
   DtosServiceStoreItemDto,
   ServiceService,
-  DtosServiceYamlDto, DtosServiceStoreItemFormDto,
+  DtosServiceYamlDto,
 } from 'src/app/share/swagger-auto-gen';
 
 import {NotificationService} from '../../services/notification/notification.service';
-import * as arraySort from 'array-sort'
+import * as arraySort from 'array-sort';
 import {Outlet} from '../../services/notification/outlet';
 import {NotificationType} from '../../services/notification/notificationtype';
 import {Notification} from '../../services/notification/notification';
@@ -26,12 +25,11 @@ import { CreateServiceWizardComponent } from '../create-service-wizard/create-se
   styleUrls: ['./servicestore.component.scss'],
   providers: [ServicestoreService, ServiceService]
 })
-export class ServicestoreComponent implements OnInit, OnDestroy {  
+export class ServicestoreComponent implements OnInit, OnDestroy {
   @ViewChild('creationWizard') wizard: CreateServiceWizardComponent;
 
   services: Array<DtosServiceStoreItemDto>;
-  jsonFormPageNavTitles: string[];
-  jsonForm: any;
+
   serviceType: string;
   clicked: boolean;
   private notificationOutlet: string;
@@ -59,7 +57,7 @@ export class ServicestoreComponent implements OnInit, OnDestroy {
   subscribeToNotificationOutlet(): void{
     this.notificationService.currentNotificationOutlet.subscribe(
       notificationOutlet => this.notificationOutlet = notificationOutlet
-    )
+    );
   }
 
   notificationIsOpen(outlet: string): boolean {
@@ -67,10 +65,6 @@ export class ServicestoreComponent implements OnInit, OnDestroy {
   }
 
   useGlobalNotificationSuccess(): void {
-    this.notificationService.useOutletOnSuccess(Outlet.global);
-  }
-
-  useEditorModalNotificationSuccess(): void {
     this.notificationService.useOutletOnSuccess(Outlet.global);
   }
 

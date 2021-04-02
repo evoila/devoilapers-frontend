@@ -11,16 +11,15 @@ import 'ace-builds/webpack-resolver';
 export class AceEditorComponent implements AfterViewInit {
   @ViewChild('editor') private editor: ElementRef<HTMLElement>;
 
-  @Input() 
+  @Input()
   get yaml(): string {
       return this._yaml;
   }
- 
+
   set yaml(value: string) {
     this._yaml = value ?? '';
     this.setYamlToEditorComponent(value);
   }
-
 
   @Output() textChanged = new EventEmitter<string>();
 
@@ -28,7 +27,7 @@ export class AceEditorComponent implements AfterViewInit {
   aceEditor: any;
 
   constructor() { }
- 
+
   private setYamlToEditorComponent(yaml: string): void {
     if (this.aceEditor === undefined) {
       return;
@@ -50,5 +49,4 @@ export class AceEditorComponent implements AfterViewInit {
 
     this.setYamlToEditorComponent(this.yaml);
   }
-
 }

@@ -1,11 +1,9 @@
-import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { DtosServiceInstanceActionDto, DtosServiceInstanceDetailsDto, ServiceService } from '../../share/swagger-auto-gen';
 import { NotificationService } from '../../services/notification/notification.service';
-import { trigger } from '@angular/animations';
 import { Outlet } from '../../services/notification/outlet';
 import { NotificationType } from '../../services/notification/notificationtype';
 import { Notification } from '../../services/notification/notification';
-import { JsonPipe } from '@angular/common';
 import { ActionResponseModalComponent } from '../action-response-modal/action-response-modal.component';
 
 @Component({
@@ -52,8 +50,6 @@ export class ActionModalComponent implements OnInit {
   notificationIsOpen(): boolean {
     return this.notificationOutlet === Outlet.actionModal;
   }
-
-
 
   displayAction(
     selectedService: DtosServiceInstanceDetailsDto,

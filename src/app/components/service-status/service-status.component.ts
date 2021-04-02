@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 @Component({
-  selector: 'service-status',
+  selector: 'app-service-status',
   templateUrl: './service-status.component.html',
   styleUrls: ['./service-status.component.scss']
 })
@@ -12,9 +12,6 @@ export class ServiceStatusComponent implements OnInit {
   @Output()
   public readonly closer: EventEmitter<any> = new EventEmitter();
 
-  displayMsg = '';
-  actionButtonLabel = 'Details';
-
   constructor() {
 
   }
@@ -24,40 +21,36 @@ export class ServiceStatusComponent implements OnInit {
     this._status = val;
   }
 
-  get status() {
+  get status(): string {
     return this._status;
   }
 
-  get statusColor() {
-    if (this._status === undefined) 
-      return "#435560";
+  get statusColor(): string {
+    if (this._status === undefined)
+      return '#435560';
 
-    let lowerCaseStatus = this._status.toLowerCase();
+    const lowerCaseStatus = this._status.toLowerCase();
 
     switch (lowerCaseStatus) {
-      case "ok":
-        return "#9ecca4";
-      case "warning":
-        return "#f48b29";
-      case "error":
-        return "#ac0d0d";
-      case "pending":
-        return "#78c4d4";
+      case 'ok':
+        return '#9ecca4';
+      case 'warning':
+        return '#f48b29';
+      case 'error':
+        return '#ac0d0d';
+      case 'pending':
+        return '#78c4d4';
     }
 
-    return "#435560";
+    return '#435560';
   }
 
   ngOnInit(): void {
-    
+
   }
 
   public onClose(): void {
     this.closer.emit();
-  }
-
-  toggleErrorNotificationDetail(): void {
-    this.actionButtonLabel = this.actionButtonLabel === 'Details' ? 'Less' : 'Details';
   }
 
 }

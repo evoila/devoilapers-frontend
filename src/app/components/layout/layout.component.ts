@@ -24,14 +24,14 @@ export class LayoutComponent implements OnInit {
     this.subscribeToNotificationOutlet();
   }
 
-  subscribeToNotificationOutlet(){
+  subscribeToNotificationOutlet(): void {
     this.notificationService.currentNotificationOutlet.subscribe(
       notificationOutlet => {
         this.notificationOutlet = notificationOutlet;
         this.notificationIsOpen();
         this.cdRef.detectChanges();
       }
-    )
+    );
     this.useGlobalNotification();
   }
 

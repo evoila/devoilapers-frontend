@@ -41,20 +41,12 @@ export class AuthService {
     this.apiConfiguration.password = password;
   }
 
-  public getUsername(): string {
-    return sessionStorage.getItem('username');
-  }
-
   public getPassword(): string {
     return sessionStorage.getItem('password');
   }
 
   public getRole(): string {
     return sessionStorage.getItem('role');
-  }
-
-  public getRememberMe(): string {
-    return sessionStorage.getItem('rememberMe');
   }
 
   public logout(): void {

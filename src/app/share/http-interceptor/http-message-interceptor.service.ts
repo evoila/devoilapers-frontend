@@ -37,7 +37,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           // When the Backend returns an Error with an Error a in the ErrorDto,
           // then the short ErrorMessage will be Replaced with the Status
           if (error.error !== null && error.error.message) {
-            let errorDto: DtosHTTPErrorDto = error.error;
+            const errorDto: DtosHTTPErrorDto = error.error;
             shortErrorMessage = errorDto.message;
             longErrorMessage = longErrorMessage + errorDto.message;
           }

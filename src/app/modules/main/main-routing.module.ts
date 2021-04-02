@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { PageNotFoundComponent } from '../../components/page-not-found/page-not-found.component';
 import { AboutComponent } from '../../components/about/about.component';
 import { LayoutComponent } from '../../components/layout/layout.component';
-import { ServicesComponent } from '../../components/services/services.component';
 import { ServicestoreComponent } from '../../components/servicestore/servicestore.component';
 import { ServiceDetailsComponent } from '../../components/service-details/service-details.component';
 import { AuthGuardService } from '../../services/auth/auth-guard.service';

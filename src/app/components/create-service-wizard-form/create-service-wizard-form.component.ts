@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 
 @Component({
@@ -8,12 +8,14 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
   styleUrls: ['./create-service-wizard-form.component.scss']
 })
 export class CreateServiceWizardFormComponent {
+  // tslint:disable-next-line:ban-types
   @Input() formJson: Object;
   @Output() resultJson = new EventEmitter<object>();
 
 
 
-  emitResultJson(formResult) {
+  // tslint:disable-next-line:typedef
+  emitResultJson(formResult): void {
     this.resultJson.emit(formResult);
   }
 }

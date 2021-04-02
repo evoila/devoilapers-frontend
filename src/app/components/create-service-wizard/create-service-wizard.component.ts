@@ -26,10 +26,10 @@ export class CreateServiceWizardComponent implements OnInit {
   @Output() canceled = new EventEmitter<void>();
 
   public yamlText: string;
-  public serviceStoreItem: DtosServiceStoreItemDto = new Object();
+  public serviceStoreItem: DtosServiceStoreItemDto = {};
   public jsonForm: any;
   public jsonFormPageNavTitles: string[];
-  public formResult: object = new Object();
+  public formResult: object = {};
   private notificationOutlet: string;
 
   constructor(private servicestoreService: ServicestoreService, private notificationService: NotificationService) { }
