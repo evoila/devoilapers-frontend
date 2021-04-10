@@ -21,9 +21,6 @@ The project structure will probably change during the project.
 ## Getting started
 Ensure you have Node.js **v14.15.4** installed.
 
-### VS Code configurations 
-See the Wiki: https://github.com/evoila/devoilapers-frontend/wiki/Stack#visual-studio-code-extensions-link
-
 ### Build and run without IDE
 1. Start the devoilapers-backend: https://github.com/evoila/devoilapers-backend/blob/main/ReadMe.md#build-and-run-without-ide
 2. Execute `npm install`
