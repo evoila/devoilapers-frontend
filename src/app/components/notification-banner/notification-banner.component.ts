@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, EventEmitter, Output, AfterContentChecked} from '@angular/core';
+import {Component, OnInit } from '@angular/core';
 import { NotificationService } from 'src/app/services/notification/notification.service';
 import {Notification} from '../../services/notification/notification';
 
@@ -8,25 +8,25 @@ import {Notification} from '../../services/notification/notification';
   templateUrl: './notification-banner.component.html',
   styleUrls: ['./notification-banner.component.scss']
 })
-export class NotificationBannerComponent {
+export class NotificationBannerComponent implements OnInit {
 
   toggleMessageDescription = true;
   actionButtonLabel = 'Details';
 
   notification: Notification = null;
-  alertClosed: boolean = true;
+  alertClosed = true;
 
   constructor(
     private notificationService: NotificationService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.notificationService.currentNotification.subscribe(
       notification => {
         this.notification = notification;
         this.alertClosed = false;
       }
-    )
+    );
   }
 
   toggleErrorNotificationDetail(): void {

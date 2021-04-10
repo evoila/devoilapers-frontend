@@ -14,7 +14,7 @@ import {
   ActionModalComponent
 } from '../action-modal/action-modal.component';
 
-import { Observable, Subscription, interval  } from 'rxjs';
+import { Subscription, interval  } from 'rxjs';
 
 @Component({
   selector: 'app-services',
@@ -48,17 +48,13 @@ export class ServicesComponent implements OnInit, OnDestroy {
   }
 
   gotoServiceDetails(serviceType: string, serviceName: string): void {
-    this.router.navigate(['main/services', serviceType, serviceName]);
+    this.router.navigate(['main/services', serviceType, serviceName]).then();
   }
 
   displayAction(
     selectedService: DtosServiceInstanceDetailsDto,
     selectedAction: DtosServiceInstanceActionDto): void {
-
-
-
     this.actionModal.displayAction(selectedService, selectedAction);
-
   }
 
   ngOnDestroy(): void {

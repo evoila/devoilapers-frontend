@@ -18,11 +18,11 @@
         <clr-dg-column>Interactions</clr-dg-column>
 
         <clr-dg-row *ngFor="let service of services" [clrDgItem]="service"
-          (dblclick)="this.notificationService.close();this.setSelectedService(service);showServiceDetailsModal()">
+          (dblclick)="this.closeNotification();this.setSelectedService(service);showServiceDetailsModal()">
           <clr-dg-cell>{{service.name}}</clr-dg-cell>
           <clr-dg-cell>{{service.type}}</clr-dg-cell>
           <clr-dg-cell>
-            <service-status [status]="service.status"></service-status>
+            <app-service-status [status]="service.status"></app-service-status>
           </clr-dg-cell>
           <clr-dg-cell>
             <clr-dg-action-overflow>
@@ -32,7 +32,7 @@
                 <clr-icon shape="info-standard"></clr-icon>
                 Overview
               </button>
-              <button (click)="this.notificationService.close();
+              <button (click)="this.closeNotification();
                       setSelectedService(service);
                       showYamlEditorModal();"
                       class="action-item">
@@ -103,7 +103,7 @@
                   <tr>
                     <th>Status:</th>
                     <td>
-                      <service-status [status]="selectedService.status"></service-status>
+                      <app-service-status [status]="selectedService.status"></app-service-status>
                     </td>
                   </tr>
                 </tbody>

@@ -1,4 +1,4 @@
-import {Injectable, NgModule} from '@angular/core';
+import { NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ClarityModule } from '@clr/angular';
@@ -25,10 +25,8 @@ import { ActionResponseModalComponent } from '../../components/action-response-m
 import {
   SchemaFormModule,
   WidgetRegistry,
-  DefaultWidgetRegistry,
-} from "ngx-schema-form";
+} from 'ngx-schema-form';
 import {ButtonComponent} from '../../components/clarity-form-components/button/button.component';
-import {CdsButton} from '@clr/core/button';
 import { ClarityWidgetRegistry } from 'src/app/components/clarity-form-components/claritywidgedregistry';
 
 

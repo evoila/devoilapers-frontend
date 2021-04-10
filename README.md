@@ -21,14 +21,12 @@ The project structure will probably change during the project.
 ## Getting started
 Ensure you have Node.js **v14.15.4** installed.
 
-### VS Code configurations 
-See the Wiki: https://github.com/evoila/devoilapers-frontend/wiki/Stack#visual-studio-code-extensions-link
-
 ### Build and run without IDE
 1. Start the devoilapers-backend: https://github.com/evoila/devoilapers-backend/blob/main/ReadMe.md#build-and-run-without-ide
-2. Execute `npm install`
-3. Execute `npm start`
-4. Open a Browser on http://localhost:4200/
+2. Open a Browser on https://127.0.0.1:8080/swagger/index.html and accept the self-signed certificate
+3. Execute `npm install`
+4. Execute `npm start`
+5. Open a Browser on http://localhost:4200/
 
 ### Branch naming conventions
 Use underscores to replace spaces or special characters

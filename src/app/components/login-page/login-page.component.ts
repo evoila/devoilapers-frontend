@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit, Output} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService, DtosAccountCredentialsDto } from 'src/app/share/swagger-auto-gen';
 import {AuthService} from '../../services/auth/auth.service';
@@ -41,21 +41,17 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  subscribeToNotificationOutlet(){
+  subscribeToNotificationOutlet(): void {
     this.notificationService.currentNotificationOutlet.subscribe(
       notificationOutlet => {
-        this.notificationOutlet = notificationOutlet
+        this.notificationOutlet = notificationOutlet;
         this.cdRef.detectChanges();
       }
-    )
+    );
   }
 
   notificationIsOpen(): boolean {
     return this.notificationOutlet === Outlet.global;
-  }
-
-  useGlobalNotification(): void {
-    this.notificationService.useOutletOnError(Outlet.global);
   }
 
   onLogin(): void {
@@ -82,6 +78,6 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.notificationService.close()
+    this.notificationService.close();
   }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DtosServiceInstanceActionDto, ServiceService, DtosServiceInstanceDetailsDto } from 'src/app/share/swagger-auto-gen';
 import { NotificationService } from 'src/app/services/notification/notification.service';
 import { NotificationType } from '../../services/notification/notificationtype';
@@ -39,7 +39,7 @@ export class ActionToggleComponent implements OnInit {
     });
   }
 
-  setActionToggleSwitchValue(switchChangedEvent) {
+  setActionToggleSwitchValue(switchChangedEvent): void {
     const isChecked: boolean = switchChangedEvent.currentTarget.checked;
     const query = isChecked ? 'set' : 'unset';
 
@@ -66,6 +66,4 @@ export class ActionToggleComponent implements OnInit {
       },
     });
   }
-
-
 }
